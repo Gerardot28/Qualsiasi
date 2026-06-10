@@ -1,0 +1,44 @@
+.header {
+  padding: 16px 20px 0;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #facc15;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.pageBtn {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #a78bfa;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.3);
+}
+
+.pageBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.85rem;
+  color: #64748b;
+  min-width: 100px;
+  text-align: center;
+}
