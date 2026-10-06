@@ -64,7 +64,6 @@ SCHEMES = {
         top_fill=[H("#fffbe0"), H("#ffe680"), H("#ffcc4d"), H("#f6a531"), H("#d9741e")],
         top_rim=[H("#b9a6ff"), H("#8f74ff"), H("#6a4fe0")],
         sparkle={"#": H("#ffffff"), "+": H("#e9fbff"), "*": H("#9feaff"), ".": H("#7a8cff")},
-        portal=[H("#ffffff"), H("#72f0ff"), H("#7c6dff"), H("#d64ad8"), H("#ff9a3c")],
         # background recolour (rayquaza_and_clouds.pal, 16 entries)
         sky=[H("#0b0626"), H("#140a3c"), H("#1f0f55"), H("#2d146b"), H("#3f1a7e"),
              H("#56208c"), H("#6e2896"), H("#86329c")],
@@ -82,7 +81,6 @@ SCHEMES = {
         top_fill=[H("#f4ecff"), H("#d9c8ff"), H("#b79cff"), H("#9474f0"), H("#7050d0")],
         top_rim=[H("#ffe680"), H("#f2a324")],
         sparkle={"#": H("#ffffff"), "+": H("#fff6d0"), "*": H("#ffd46a"), ".": H("#b07cff")},
-        portal=[H("#ffffff"), H("#ffe680"), H("#ffb040"), H("#a957f5"), H("#4b2aa8")],
         sky=[H("#080512"), H("#100a26"), H("#190f3a"), H("#22134c"), H("#2c175c"),
              H("#391b68"), H("#471f70"), H("#562476")],
         silhouette=H("#07040f"),
@@ -110,13 +108,22 @@ def parse_args():
 
 
 def apply_overrides(scheme, overrides):
+    """--color KEY=#hex[,#hex...]: replace a colour or a colour list (a list
+    given with a different number of colours is interpolated to the length the
+    scheme uses, e.g. two stops for a 5-step gradient)."""
     s = dict(scheme)
+    keys = sorted(k for k, v in s.items() if isinstance(v, (list, tuple)) and not isinstance(v, str))
     for o in overrides:
-        k, v = o.split("=", 1)
-        cols = [px.hexrgb(c) for c in v.split(",")]
-        if k not in s:
-            sys.exit(f"unknown colour key {k}; known: {', '.join(sorted(s))}")
-        s[k] = cols if isinstance(s[k], list) else cols[0]
+        k, _, v = o.partition("=")
+        if k not in keys:
+            sys.exit(f"unknown colour key {k!r}; colour keys: {', '.join(keys)}")
+        cols = [px.hexrgb(c) for c in v.split(",") if c]
+        if isinstance(s[k], list):
+            # resample to the scheme's length so every index stays valid
+            n = len(s[k])
+            s[k] = [tuple(int(round(v)) for v in c) for c in px.ramp(cols, n)] if len(cols) != n else cols
+        else:
+            s[k] = cols[0]
     return s
 
 
@@ -317,11 +324,16 @@ def render_logo(word, top_text, scheme, W=LOGO_W, H=LOGO_H, cx=LOGO_CENTER_X, ma
     words = [("top", top, top_ids)]
     if stacked:
         w_in, w_rim, w_out, ext_d = sc(1), sc(1), sc(1), sc(3)
-        f, cap = fit_font(word, FONT_WORD, word_cap, max_w - 1, 2 * (w_in + w_rim + w_out), -1)
-        # place the word so that its bottom (incl. extrusion) ends at `bottom`
-        probe = Word(Canvas(W, H, 1), word, f, -1, cx, 0, w_in, w_rim, w_out, ext_d)
-        y0 = bottom - probe.bottom
-        y0 = max(y0, top.bottom - int(round(overlap * scale)))
+        # largest cap that fits the width AND sits between the top line
+        # (allowing `overlap` px onto its extrusion) and `bottom`
+        cap_try = word_cap
+        while True:
+            f, cap = fit_font(word, FONT_WORD, cap_try, max_w - 1, 2 * (w_in + w_rim + w_out), -1)
+            probe = Word(Canvas(W, H, 1), word, f, -1, cx, 0, w_in, w_rim, w_out, ext_d)
+            y0 = bottom - probe.bottom          # word bottom (incl. extrusion) ends at `bottom`
+            if y0 >= top.bottom - int(round(overlap * scale)) or cap <= 8:
+                break
+            cap_try = cap - 1
         w = Word(cv, word, f, -1, cx, y0, w_in, w_rim, w_out, ext_d, close=1.6 * scale,
                  rim_close=3.5 * scale)
         w_ids = layer_word(cv, w, prism_fill(w, scheme), [px.gba(c) for c in scheme["gold"]],

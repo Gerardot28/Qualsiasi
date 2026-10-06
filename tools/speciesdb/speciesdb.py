@@ -1054,7 +1054,10 @@ def suggest_levels(S):
             else:
                 v = 1
         elif S[p]['isBaby']:
-            v = 1
+            # the basic a baby evolves into is normally found in the wild, so
+            # it starts at 1 -- unless the baby evolves at an explicit level
+            # (Tyrogue 20, Wynaut 15, Smoochum/Elekid/Magby/Toxel 30)
+            v = rec['evolvesFromLevel'] if rec['evolvedBy'] == 'level' else 1
         elif rec['evolvedBy'] == 'level':
             v = max(rec['evolvesFromLevel'], lvl(p, depth + 1))
         else:
@@ -1137,13 +1140,16 @@ def summarize(meta, S, families):
     return c
 
 
-def sanity_checks(S, families):
+def sanity_checks(S, families, full_config=True):
+    """Built-in checks.  Each line starts with OK / FAIL / SKIP / INFO.
+
+    A check whose species are not defined (families disabled in the config)
+    is reported as SKIP instead of crashing.  Count checks that only hold on
+    the default all-enabled config (1025 dex numbers, 27 starters, 19 babies,
+    exact family member lists) are downgraded to INFO when full_config is
+    False, so a reduced config does not make the tool fail."""
     out = []
     fam_by_root = {f['root']: f for f in families}
-
-    def check(cond, msg):
-        out.append(('OK  ' if cond else 'FAIL') + ' ' + msg)
-        return cond
 
     alias = {}
     for n, r in S.items():
@@ -1156,41 +1162,75 @@ def sanity_checks(S, families):
     def g(n):
         return S.get(canon(n))
 
+    def check(msg, cond, needs=(), full_only=False):
+        """cond: callable returning (bool) or (bool, detail)."""
+        missing = [n for n in needs if g(n) is None]
+        if missing:
+            out.append('SKIP %s (not defined in this config: %s)' % (msg, ', '.join(missing)))
+            return None
+        try:
+            res = cond()
+        except Exception as e:  # never crash on a reduced/modified tree
+            res = (False, 'error: %s: %s' % (type(e).__name__, e))
+        detail = None
+        if isinstance(res, tuple):
+            res, detail = res
+        text = msg + (' %s' % (detail,) if detail is not None else '')
+        if res:
+            out.append('OK   ' + text)
+        else:
+            out.append(('INFO ' if full_only and not full_config else 'FAIL ') + text)
+        return bool(res)
+
     b = fam_by_root.get('SPECIES_BULBASAUR')
-    check(b is not None and b['members'] == ['SPECIES_BULBASAUR', 'SPECIES_IVYSAUR', 'SPECIES_VENUSAUR']
-          and list(b['stages'].values()) == [0, 1, 2],
-          'Bulbasaur family = %s' % (b and dict(b['stages'])))
-    check(g('SPECIES_IVYSAUR') and g('SPECIES_IVYSAUR')['evolvesFromLevel'] == 16
-          and g('SPECIES_BULBASAUR')['evolvesAtLevel'] == 16, 'Ivysaur evolves from Bulbasaur at 16')
-    check(g('SPECIES_VENUSAUR')['evolvesFromLevel'] == 32, 'Venusaur at 32')
+    check('Bulbasaur family 3 members, stages 0/1/2 =',
+          lambda: (b['members'] == ['SPECIES_BULBASAUR', 'SPECIES_IVYSAUR', 'SPECIES_VENUSAUR']
+                   and list(b['stages'].values()) == [0, 1, 2], dict(b['stages'])),
+          needs=('SPECIES_BULBASAUR', 'SPECIES_IVYSAUR', 'SPECIES_VENUSAUR'))
+    check('Ivysaur evolves from Bulbasaur at 16',
+          lambda: g('SPECIES_IVYSAUR')['evolvesFromLevel'] == 16 and g('SPECIES_BULBASAUR')['evolvesAtLevel'] == 16,
+          needs=('SPECIES_BULBASAUR', 'SPECIES_IVYSAUR'))
+    check('Venusaur at 32', lambda: g('SPECIES_VENUSAUR')['evolvesFromLevel'] == 32, needs=('SPECIES_VENUSAUR',))
     e = fam_by_root.get('SPECIES_EEVEE')
-    check(e is not None and len(e['members']) == 9, 'Eevee family has 9 members: %s' % (e and e['members']))
+    check('Eevee family has 9 members:', lambda: (len(e['members']) == 9, e['members']),
+          needs=('SPECIES_EEVEE',), full_only=True)
     p = fam_by_root.get('SPECIES_PICHU')
-    check(p is not None and 'SPECIES_PIKACHU' in p['members'] and 'SPECIES_RAICHU' in p['members']
-          and 'SPECIES_RAICHU_ALOLA' in p['members'] and g('SPECIES_PICHU')['isBaby'],
-          'Pikachu family rooted at baby Pichu: %s' % (p and p['members']))
-    check(g('SPECIES_PIKACHU')['familyRoot'] == 'SPECIES_PICHU' and g('SPECIES_PIKACHU')['stage'] == 0
-          and g('SPECIES_RAICHU')['stage'] == 1, 'Pikachu stage 0 (basic), Raichu stage 1')
+    check('Pikachu family rooted at baby Pichu:',
+          lambda: ('SPECIES_PIKACHU' in p['members'] and 'SPECIES_RAICHU' in p['members']
+                   and 'SPECIES_RAICHU_ALOLA' in p['members'] and g('SPECIES_PICHU')['isBaby'], p['members']),
+          needs=('SPECIES_PICHU', 'SPECIES_PIKACHU', 'SPECIES_RAICHU', 'SPECIES_RAICHU_ALOLA'))
+    check('Pikachu stage 0 (basic), Raichu stage 1',
+          lambda: g('SPECIES_PIKACHU')['familyRoot'] == 'SPECIES_PICHU' and g('SPECIES_PIKACHU')['stage'] == 0
+          and g('SPECIES_RAICHU')['stage'] == 1, needs=('SPECIES_PICHU', 'SPECIES_PIKACHU', 'SPECIES_RAICHU'))
     ra = fam_by_root.get('SPECIES_RATTATA_ALOLA')
-    check(ra is not None and ra['members'] == ['SPECIES_RATTATA_ALOLA', 'SPECIES_RATICATE_ALOLA'],
-          'Alolan Rattata is its own family root: %s' % (ra and ra['members']))
-    check(fam_by_root.get('SPECIES_RATTATA', {}).get('members') == ['SPECIES_RATTATA', 'SPECIES_RATICATE'],
-          'Kantonian Rattata family = Rattata, Raticate')
+    check('Alolan Rattata is its own family root:',
+          lambda: (ra['members'] == ['SPECIES_RATTATA_ALOLA', 'SPECIES_RATICATE_ALOLA'], ra['members']),
+          needs=('SPECIES_RATTATA_ALOLA', 'SPECIES_RATICATE_ALOLA'))
+    check('Kantonian Rattata family = Rattata, Raticate',
+          lambda: fam_by_root['SPECIES_RATTATA']['members'] == ['SPECIES_RATTATA', 'SPECIES_RATICATE'],
+          needs=('SPECIES_RATTATA', 'SPECIES_RATICATE'))
     ap = fam_by_root.get('SPECIES_APPLIN')
     exp_ap = {'SPECIES_APPLIN', 'SPECIES_FLAPPLE', 'SPECIES_APPLETUN', 'SPECIES_DIPPLIN', 'SPECIES_HYDRAPPLE'}
-    check(ap is not None and set(ap['members']) == exp_ap, 'Applin family: %s' % (ap and ap['stages']))
-    check(g('SPECIES_KINGAMBIT') and g('SPECIES_KINGAMBIT')['familyRoot'] == 'SPECIES_PAWNIARD'
+    check('Applin family:', lambda: (set(ap['members']) == exp_ap, dict(ap['stages'])),
+          needs=('SPECIES_APPLIN',), full_only=True)
+    check('Kingambit evolves from Bisharp (stage 2, root Pawniard)',
+          lambda: g('SPECIES_KINGAMBIT')['familyRoot'] == 'SPECIES_PAWNIARD'
           and g('SPECIES_KINGAMBIT')['preEvolution'] == 'SPECIES_BISHARP' and g('SPECIES_KINGAMBIT')['stage'] == 2,
-          'Kingambit evolves from Bisharp (stage 2, root Pawniard)')
-    check(g('SPECIES_WYRDEER') and g('SPECIES_WYRDEER')['preEvolution'] == 'SPECIES_STANTLER',
-          'Wyrdeer evolves from Stantler (%s)' % (g('SPECIES_WYRDEER') or {}).get('evolvedBy'))
+          needs=('SPECIES_KINGAMBIT', 'SPECIES_BISHARP', 'SPECIES_PAWNIARD'))
+    check('Wyrdeer evolves from Stantler',
+          lambda: (g('SPECIES_WYRDEER')['preEvolution'] == 'SPECIES_STANTLER', '(%s)' % g('SPECIES_WYRDEER')['evolvedBy']),
+          needs=('SPECIES_WYRDEER', 'SPECIES_STANTLER'))
     for n in ('SPECIES_SPRIGATITO', 'SPECIES_GHOLDENGO', 'SPECIES_PECHARUNT', 'SPECIES_TERAPAGOS'):
-        check(g(n) is not None and g(n)['encounterable'], '%s exists and is encounterable (gen %s)' % (n, (g(n) or {}).get('generation')))
-    check(g('SPECIES_GHOLDENGO')['familyRoot'] == canon('SPECIES_GIMMIGHOUL'), 'Gholdengo root Gimmighoul (%s)' % canon('SPECIES_GIMMIGHOUL'))
+        check('%s exists and is encounterable' % n,
+              lambda n=n: (g(n)['encounterable'], '(gen %s)' % g(n)['generation']), needs=(n,))
+    check('Gholdengo root Gimmighoul',
+          lambda: (g('SPECIES_GHOLDENGO')['familyRoot'] == canon('SPECIES_GIMMIGHOUL'), '(%s)' % canon('SPECIES_GIMMIGHOUL')),
+          needs=('SPECIES_GHOLDENGO', 'SPECIES_GIMMIGHOUL'))
     nd = {r['natDexNum'] for r in S.values() if r['natDexNum']}
-    check(nd == set(range(1, 1026)), 'national dex 1..1025 all present (%d distinct)' % len(nd))
+    check('national dex 1..1025 all present', lambda: (nd == set(range(1, 1026)), '(%d distinct)' % len(nd)),
+          full_only=True)
     nde = {r['natDexNum'] for r in S.values() if r['encounterable']}
-    check(nde == set(range(1, 1026)), 'every national dex number has an encounterable form (%d)' % len(nde))
+    check('every national dex number has an encounterable form', lambda: (nde == nd, '(%d)' % len(nde)))
     for n in ('SPECIES_VENUSAUR_MEGA', 'SPECIES_KYOGRE_PRIMAL', 'SPECIES_CHARIZARD_GMAX', 'SPECIES_AEGISLASH_BLADE',
               'SPECIES_DARMANITAN_ZEN', 'SPECIES_MIMIKYU_BUSTED', 'SPECIES_CRAMORANT_GULPING', 'SPECIES_EISCUE_NOICE',
               'SPECIES_ZYGARDE_COMPLETE', 'SPECIES_MINIOR_CORE_RED', 'SPECIES_VIVILLON_POLAR',
@@ -1201,11 +1241,8 @@ def sanity_checks(S, families):
               'SPECIES_PALAFIN_HERO', 'SPECIES_MORPEKO_HANGRY', 'SPECIES_WISHIWASHI_SCHOOL', 'SPECIES_CHERRIM_SUNSHINE',
               'SPECIES_MELOETTA_PIROUETTE', 'SPECIES_GRENINJA_ASH', 'SPECIES_TERAPAGOS_STELLAR', 'SPECIES_ZACIAN_CROWNED',
               'SPECIES_SHELLOS_EAST', 'SPECIES_DEERLING_SUMMER', 'SPECIES_XERNEAS_ACTIVE', 'SPECIES_EEVEE_STARTER'):
-        r = g(n)
-        if r is not None:
-            check(not r['encounterable'], '%s excluded (%s: %s)' % (n, r['formKind'], r['excludeReason']))
-        else:
-            out.append('INFO %s not defined' % n)
+        check('%s excluded' % n, lambda n=n: (not g(n)['encounterable'],
+                                               '(%s: %s)' % (g(n)['formKind'], g(n)['excludeReason'])), needs=(n,))
     for n in ('SPECIES_ROTOM_WASH', 'SPECIES_ORICORIO_POM_POM', 'SPECIES_LYCANROC_MIDNIGHT', 'SPECIES_LYCANROC_DUSK',
               'SPECIES_URSHIFU_RAPID_STRIKE', 'SPECIES_TAUROS_PALDEA_BLAZE', 'SPECIES_WORMADAM_SANDY',
               'SPECIES_DEOXYS_ATTACK', 'SPECIES_MEOWSTIC_F', 'SPECIES_TOXTRICITY_LOW_KEY', 'SPECIES_URSALUNA_BLOODMOON',
@@ -1214,17 +1251,14 @@ def sanity_checks(S, families):
               'SPECIES_NECROZMA', 'SPECIES_UNOWN', 'SPECIES_VIVILLON', 'SPECIES_ALCREMIE', 'SPECIES_MINIOR_METEOR',
               'SPECIES_ARCEUS_NORMAL', 'SPECIES_CASTFORM_NORMAL', 'SPECIES_ZYGARDE_10', 'SPECIES_ZYGARDE_50',
               'SPECIES_ROCKRUFF_OWN_TEMPO', 'SPECIES_BASCULIN_WHITE_STRIPED', 'SPECIES_SQUAWKABILLY_YELLOW', 'SPECIES_GIMMIGHOUL'):
-        r = g(n)
-        if r is not None:
-            check(r['encounterable'], '%s encounterable (%s, formOf %s, root %s)' % (n, r['formKind'], r['formOf'], r['familyRoot']))
-        else:
-            out.append('INFO %s not defined' % n)
+        check('%s encounterable' % n, lambda n=n: (g(n)['encounterable'], '(%s, formOf %s, root %s)' % (
+            g(n)['formKind'], g(n)['formOf'], g(n)['familyRoot'])), needs=(n,))
     st = [f['root'] for f in families if f['isStarter']]
-    check(len(st) == 27, '27 starter families (%d)' % len(st))
+    check('27 starter families', lambda: (len(st) == 27, '(%d)' % len(st)), full_only=True)
     bb = [n for n, r in S.items() if r['isBaby'] and r['encounterable']]
-    check(len(bb) == 19, '19 encounterable babies (%d)' % len(bb))
+    check('19 encounterable babies', lambda: (len(bb) == 19, '(%d)' % len(bb)), full_only=True)
     bad_roots = [f['root'] for f in families if not f['rootEncounterable']]
-    check(not bad_roots, 'all family roots encounterable %s' % bad_roots[:10])
+    check('all family roots encounterable', lambda: (not bad_roots, bad_roots[:10]))
     return out
 
 
@@ -1244,7 +1278,9 @@ def main(argv=None):
     families = build_families(species)
     counts = summarize(meta, species, families)
     meta['counts'] = counts
-    checks = sanity_checks(species, families)
+    cs = meta['configSummary']
+    full_config = all(cs['genFlags'].values()) and not cs['familiesDisabled']
+    checks = sanity_checks(species, families, full_config)
     meta['sanityChecks'] = checks
 
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)

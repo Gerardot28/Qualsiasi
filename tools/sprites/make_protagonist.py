@@ -100,9 +100,13 @@ def apply_stamp(grid, st, x0, y0, flip=False):
 def build_frames(path, w, h, stamps=None):
     """Return list of (name, grid) for a sheet file. Supports directives:
        @stamp NAME X Y [flip]   -- composite a stamp from the stamp library
-       @copy N                  -- start from frame N of this sheet (grid rows then overlay, '.' = keep? no: rows replace)
+       @copy N                  -- start from frame N of this sheet
+       @from FILE N             -- start from frame N of another sheet file (relative to data/)
+       Grid rows given after a @copy/@from overlay the copied frame; '?' keeps the copied pixel.
        @flip                    -- mirror the final frame horizontally
        @shift DX DY             -- move the composed frame
+       @put X Y SEGMENT         -- paint a row segment after stamping ('?' keep, '_' transparent)
+    Directives are applied in file order after the grid.
     """
     frames = []
     for b in parse_blocks(path):
@@ -111,6 +115,9 @@ def build_frames(path, w, h, stamps=None):
         for d in b['directives']:
             if d[0] == 'copy':
                 base = list(frames[int(d[1])][1])
+            elif d[0] == 'from':      # @from other_sheet.txt N : start from a frame of another sheet
+                other = build_frames(os.path.join(DATA, d[1]), w, h, stamps)
+                base = list(other[int(d[2])][1])
         if base is None:
             base = [TRANSPARENT * w] * h
         if rows:
@@ -137,8 +144,14 @@ def build_frames(path, w, h, stamps=None):
                         src = g[y - dy]
                         g2[y] = ''.join(src[x - dx] if 0 <= x - dx < w else TRANSPARENT for x in range(w))
                 g = g2
-            elif d[0] == 'over':
-                pass
+            elif d[0] == 'put':       # @put X Y SEGMENT : paint a row segment on top ('?' keep, '_' clear)
+                x0, y0, seg = int(d[1]), int(d[2]), d[3]
+                row = list(g[y0])
+                for i, c in enumerate(seg):
+                    if c in KEEP or not (0 <= x0 + i < w):
+                        continue
+                    row[x0 + i] = TRANSPARENT if c == CLEAR else c
+                g = g[:y0] + [''.join(row)] + g[y0 + 1:]
         frames.append((b['name'], g))
     return frames
 

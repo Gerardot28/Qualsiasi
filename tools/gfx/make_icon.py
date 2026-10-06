@@ -621,12 +621,14 @@ def main():
     sheet.save(os.path.join(args.out, "preview_sheet.png"))
     chk = Image.open(os.path.join(args.out, "icon.icns"))
     print("icns entries (w, h, scale):", sorted(chk.info.get("sizes", [])))
-    for sz in ((16, 16, 1), (32, 32, 1)):          # read back the RLE entries
-        chk.size = sz
-        chk.load()
-        ref = out[f"icon_{sz[0]}.png"].convert("RGBA")
-        assert np.array_equal(np.asarray(chk.im.convert("RGBA") if hasattr(chk.im, "convert") else chk),
-                              np.asarray(ref)) or True
+    for (w, h, k), ref in (((16, 16, 1), 16), ((32, 32, 1), 32), ((32, 32, 2), 64),
+                           ((512, 512, 2), 1024)):      # read back and compare
+        chk = Image.open(os.path.join(args.out, "icon.icns"))
+        chk.size = (w, h)
+        chk.load(scale=k)
+        same = np.array_equal(np.asarray(chk.convert("RGBA")),
+                              np.asarray(out[f"icon_{ref}.png"].convert("RGBA")))
+        assert same, f"icns entry {w}x{h}@{k}x does not match icon_{ref}.png"
     print("wrote:", ", ".join(sorted(os.listdir(args.out))))
 
 

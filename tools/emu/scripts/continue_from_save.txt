@@ -1,0 +1,11 @@
+# Boot with an existing save (--sav FILE) and CONTINUE: main menu shows
+# CONTINUE / NEW GAME / OPTION with the save summary, then the game resumes
+# where it was saved (the truck for save_in_truck.txt).
+include boot_to_title.txt
+press START
+wait 90
+shot ct_00_main_menu_continue    # f1206
+press A
+wait 400
+shot ct_01_resumed    # f1622
+mapinfo

@@ -13,6 +13,7 @@ with a greedy raster pass followed by a few ICM sweeps.  Edges, shores, tree
 crowns, 2x2 trees, ... all come out of the statistics of the real maps.
 """
 import collections
+import hashlib
 import json
 import math
 import os
@@ -123,7 +124,7 @@ def window(g, x, y):
     return ''.join(out)
 
 
-def train(project, primary, secondaries=None, verbose=False):
+def train(project, primary, secondaries=None, verbose=False, focus=None, focus_weight=8, exclude=()):
     P = project
     n_primary = P.consts_for(P.tileset(primary).is_frlg)['metatiles_primary']
     classes = {'__primary__': load_class_table(primary)}
@@ -134,7 +135,7 @@ def train(project, primary, secondaries=None, verbose=False):
             continue
         if secondaries and L.secondary_symbol not in secondaries:
             continue
-        if L.name in seen:
+        if L.name in seen or L.id in exclude:
             continue
         seen.add(L.name)
         try:
@@ -148,24 +149,25 @@ def train(project, primary, secondaries=None, verbose=False):
         if h < 3 or w < 3:
             continue
         M.layouts.append(L.name)
+        wgt = focus_weight if focus and L.secondary_symbol == focus else 1
         mids = blocks & 0x3FF
         keys = [[mkey(int(mids[y, x]), L.secondary_symbol, n_primary) for x in range(w)] for y in range(h)]
         for y in range(h):
             for x in range(w):
                 k = keys[y][x]
                 v = int(blocks[y, x])
-                M.ce[k][((v >> 10) & 3, (v >> 12) & 0xF)] += 1
+                M.ce[k][((v >> 10) & 3, (v >> 12) & 0xF)] += wgt
                 if x + 1 < w:
-                    M.H[(k, keys[y][x + 1])] += 1
+                    M.H[(k, keys[y][x + 1])] += wgt
                 if y + 1 < h:
-                    M.V[(k, keys[y + 1][x])] += 1
+                    M.V[(k, keys[y + 1][x])] += wgt
                 c = g[y, x]
                 if c == UNKNOWN:
                     continue
                 wd = window(g, x, y)
-                M.win9[wd][k] += 1
-                M.win4[wd[:5]][k] += 1
-                M.win1[c][k] += 1
+                M.win9[wd][k] += wgt
+                M.win4[wd[:5]][k] += wgt
+                M.win1[c][k] += wgt
     M.finalize()
     M.primary = primary
     M.n_primary = n_primary
@@ -175,7 +177,7 @@ def train(project, primary, secondaries=None, verbose=False):
     return M
 
 
-def get_model(project, primary, secondaries=None, rebuild=False):
+def get_model(project, primary, secondaries=None, rebuild=False, focus=None, exclude=()):
     """Model trained on layouts using `primary` (and, if given, one of `secondaries`)."""
     os.makedirs(CACHE_DIR, exist_ok=True)
     secondaries = sorted(secondaries) if secondaries else None
@@ -184,7 +186,14 @@ def get_model(project, primary, secondaries=None, rebuild=False):
     for f in sorted(os.listdir(CLASS_DIR)):
         stamp.append((f, os.path.getmtime(os.path.join(CLASS_DIR, f))))
     stamp.append(secondaries)
-    tag = primary if not secondaries else primary + '__' + '_'.join(x.replace('gTileset_', '') for x in secondaries)
+    stamp.append(focus)
+    stamp.append(sorted(exclude))
+    if secondaries and len(secondaries) > 3:
+        tag = primary + '__%d_secondaries_%08x' % (len(secondaries), int(hashlib.md5('|'.join(secondaries).encode()).hexdigest()[:8], 16))
+    else:
+        tag = primary if not secondaries else primary + '__' + '_'.join(x.replace('gTileset_', '') for x in secondaries)
+    if focus:
+        tag += '__focus_' + focus.replace('gTileset_', '')
     p = os.path.join(CACHE_DIR, 'model_%s.pickle' % tag)
     if not rebuild and os.path.exists(p):
         try:
@@ -194,7 +203,7 @@ def get_model(project, primary, secondaries=None, rebuild=False):
                 return M
         except Exception:
             pass
-    M = train(project, primary, secondaries)
+    M = train(project, primary, secondaries, focus=focus, exclude=set(exclude))
     with open(p, 'wb') as f:
         pickle.dump((stamp, M), f)
     return M

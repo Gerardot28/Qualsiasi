@@ -82,14 +82,20 @@ class SpeciesDB:
 
     # -- gameplay helpers ----------------------------------------------
     def moves_at_level(self, name, level, n=4):
-        """Last n distinct level-up moves learnt at or below level (game logic)."""
+        """Default moveset the game gives a Pokemon of this level, exactly like
+        GiveBoxMonInitialMoveset (src/pokemon.c): walk the level-up learnset in
+        order up to `level`, skip level-0 (evolution) moves and moves already
+        known, and keep only the last n."""
         moves = []
         for lv, mv in self[name]['levelUpLearnset']:
-            if lv <= level:
-                if mv in moves:
-                    moves.remove(mv)
-                moves.append(mv)
-        return moves[-n:]
+            if lv > level:
+                break
+            if lv == 0 or mv in moves:
+                continue
+            moves.append(mv)
+            if len(moves) > n:
+                moves.pop(0)
+        return moves
 
     def evolve_for_level(self, name, level, rng=None, encounterable_only=True):
         """Follow evolutions while the target's suggestedMinLevel <= level.
