@@ -38,5 +38,7 @@
  "src/pokenav_match_call_data.c:gText_MatchCallMay_Intro1": 147,
  "src/pokenav_match_call_data.c:gText_MatchCallMay_Intro2": 147,
  "src/pokenav_match_call_data.c:sCheckPageOverrides": 147,
- "_why src/pokenav_match_call_data.c:gText_MatchCallSteven_*,gText_MatchCallBrendan_*,gText_MatchCallMay_*,sCheckPageOverrides": "Check-page flavor texts, printed like match_call_messages.h by pokenav_list.c PrintMatchCallFlavorText (FONT_NARROW, x=2, 16-tile window -> 126px narrow); normal cap = widest original flavor line (147px); narrow widths verified <= 126px."
+ "_why src/pokenav_match_call_data.c:gText_MatchCallSteven_*,gText_MatchCallBrendan_*,gText_MatchCallMay_*,sCheckPageOverrides": "Check-page flavor texts, printed like match_call_messages.h by pokenav_list.c PrintMatchCallFlavorText (FONT_NARROW, x=2, 16-tile window -> 126px narrow); normal cap = widest original flavor line (147px); narrow widths verified <= 126px.",
+ "src/data/text/follower_messages.h": 208,
+ "_why src/data/text/follower_messages.h": "Printed by data/scripts/follower.inc (EventScript_FollowerGeneric etc.: message 0x0 / waitbuttonpress) in the field message box = window 0, menu.c sStandardTextBox_WindowTemplates 27 tiles = 216px, text at x=0; 208 leaves room for the down arrow."
 }
