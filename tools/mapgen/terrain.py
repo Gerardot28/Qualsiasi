@@ -27,6 +27,16 @@ CACHE_DIR = os.path.join(HERE, 'cache')
 MODEL_VERSION = 3
 
 UNKNOWN = '?'
+
+# collision / elevation given to synthesised cells of each class (Emerald conventions:
+# walkable ground = elevation 3, surfable water = elevation 1, obstacles = collision 1 / elevation 0)
+CLASS_CE = {
+    '.': (0, 3), ',': (0, 3), '"': (0, 3), 'f': (0, 3), ':': (0, 3), '_': (0, 3), 'P': (0, 3), 's': (0, 3),
+    'p': (0, 3), 'w': (0, 3),
+    '~': (0, 1), 'W': (0, 1),
+    'T': (1, 0), 'Y': (1, 0), '#': (1, 0), 'b': (1, 0), 'o': (1, 0), 'F': (1, 0), '!': (1, 0), 'h': (1, 0),
+    '=': (1, 0), '<': (1, 0), '>': (1, 0),
+}
 DIRS8 = [(0, -1), (1, 0), (0, 1), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1)]  # N E S W NE SE SW NW
 
 
@@ -124,7 +134,8 @@ def window(g, x, y):
     return ''.join(out)
 
 
-def train(project, primary, secondaries=None, verbose=False, focus=None, focus_weight=8, exclude=()):
+def train(project, primary, secondaries=None, verbose=False, focus=None, focus_weight=8, exclude=(),
+          prefixes=None):
     P = project
     n_primary = P.consts_for(P.tileset(primary).is_frlg)['metatiles_primary']
     classes = {'__primary__': load_class_table(primary)}
@@ -136,6 +147,8 @@ def train(project, primary, secondaries=None, verbose=False, focus=None, focus_w
         if secondaries and L.secondary_symbol not in secondaries:
             continue
         if L.name in seen or L.id in exclude:
+            continue
+        if prefixes and not any(L.name.startswith(px) for px in prefixes):
             continue
         seen.add(L.name)
         try:
@@ -177,7 +190,7 @@ def train(project, primary, secondaries=None, verbose=False, focus=None, focus_w
     return M
 
 
-def get_model(project, primary, secondaries=None, rebuild=False, focus=None, exclude=()):
+def get_model(project, primary, secondaries=None, rebuild=False, focus=None, exclude=(), prefixes=None):
     """Model trained on layouts using `primary` (and, if given, one of `secondaries`)."""
     os.makedirs(CACHE_DIR, exist_ok=True)
     secondaries = sorted(secondaries) if secondaries else None
@@ -188,12 +201,15 @@ def get_model(project, primary, secondaries=None, rebuild=False, focus=None, exc
     stamp.append(secondaries)
     stamp.append(focus)
     stamp.append(sorted(exclude))
+    stamp.append(sorted(prefixes) if prefixes else None)
     if secondaries and len(secondaries) > 3:
         tag = primary + '__%d_secondaries_%08x' % (len(secondaries), int(hashlib.md5('|'.join(secondaries).encode()).hexdigest()[:8], 16))
     else:
         tag = primary if not secondaries else primary + '__' + '_'.join(x.replace('gTileset_', '') for x in secondaries)
     if focus:
         tag += '__focus_' + focus.replace('gTileset_', '')
+    if prefixes:
+        tag += '__only_%08x' % int(hashlib.md5('|'.join(sorted(prefixes)).encode()).hexdigest()[:8], 16)
     p = os.path.join(CACHE_DIR, 'model_%s.pickle' % tag)
     if not rebuild and os.path.exists(p):
         try:
@@ -203,7 +219,7 @@ def get_model(project, primary, secondaries=None, rebuild=False, focus=None, exc
                 return M
         except Exception:
             pass
-    M = train(project, primary, secondaries, focus=focus, exclude=set(exclude))
+    M = train(project, primary, secondaries, focus=focus, exclude=set(exclude), prefixes=prefixes)
     with open(p, 'wb') as f:
         pickle.dump((stamp, M), f)
     return M

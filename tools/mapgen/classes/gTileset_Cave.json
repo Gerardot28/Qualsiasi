@@ -1,49 +1,19 @@
 {
- "_doc": "Auto-labelled from collision/behaviour of gTileset_Cave metatiles in Emerald cave layouts (ids are local to the secondary tileset, i.e. metatile id - 0x200). \".\" cave floor, \"#\" cave wall/rock, \"~\" cave water, \"=\" ledge.",
+ "_doc": "Terrain classes for gTileset_Cave (ids local to the secondary: metatile id - 0x200). \".\" cave floor, \"#\" rock wall, \"~\" cave water, \"=\" ledge, \"s\" sandy floor. Bridges, ice, stairs and rocks are left unlabelled (use stamps). Auto-labelled from collision/behaviour, then cleaned by hand.",
  ".": [
   "001",
-  "004",
   "011",
   "044",
   "06E",
   "073",
-  "08F",
-  "098",
-  "099",
-  "09A",
-  "09B",
-  "09C",
-  "09D",
-  "09E",
-  "0A0",
-  "0A1",
-  "0A2",
-  "0A8",
-  "0A9",
-  "0AA",
-  "0BB",
-  "0BC",
-  "0BD",
-  "0C3",
-  "0C4",
-  "0C5",
   "0D1",
   "0D9",
   "0F5",
   "11B",
   "157",
-  "15A",
-  "15B",
   "15D",
   "161",
-  "163",
-  "169",
-  "181",
-  "185",
-  "187",
-  "18C",
-  "18E",
-  "18F"
+  "169"
  ],
  "#": [
   "002",
@@ -291,5 +261,10 @@
   "19B",
   "19C",
   "19D"
+ ],
+ "s": [
+  "098-09E",
+  "0A0-0A2",
+  "0A8-0AA"
  ]
 }

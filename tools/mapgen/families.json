@@ -536,6 +536,57 @@
       "211",
       "211"
     ],
-    "look": "Generic brown cave (Granite Cave, Victory Road, Seafloor Cavern...). '.' floor, '#' rock wall, '~' cave water, '=' ledge."
+    "look": "Brown cave (Granite Cave, Victory Road, Shoal Cave). '.' floor, '#' rock wall (draw walls >= 2 thick), '~' cave water, '=' ledge, 's' sandy floor.",
+    "train_layouts": [
+      "GraniteCave_",
+      "ArtisanCave_",
+      "AlteringCave",
+      "VictoryRoad_",
+      "ShoalCave_LowTideInnerRoom",
+      "ShoalCave_LowTideLowerRoom",
+      "ShoalCave_LowTideStairsRoom",
+      "ShoalCave_HighTideInnerRoom",
+      "DesertUnderpass",
+      "ScorchedSlab"
+    ]
+  },
+  "cave_dark": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Cave",
+    "kind": "cave",
+    "train": [
+      "gTileset_Cave"
+    ],
+    "border": [
+      "211",
+      "211",
+      "211",
+      "211"
+    ],
+    "train_layouts": [
+      "SeafloorCavern_",
+      "MarineCave_",
+      "TerraCave_",
+      "SealedChamber_"
+    ],
+    "look": "Grey-walled sea cave (Seafloor Cavern, Marine/Terra Cave). Same chars as 'cave'."
+  },
+  "cave_stone": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Cave",
+    "kind": "cave",
+    "train": [
+      "gTileset_Cave"
+    ],
+    "border": [
+      "211",
+      "211",
+      "211",
+      "211"
+    ],
+    "train_layouts": [
+      "CaveOfOrigin_"
+    ],
+    "look": "Pale stone cave (Cave of Origin). Same chars as 'cave'."
   }
 }

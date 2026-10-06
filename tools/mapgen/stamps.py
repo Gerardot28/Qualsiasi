@@ -19,6 +19,7 @@ import argparse
 import collections
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -208,9 +209,10 @@ def auto_extract(project, verbose=False):
 def manual_extract(project):
     p = os.path.join(HERE, 'stamps_manual.json')
     if not os.path.exists(p):
-        return []
+        return [], {}
     out = []
-    for e in json.load(open(p))['stamps']:
+    data = json.load(open(p))
+    for e in data.get('stamps', []):
         L = project.layout(e['layout'])
         x0, y0, w, h = e['x'], e['y'], e['w'], e['h']
         mask = e.get('mask')  # list of strings, '.' = transparent, anything else = keep
@@ -232,7 +234,7 @@ def manual_extract(project):
         if 'force_secondary' in e:
             st['secondary'] = e['force_secondary']
         out.append(st)
-    return out
+    return out, {k: v for k, v in data.get('aliases', {}).items() if not k.startswith('_')}
 
 
 def signature(st):
@@ -240,12 +242,17 @@ def signature(st):
             tuple(tuple((v & 0x3FF) if v is not None else -1 for v in r) for r in st['blocks']))
 
 
+def snake(name):
+    s = re.sub(r'([a-z])([A-Z])', r'\1_\2', name)
+    return re.sub(r'[^A-Za-z0-9]+', '_', s).lower().strip('_')
+
+
 def build(project, verbose=True):
+    """Extract all stamps. Ids are stable: <family>/<kind>_<source map>[_<dest>|_<x>_<y>]."""
     autos = auto_extract(project)
-    manual = manual_extract(project)
+    manual, aliases = manual_extract(project)
     lib = collections.OrderedDict()
     sigs = {}
-    counters = collections.Counter()
     for st in manual + autos:
         sig = signature(st)
         if sig in sigs:
@@ -256,13 +263,26 @@ def build(project, verbose=True):
         if 'name' in st:
             sid = '%s/%s' % (fam, st.pop('name'))
         else:
-            base = '%s/%s' % (fam, st['kind'])
-            counters[base] += 1
-            sid = '%s_%d' % (base, counters[base])
+            src = snake(st['source'].get('map', 'x'))
+            sid = '%s/%s_%s' % (fam, st['kind'], src)
+            if sid in lib:
+                dest = snake(st['source'].get('dest_map', '').replace('MAP_', '').title().replace('_', ''))
+                sid = '%s/%s_%s' % (fam, st['kind'], dest or src)
+            if sid in lib:
+                sid = '%s/%s_%s_%d_%d' % (fam, st['kind'], src, st['source']['x'], st['source']['y'])
         st['id'] = sid
         st['family'] = fam
         sigs[sig] = st
         lib[sid] = st
+    for alias, target in aliases.items():
+        if target not in lib:
+            print('WARNING: alias %s -> %s: target missing' % (alias, target))
+            continue
+        st = dict(lib[target])
+        st['id'] = alias
+        st['alias_of'] = target
+        st['family'] = alias.split('/')[0]
+        lib[alias] = st
     os.makedirs(STAMP_DIR, exist_ok=True)
     byfam = collections.defaultdict(list)
     for st in lib.values():
@@ -373,11 +393,14 @@ def previews(project, outdir, lib=None):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('cmd', choices=['build', 'previews', 'list'])
-    ap.add_argument('--root', default=DEFAULT_ROOT)
+    ap.add_argument('--root', default=None,
+                    help='tree to read (build: default /home/user/pex-orig, the pristine source; '
+                         'previews: default %s)' % DEFAULT_ROOT)
     ap.add_argument('--out', default=DEFAULT_OUT)
     ap.add_argument('--family')
     a = ap.parse_args()
-    P = pexmap.Project(a.root)
+    root = a.root or ('/home/user/pex-orig' if a.cmd == 'build' and os.path.isdir('/home/user/pex-orig') else DEFAULT_ROOT)
+    P = pexmap.Project(root)
     if a.cmd == 'build':
         build(P)
     elif a.cmd == 'previews':

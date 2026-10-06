@@ -36,12 +36,12 @@ maps:
       YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
       YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
     stamps:
-      - {stamp: general/pokecenter_2, x: 6,  y: 5,  door: {to: TestTown_PokemonCenter_1F}}
-      - {stamp: general/mart_2,       x: 22, y: 5,  door: {to: TestTown_Mart}}
-      - {stamp: general/building_1,   x: 6,  y: 13, door: {to: TestTown_House1}}
-      - {stamp: petalburg/house_3,    x: 21, y: 12, door: {to: TestTown_House2}}
-      - {stamp: general/gym_1,        x: 13, y: 15, door: {to: TestTown_Gym}}
-      - {stamp: petalburg/house_4,    x: 25, y: 16, door: {to: MAP_LITTLEROOT_TOWN, warp: 0}}
+      - {stamp: general/pokecenter,   x: 6,  y: 5,  door: {to: TestTown_PokemonCenter_1F}}
+      - {stamp: general/mart,         x: 22, y: 5,  door: {to: TestTown_Mart}}
+      - {stamp: general/house_red,    x: 6,  y: 13, door: {to: TestTown_House1}}
+      - {stamp: petalburg/house_oldale, x: 21, y: 12, door: {to: TestTown_House2}}
+      - {stamp: general/gym,          x: 13, y: 15, door: {to: TestTown_Gym}}
+      - {stamp: petalburg/house_small, x: 25, y: 16, door: {to: MAP_LITTLEROOT_TOWN, warp: 0}}
     npcs:
       - {name: Boy, gfx: BOY_1, x: 11, y: 11, move: wander, range: [2, 1],
          text: "Welcome to TEST TOWN! Everything here was drawn by a map compiler."}
@@ -65,13 +65,13 @@ maps:
     terrain: |
       TTTTTTTTTTTTTT::::TTTTTTTTTTTTTT
       TTTTTTTTTTTTTT::::TTTTTTTTTTTTTT
-      TT............::::............TT
-      TT..,,,,,,....::::....,,,,,,..TT
-      TT..,,,,,,....::::....,,,,,,..TT
-      TT..,,,,,,....::::....,,,,,,..TT
-      TT............::::............TT
-      TT...TTTT.....::::.....TTTT...TT
-      TT...TTTT.....::::.....TTTT...TT
+      TT##########..::::............TT
+      TT##########..::::....,,,,,,..TT
+      TT##########..::::....,,,,,,..TT
+      TT##########..::::....,,,,,,..TT
+      TT##########..::::............TT
+      TT............::::.....TTTT...TT
+      TT............::::.....TTTT...TT
       TT............::::............TT
       TT==========..::::..==========TT
       TT............::::............TT
@@ -87,6 +87,8 @@ maps:
       TT..,,,,......::::......,,,,..TT
       TT............::::............TT
       TTTTTTTTTTTTTT::::TTTTTTTTTTTTTT
+    stamps:
+      - {stamp: general/cave_entrance, x: 6, y: 5, door: {to: TestCave}}
     trainers:
       - {name: Youngster, trainer: TRAINER_TEST_ROUTE_JOEY, gfx: YOUNGSTER, x: 13, y: 13, move: face_right, sight: 4,
          intro: "Hey! You just came from TEST TOWN? Let's battle!",
@@ -124,6 +126,42 @@ maps:
         party:
           - {species: Rattata, level: 4}
           - {species: Sentret, level: 3}
+
+  # ------------------------------------------------------------------ Test Cave (cave family)
+  - name: TestCave
+    group: Johto
+    family: cave
+    map_type: cave
+    music: MUS_CAVE_OF_ORIGIN
+    mapsec: MAPSEC_TEST_CAVE
+    mapsec_name: TEST CAVE
+    terrain: |
+      ######################
+      ######################
+      ####.........#########
+      ###...........########
+      ##..............######
+      ##.....~~~~.......####
+      ##.....~~~~........###
+      ##.................###
+      ###......###.......###
+      ###......###......####
+      ##...............#####
+      ##...............#####
+      ###......#############
+      ######################
+    stamps:
+      - {stamp: cave/exit, x: 6, y: 12, door: {to: TestRoute1}}
+    npcs:
+      - {name: Hiker, gfx: HIKER, x: 14, y: 7, move: wander, range: [2, 2], text: "Caves are drawn with the same ASCII grid, just another family."}
+    wild:
+      land:
+        rate: 10
+        mons:
+          - [SPECIES_ZUBAT, 4, 6]
+          - [SPECIES_GEODUDE, 4, 6]
+          - [SPECIES_ZUBAT, 5, 7]
+          - [SPECIES_ONIX, 6, 6]
 
   # ------------------------------------------------------------------ interiors (re-used layouts)
   - name: TestTown_PokemonCenter_1F

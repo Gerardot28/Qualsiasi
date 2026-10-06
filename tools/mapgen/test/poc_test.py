@@ -203,6 +203,18 @@ def main():
         e.run(['wait 60', 'read32 gMain+4 cb2b'], 'x')
         check('ran from the wild battle', e.last['cb2b'] == cb2_overworld, '', e.shot('p27_after_wild'))
 
+    # ---- cave: entrance in the rock face (7,6) -> TestCave (cave family)
+    enter_door(e, 7, 6, 'MAP_TEST_CAVE', 'p29_cave_arrival')
+    e.walk_to(7, 9)
+    e.shot('p30_cave_inside')
+    m, x, y = e.where()
+    check('walk inside the cave', m == 'MAP_TEST_CAVE' and (x, y) == (7, 9), '%s (%d,%d)' % (m, x, y))
+    e.walk_to(7, 13)
+    e.run(['hold DOWN 16', 'wait 180'], 'cave_exit')
+    m, x, y = e.where()
+    check('cave exit -> route, in front of the cave mouth', m == 'MAP_TEST_ROUTE1' and (x, y) == (7, 7),
+          '%s (%d,%d)' % (m, x, y), e.shot('p31_out_of_cave'))
+
     # ---- back south across the connection
     e.walk_to(15, 23)
     e.run(['hold DOWN 32', 'wait 60'], 'south')

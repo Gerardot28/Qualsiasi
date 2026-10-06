@@ -1,0 +1,32 @@
+{
+  "_doc": "Hand-picked stamps (rectangles of existing layouts) and friendly aliases for auto-extracted stamps. Ids are '<family>/<name>'; the family part is computed from the tilesets the stamp uses (general = primary tileset only). mask rows: '.' = transparent cell.",
+  "stamps": [
+    {"id": "sign_board", "kind": "prop", "layout": "LAYOUT_ROUTE104", "x": 17, "y": 23, "w": 1, "h": 1,
+     "notes": "Wooden trainer-tips board (impassable). Add a sign entry at its position for the text."},
+    {"id": "gym_sign", "kind": "prop", "layout": "LAYOUT_PETALBURG_CITY", "x": 17, "y": 9, "w": 1, "h": 2,
+     "notes": "Gym statue-sign, 1x2; the readable tile is the bottom one."},
+    {"id": "rock_cluster", "kind": "prop", "layout": "LAYOUT_DEWFORD_TOWN", "x": 18, "y": 15, "w": 1, "h": 1,
+     "notes": "Single brown boulder (same as terrain 'o')."}
+  ],
+  "aliases": {
+    "_doc": "alias id -> real (auto-extracted) stamp id; aliases are stable names to use in specs",
+    "general/pokecenter": "general/pokecenter_petalburg_city",
+    "general/pokecenter_flowers": "general/pokecenter_battle_frontier_outside_east",
+    "general/mart": "general/mart_mossdeep_city",
+    "general/house_red": "general/building_route111old_ladys_rest_stop",
+    "general/house_red_wide": "general/house_petalburg_city",
+    "general/house_red_flowers": "general/house_petalburg_city_house2",
+    "general/shop_double": "general/shop_lavaridge_town",
+    "general/gym": "general/gym_petalburg_city",
+    "general/cave_entrance": "general/cave_route116",
+    "petalburg/house_littleroot": "petalburg/house_littleroot_town",
+    "petalburg/house_oldale": "petalburg/house_oldale_town",
+    "petalburg/house_small": "petalburg/house_petalburg_city",
+    "petalburg/lab": "petalburg/lab_littleroot_town",
+    "petalburg/pokecenter": "petalburg/pokecenter_oldale_town",
+    "petalburg/mart": "petalburg/mart_oldale_town",
+    "cave/exit": "cave/exit_south_granite_cave_1f",
+    "cave/passage": "cave/passage_granite_cave_stevens_room",
+    "cave/ladder": "cave/ladder_granite_cave_b1f"
+  }
+}

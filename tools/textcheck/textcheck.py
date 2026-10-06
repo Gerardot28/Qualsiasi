@@ -883,6 +883,8 @@ LABEL_CLASS_OVERRIDES = [
     (re.compile(r'MauvilleCity_PokemonCenter_1F_Text_\w+Story$'), 'field'),
     # src/field_specials.c ShowBattleFrontierTutorMoveDescription: 12x6-tile window
     (re.compile(r'BattleFrontier_Lounge7_Text_\w+Desc$'), 'tutor_desc'),
+    # src/battle_tower.c PARTNER_TEXTS(name) token pasting -> ShowFieldMessage(...)
+    (re.compile(r'BattleFrontier_BattleTowerMultiPartnerRoom_Text_\w+$'), 'field'),
 ]
 
 IDENT_RE = re.compile(r'[A-Za-z_]\w*')
@@ -1024,11 +1026,10 @@ class UsageIndex:
         classes = set()
         for r in refs:
             classes |= r[2]
-        if refs:
-            for rx, cls in LABEL_CLASS_OVERRIDES:
-                if rx.match(label):
-                    classes.add(cls)
-        if not refs:
+        for rx, cls in LABEL_CLASS_OVERRIDES:
+            if rx.match(label):
+                classes.add(cls)
+        if not refs and not classes:
             return set(), 'unreferenced'
         if classes:
             return classes, ','.join(sorted(classes))
@@ -1509,6 +1510,15 @@ class Checker:
         elif nk < ok_ and not (oend and not nend):
             self.add('error', 'TERMINATION', rel, last, label,
                      'fewer "$" terminators (%d) than the original (%d)%s' % (nk, ok_, vtag))
+        # \p or \l right before "$": the box waits for a button press and then shows an
+        # empty box / scrolls the last line away (vanilla does this only in FRLG intro texts)
+        for code, name in ((b'\xfb\xff', '\\p$'), (b'\xfa\xff', '\\l$')):
+            if nd.count(code) > od.count(code):
+                self.add('warning', 'STYLE', rel, last, label,
+                         '"%s": the player must press a button again and sees an empty/scrolled box; '
+                         'end the text with "$" directly%s' % (name, vtag))
+        if od.rstrip(b'\xff') and not nd.rstrip(b'\xff'):
+            self.add('warning', 'STYLE', rel, last, label, 'text block is now empty' + vtag)
 
     def _check_display(self, rel, label, li, nsl):
         ctx = self.ctx
