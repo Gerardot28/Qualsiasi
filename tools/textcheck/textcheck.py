@@ -1045,8 +1045,7 @@ class Issue:
 # Checker
 # ==========================================================================
 class Context:
-    def __init__(self, root, orig, charmap_path=None, player_width=42, strvar_width=60,
-                 arrow_check=True):
+    def __init__(self, root, orig, charmap_path=None, player_width=42, strvar_width=60):
         self.root = root
         self.orig = orig
         cm_path = charmap_path or (os.path.join(root, 'charmap.txt') if root and os.path.exists(os.path.join(root, 'charmap.txt'))
@@ -1057,7 +1056,6 @@ class Context:
         self.fonts = Fonts(fonts_c)
         self.player_width = player_width
         self.strvar_width = strvar_width
-        self.arrow_check = arrow_check
         self.ph_widths = self._placeholder_widths()
         self.measurer = Measurer(self.fonts, self.ph_widths)
         self.index = None
@@ -1150,6 +1148,11 @@ class LabelInfo:
         self.cls = min(box, key=lambda c: CLASS_LIMITS[c]) if box else None
         base = CLASS_LIMITS[self.cls] if box else LIMIT_FIELD
         self.base_limit = base
+        # a line followed by \p or \l must leave room for the down arrow
+        self.base_arrow = base - DOWN_ARROW_W if self.box else base
+
+        def eff(dl):
+            return self.base_arrow if dl['term'] in ('p', 'l') else base
         # --- calibrate STR_VAR widths on vanilla lines
         dlines = []
         for b in orig_blocks:
@@ -1165,30 +1168,39 @@ class LabelInfo:
             tok = sum(dflt[p] * dl['ph'][p] for p in cal)
             if tok <= 0:
                 continue
-            s = (base - other) / tok
+            sc = (eff(dl) - other) / tok
             for p in cal:
-                scale[p] = min(scale.get(p, 1.0), s)
-        self.ph_override = {p: max(0, int(dflt[p] * s)) for p, s in scale.items() if s < 1.0}
+                scale[p] = min(scale.get(p, 1.0), sc)
+        self.ph_override = {p: max(0, int(dflt[p] * sc)) for p, sc in scale.items() if sc < 1.0}
         # --- vanilla maxima under the calibrated model
-        self.vanilla_max = 0
+        self.vanilla_max = 0          # widest line not followed by \p/\l
+        self.vanilla_max_arrow = 0    # widest line followed by \p/\l
         self.vanilla_box = Counter()
-        self.vanilla_arrow = 0
         for b in orig_blocks:
             for _, sl in b.variants():
                 dl2 = ctx.measurer.lines(_units(sl), self.ph_override)
                 for dl in dl2:
-                    self.vanilla_max = max(self.vanilla_max, dl['width'])
-                    if dl['term'] in ('p', 'l') and dl['width'] + DOWN_ARROW_W > base:
-                        self.vanilla_arrow += 1
+                    if dl['term'] in ('p', 'l'):
+                        self.vanilla_max_arrow = max(self.vanilla_max_arrow, dl['width'])
+                    else:
+                        self.vanilla_max = max(self.vanilla_max, dl['width'])
                 for seg in _segments(dl2):
                     for kind, _ in box_violations(seg):
                         self.vanilla_box[kind] += 1
-        self.limit = max(base, self.vanilla_max)
-        self.preexisting_overflow = self.vanilla_max > base
+        if self.box:
+            self.limit = max(base, self.vanilla_max)
+            self.limit_arrow = max(self.base_arrow, self.vanilla_max_arrow)
+        else:
+            # unclassified: max(vanilla width of this label, standard limit)
+            self.limit = self.limit_arrow = max(base, self.vanilla_max, self.vanilla_max_arrow)
+        self.preexisting_overflow = self.vanilla_max > base or self.vanilla_max_arrow > self.base_arrow
+
+    def line_limit(self, dl):
+        return self.limit_arrow if dl['term'] in ('p', 'l') else self.limit
 
 
 class Checker:
-    def __init__(self, ctx, warn_arrow=True):
+    def __init__(self, ctx, warn_arrow=False):
         self.ctx = ctx
         self.issues = []
         self.stats = Counter()
@@ -1346,36 +1358,52 @@ class Checker:
         dlines = ctx.measurer.lines(_units(nsl), li.ph_override)
         for dl in dlines:
             self.stats['display_lines'] += 1
-            if dl['width'] > li.limit:
-                if li.box:
-                    what = '%s box' % li.cls
-                    lim_desc = '' if not li.preexisting_overflow else ' (vanilla already %dpx)' % li.vanilla_max
-                else:
-                    what = 'unclassified text'
-                    lim_desc = ' (limit = max(vanilla %dpx, %dpx))' % (li.vanilla_max, LIMIT_FIELD)
-                self.add('error', 'WIDTH', rel, dl['line'], label,
-                         'line too wide for %s%s%s' % (what, lim_desc, _ph_note(dl, li, ctx)),
-                         width=dl['width'], limit=li.limit, text=dl['text'])
-            elif (self.warn_arrow and li.box and dl['term'] in ('p', 'l')
-                  and dl['width'] + DOWN_ARROW_W > li.base_limit and li.vanilla_arrow == 0):
-                self.add('warning', 'WIDTH', rel, dl['line'], label,
-                         'the "more text" arrow after this line is clipped (needs %dpx more)' % DOWN_ARROW_W,
-                         width=dl['width'] + DOWN_ARROW_W, limit=li.base_limit, text=dl['text'])
+            lim = li.line_limit(dl)
+            if dl['width'] <= lim:
+                continue
+            arrow_only = dl['width'] <= li.limit
+            if li.box:
+                what = 'the %s box' % li.cls
+                if li.preexisting_overflow:
+                    what += ' (limit raised to the vanilla width of this label)'
+            else:
+                what = 'unclassified text [%s] (limit = max(vanilla %dpx, %dpx))' % (
+                    li.desc, max(li.vanilla_max, li.vanilla_max_arrow), LIMIT_FIELD)
+            if arrow_only:
+                msg = ('line before \\%s leaves no room for the %dpx "more text" arrow in %s'
+                       % (dl['term'], DOWN_ARROW_W, what))
+                sev = 'warning' if self.warn_arrow else 'error'
+                chk = 'ARROW'
+            else:
+                msg = 'line too wide for %s' % what
+                sev = 'error'
+                chk = 'WIDTH'
+            self.add(sev, chk, rel, dl['line'], label, msg + _ph_note(dl, li, ctx),
+                     width=dl['width'], limit=lim, text=dl['text'])
+        if 'buffer' in li.classes:
+            w = max([dl['width'] for dl in dlines] + [0])
+            vw = max(li.vanilla_max, li.vanilla_max_arrow)
+            if w > max(vw, ctx.strvar_width):
+                self.add('warning', 'WIDTH', rel, nsl[0].no if nsl else 0, label,
+                         'text inserted via bufferstring is wider than the vanilla one (%dpx vs %dpx): '
+                         'check the lines that print it through {STR_VAR_n}' % (w, vw))
         if not li.box:
             return
         for seg in _segments(dlines):
             for kind, dl in box_violations(seg):
+                pre = li.vanilla_box[kind] > 0
+                sev = 'warning' if pre else 'error'
+                note = ' (also in vanilla)' if pre else ''
                 if kind == 'third_line':
-                    sev = 'error' if li.vanilla_box['third_line'] == 0 else 'warning'
                     self.add(sev, 'BOXLINES', rel, dl['line'], label,
-                             'text on a 3rd line of the 2-line %s box: use \\l instead of \\n for the 2nd break '
-                             'of a paragraph, or start a new box with \\p%s'
-                             % (li.cls, '' if sev == 'error' else ' (also in vanilla)'), text=dl['text'])
+                             'text on a 3rd line of the 2-line %s box: after the first \\n of a paragraph '
+                             'continue with \\l (scroll) or start a new box with \\p%s' % (li.cls, note),
+                             text=dl['text'])
                 elif kind == 'scroll_first':
-                    if li.vanilla_box['scroll_first'] == 0:
-                        self.add('warning', 'BOXLINES', rel, dl['line'], label,
-                                 'first break of the paragraph is \\l (scrolls a single line away); use \\n',
-                                 text=dl['text'])
+                    self.add(sev, 'BOXLINES', rel, dl['line'], label,
+                             'first break of a paragraph is \\l (it scrolls a single line away): '
+                             'use \\n for the first break, \\l for the following ones%s' % note,
+                             text=dl['text'])
 
 
 def _ph_note(dl, li, ctx):
@@ -1448,7 +1476,7 @@ def calibrate(ctx, rels, out):
             if li.ph_override:
                 cal_labels += 1
             if li.preexisting_overflow:
-                preexist.append((li.vanilla_max, li.base_limit, rel, b.label, cls))
+                preexist.append((max(li.vanilla_max, li.vanilla_max_arrow), li.base_limit, rel, b.label, cls))
             if not li.box:
                 unclassified[li.desc.split('(')[0]] += 1
                 for r in ctx.index.refs.get(b.label, []):
@@ -1472,7 +1500,7 @@ def calibrate(ctx, rels, out):
                         if dl['term'] in ('p', 'l') and not dl['ph']:
                             ctx_lines[cls + ' (no placeholders, before \\p/\\l)'].append(
                                 (dl['width'], rel, dl['line'], b.label, dl['text'], dl['term']))
-                        if li.box and dl['term'] in ('p', 'l') and dl['width'] + DOWN_ARROW_W > li.base_limit:
+                        if li.box and dl['term'] in ('p', 'l') and dl['width'] > li.base_arrow:
                             arrow[cls] += 1
                     if li.box:
                         for seg in _segments(d1):
@@ -1538,7 +1566,8 @@ def main(argv=None):
     ap.add_argument('--json', action='store_true', help='machine-readable output on stdout')
     ap.add_argument('--player-width', type=int, default=42, help='px assumed for {PLAYER} (default 42 = 7 x 6px)')
     ap.add_argument('--strvar-width', type=int, default=60, help='px assumed for {STR_VAR_n} (default 60 = 10 x 6px)')
-    ap.add_argument('--no-arrow', action='store_true', help='do not warn about a clipped "more text" arrow')
+    ap.add_argument('--arrow-warning', action='store_true',
+                    help='report a line before \\p/\\l that leaves no room for the 8px arrow as a warning, not an error')
     ap.add_argument('--no-warnings', action='store_true', help='only print errors')
     ap.add_argument('--strict', action='store_true', help='exit 1 on warnings too')
     ap.add_argument('--list-unclassified', action='store_true', help='list labels whose display window is unknown')
@@ -1570,7 +1599,7 @@ def main(argv=None):
         print('\n'.join(out))
         return 0
 
-    checker = Checker(ctx, warn_arrow=not args.no_arrow)
+    checker = Checker(ctx, warn_arrow=args.arrow_warning)
     if args.single:
         new_path, orig_path = args.single
         ap_orig = os.path.abspath(orig_path)
