@@ -1,0 +1,5 @@
+# gbashot script: title-sequence bike ride (the intro picks the boy with the default frozen clock)
+wait 1540
+shot 01_intro_a.ppm
+wait 30
+shot 02_intro_b.ppm

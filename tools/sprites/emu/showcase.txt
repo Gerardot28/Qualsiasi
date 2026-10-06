@@ -35,3 +35,96 @@ repeat 7 A 4 16
 repeat 32 A 4 20
 repeat 24 A 2 6
 savestate house.ss
+# --- free roam after the debug Cheat start
+# debug menu (R+START) -> Utilities -> Cheat start
+press R+START 6 40
+press A 4 30
+repeat 6 DOWN 4 8
+press A 4 60
+repeat 10 A 3 10
+# Cheat start set the in-game clock to 00:00: move the frozen RTC forward 12h -> noon
+rtc 1767312001000
+wait 10
+# leave the house
+hold DOWN 64
+wait 90
+hold DOWN 30
+shot 10_lr_free_down.ppm
+hold LEFT 9
+shot 11_lr_walk_left.ppm
+hold LEFT 16
+hold UP 9
+shot 12_lr_walk_up.ppm
+hold UP 7
+hold RIGHT 9
+shot 13_lr_walk_right.ppm
+hold RIGHT 23
+wait 20
+shot 14_lr_stand.ppm
+hold B+DOWN 6
+shot 15_lr_run_a.ppm
+hold B+DOWN 4
+shot 16_lr_run_b.ppm
+hold B+LEFT 6
+shot 17_lr_run_left.ppm
+hold B+LEFT 10
+wait 20
+savestate free.ss
+# --- trainer card and Acro Bike
+press START 4 30
+repeat 3 DOWN 4 8
+press A 4 120
+shot 21_trainer_card.ppm
+press B 4 90
+press B 4 30
+press START 4 30
+press UP 4 8
+press A 4 90
+press LEFT 4 30
+press A 4 20
+shot 24_bike_use.ppm
+press A 4 120
+shot 25_bike_on.ppm
+hold DOWN 6
+shot 26_bike_down.ppm
+hold DOWN 10
+hold LEFT 6
+shot 27_bike_left.ppm
+hold LEFT 20
+hold UP 6
+shot 28_bike_up.ppm
+hold UP 14
+hold RIGHT 6
+shot 29_bike_right.ppm
+hold RIGHT 30
+wait 10
+hold B 30
+shot 30_bike_wheelie.ppm
+hold B 20
+wait 30
+savestate bike.ss
+# --- Fly map (region map head icon) and battle intro (back pic)
+loadstate bike.ss
+press R+START 6 40
+press A 4 30
+press A 4 120
+shot 31_fly_map.ppm
+loadstate bike.ss
+press R+START 6 40
+repeat 2 DOWN 4 8
+press A 4 30
+repeat 10 DOWN 4 8
+press A 4 2
+wait 330
+shot 32_battle_intro.ppm
+wait 120
+shot 32b_battle_intro.ppm
+press A 4 30
+press A 4 60
+press A 4 2
+wait 248
+shot 33_battle_throw_a.ppm
+wait 8
+shot 34_battle_throw_b.ppm
+wait 8
+shot 35_battle_throw_c.ppm
