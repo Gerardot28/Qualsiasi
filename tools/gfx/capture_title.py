@@ -67,7 +67,10 @@ def main():
             if t > now:
                 lines.append(f"sleep {t - now:.3f}")
                 now = t
-            lines.append(f"xdotool key {k}")
+            if k == "F12":
+                lines.append("xdotool key F12")  # frontend hotkey: a tap is enough
+            else:  # game input is polled once per frame: hold the key ~100 ms
+                lines.append(f"xdotool keydown {k}; sleep 0.1; xdotool keyup {k}")
             if k == "F12":
                 lines.append(f'echo "{now:.3f}" >> times.txt')
         script = textwrap.dedent(f"""\
@@ -79,7 +82,7 @@ def main():
             sleep 2
             xdotool mousemove 240 160
             sleep {max(args.skip_at - 2, 0):.3f}
-            xdotool key Return
+            xdotool keydown Return; sleep 0.1; xdotool keyup Return
             """) + "\n".join(lines) + "\nsleep 1\nkill $PID\nwait $PID 2>/dev/null\n"
         sh = os.path.join(work, "run.sh")
         with open(sh, "w") as f:

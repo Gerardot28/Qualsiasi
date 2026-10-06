@@ -851,6 +851,8 @@ C_FILE_CLASSES = {
     'src/data/battle_frontier/apprentice.h': 'field',
     'src/match_call.c': 'pokenav',
     'src/pokenav_match_call_data.c': 'pokenav',
+    # printed with AddTextPrinterParameterized2(0, FONT_NORMAL, ...) in the message window 0
+    'src/data/battle_frontier/battle_frontier_exchange_corner.h': 'field',
 }
 
 IDENT_RE = re.compile(r'[A-Za-z_]\w*')

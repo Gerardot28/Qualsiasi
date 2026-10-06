@@ -26,6 +26,7 @@ import subprocess
 import sys
 import tempfile
 
+sys.dont_write_bytecode = True  # keep the tool directory free of __pycache__
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cparse import CSource, Unevaluable  # noqa: E402
 
@@ -147,20 +148,17 @@ def makefile_game_version(root):
     return 'EMERALD'
 
 
-def preprocess(root, cpp, defines=(), game_version=None):
-    """Run cpp on src/pokemon.c like the Makefile does.  Generated headers that
+def run_cpp(root, cpp, src, defines=(), game_version=None, extra_args=()):
+    """Run cpp on *src* with the Makefile's CPPFLAGS.  Generated headers that
     do not exist in a clean tree (map_groups.h, teachable_learnsets.h, ...) are
     replaced by empty stubs; their identifiers then stay symbolic."""
-    src = os.path.join(root, 'src', 'pokemon.c')
-    if not os.path.isfile(src):
-        raise SystemExit('not an expansion tree (missing %s)' % src)
     game_version = game_version or makefile_game_version(root)
     stubs = []
     with tempfile.TemporaryDirectory(prefix='speciesdb_stub_') as stubdir:
         for _ in range(100):
             cmd = cpp + ['-iquote', os.path.join(root, 'include'), '-iquote', stubdir,
                          '-Wno-trigraphs', '-DMODERN=1', '-DTESTING=0', '-D' + game_version,
-                         '-std=gnu17'] + ['-D' + d for d in defines] + [src]
+                         '-std=gnu17'] + ['-D' + d for d in defines] + list(extra_args) + [src]
             p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             err = p.stderr.decode('utf-8', 'replace')
             if p.returncode == 0:
@@ -176,6 +174,47 @@ def preprocess(root, cpp, defines=(), game_version=None):
             open(path, 'w').close()
             stubs.append(rel)
     raise SystemExit('too many missing headers')
+
+
+def preprocess(root, cpp, defines=(), game_version=None):
+    """Preprocess src/pokemon.c (which includes species_info.h, the learnsets,
+    form tables, ...) exactly like the Makefile does."""
+    src = os.path.join(root, 'src', 'pokemon.c')
+    if not os.path.isfile(src):
+        raise SystemExit('not an expansion tree (missing %s)' % src)
+    return run_cpp(root, cpp, src, defines, game_version)
+
+
+def config_snapshot(root, cpp, defines=(), game_version=None, prefixes=('P_',)):
+    """Evaluate every object-like P_* config macro (include/config/*.h)."""
+    head = '#include "global.h"\n#include "config/pokemon.h"\n#include "config/species_enabled.h"\n'
+    with tempfile.TemporaryDirectory(prefix='speciesdb_cfg_') as td:
+        w = os.path.join(td, 'cfg.c')
+        with open(w, 'w') as f:
+            f.write(head)
+        text, _, _, _ = run_cpp(root, cpp, w, defines, game_version, ['-dM'])
+        names = []
+        for line in text.splitlines():
+            m = re.match(r'#define (\w+)(\(?)', line)
+            if m and not m.group(2) and m.group(1).startswith(prefixes):
+                names.append(m.group(1))
+        names = sorted(set(names))
+        with open(w, 'w') as f:
+            f.write(head + ''.join('const int cfg__%s[] = { %s };\n' % (n, n) for n in names))
+        text, _, _, _ = run_cpp(root, cpp, w, defines, game_version)
+    src = CSource(text)
+    out = collections.OrderedDict()
+    for n in names:
+        lst = src.object('cfg__' + n)
+        node = lst[0][1] if lst else None
+        try:
+            v = src.eval_int(node) if node is not None and node[0] != 'empty' else None
+        except Unevaluable:
+            v = src.text(*src.objects['cfg__' + n])[2:-2].strip()
+        except SyntaxError:
+            v = None
+        out[n] = v
+    return out
 
 
 # --------------------------------------------------------------------------
@@ -445,7 +484,26 @@ def build(root, cpp_cmd=None, defines=(), keep_preprocessed=None, game_version=N
     meta['gameVersion'] = game_version
     meta['extraDefines'] = list(defines)
     meta['stubbedHeaders'] = stubs
-    meta['configs'] = config_snapshot(src)
+    cfg = config_snapshot(root, cpp, defines, game_version)
+    meta['configs'] = cfg
+    fam = {k: v for k, v in cfg.items() if k.startswith('P_FAMILY_')}
+    gens = {k: v for k, v in cfg.items() if re.match(r'P_GEN_\d_POKEMON$', k)}
+    meta['configSummary'] = collections.OrderedDict([
+        ('genFlags', gens),
+        ('familyFlags', len(fam)),
+        ('familiesEnabled', sum(1 for v in fam.values() if v)),
+        ('familiesDisabled', sorted(k for k, v in fam.items() if not v)),
+        ('formFlags', {k: cfg.get(k) for k in ('P_MEGA_EVOLUTIONS', 'P_GEN_9_MEGA_EVOLUTIONS', 'P_PRIMAL_REVERSIONS',
+                                               'P_ULTRA_BURST_FORMS', 'P_GIGANTAMAX_FORMS', 'P_TERA_FORMS',
+                                               'P_FUSION_FORMS', 'P_REGIONAL_FORMS', 'P_ALOLAN_FORMS',
+                                               'P_GALARIAN_FORMS', 'P_HISUIAN_FORMS', 'P_PALDEAN_FORMS',
+                                               'P_CROSS_GENERATION_EVOS', 'P_PIKACHU_EXTRA_FORMS',
+                                               'P_COSPLAY_PIKACHU_FORMS', 'P_CAP_PIKACHU_FORMS')}),
+        ('learnsets', cfg.get('P_LVL_UP_LEARNSETS')),
+    ])
+    for k, v in list(gens.items()) + list(fam.items()):
+        if not v:
+            ex.anomaly('config: %s is disabled' % k)
     meta['speciesEnumCount'] = len(species_ids)
     meta['speciesEnumDistinctIds'] = len(set(species_ids.values()))
     meta['duplicateFieldInitializers'] = dict(duplicated_field_notes)
@@ -460,12 +518,6 @@ def git_commit(root):
         return p.stdout.decode().strip() or None
     except OSError:
         return None
-
-
-def config_snapshot(src):
-    """Not available after preprocessing (macros are gone); we record the
-    evaluated values that matter through enums only."""
-    return {}
 
 
 def extract_species(ex, name, sid, f, natdex_ids):
@@ -991,7 +1043,7 @@ def suggest_levels(S):
             v = max(rec['evolvesFromLevel'], lvl(p, depth + 1))
         else:
             base = lvl(p, depth + 1)
-            v = max(base + 10, 20 if rec['stage'] <= 1 else 32)
+            v = max(base + 5, 20 if rec['stage'] <= 1 else 30)
         memo[name] = v
         return v
 

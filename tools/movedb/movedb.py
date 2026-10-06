@@ -727,6 +727,7 @@ MOVE_BAN_FIELDS = [
     'instructBanned', 'encoreBanned', 'parentalBondBanned', 'skyBattleBanned',
     'sketchBanned', 'dampBanned',
 ]
+STAT_FIELDS = ('attack', 'defense', 'spAtk', 'spDef', 'speed', 'accuracy', 'evasion')
 SELF_KO_EFFECTS = {'EFFECT_EXPLOSION', 'EFFECT_MISTY_EXPLOSION', 'EFFECT_FINAL_GAMBIT',
                    'EFFECT_MEMENTO', 'EFFECT_HEALING_WISH', 'EFFECT_LUNAR_DANCE'}
 
@@ -735,8 +736,17 @@ def to_json_value(ev, node):
     """Generic conversion of an initializer node to JSON (dicts for designated
     lists, lists for positional ones)."""
     if isinstance(node, InitList):
-        if all(d and d[0][0] == '.' and len(d) == 1 for d, _ in node):
-            return {d[0][1]: to_json_value(ev, v) for d, v in node}
+        if node and all(d and all(x[0] == '.' for x in d) for d, _ in node):
+            out = {}
+            for d, v in node:
+                cur = out
+                for _, name in d[:-1]:
+                    nxt = cur.get(name)
+                    if not isinstance(nxt, dict):
+                        nxt = cur[name] = {}
+                    cur = nxt
+                cur[d[-1][1]] = to_json_value(ev, v)
+            return out
         return [to_json_value(ev, v) for _, v in node]
     if isinstance(node, tuple) and node[0] == 'compound':
         return to_json_value(ev, node[2])
@@ -800,8 +810,18 @@ def extract_moves(text, consts):
             if not me:
                 continue
             s = me.replace('MOVE_EFFECT_', '')
+            extra = []
             if e.get('self'):
-                s += '(self)'
+                extra.append('self')
+            stats = [(k, e[k]) for k in STAT_FIELDS if e.get(k)]
+            if stats:
+                sign = '-' if 'MINUS' in me else '+'
+                extra.append(' '.join('%s%s%d' % (k, sign, v) for k, v in stats))
+            arg = e.get('argument')
+            if isinstance(arg, dict) and arg.get('absorbPercentage'):
+                extra.append('%d%% drain' % arg['absorbPercentage'])
+            if extra:
+                s += '(%s)' % '; '.join(extra)
             ch = e.get('chance', 0)
             secondary.append('%s %d%%' % (s, ch) if ch else s)
         prio = iv('priority')
@@ -1193,7 +1213,7 @@ KNOWN_MOVES = {
     'MOVE_PROTECT': dict(priority=4, category='DAMAGE_CATEGORY_STATUS'),
     'MOVE_HURRICANE': dict(power=110, accuracy=70, type='TYPE_FLYING'),
     'MOVE_FIRE_BLAST': dict(power=110, accuracy=85),
-    'MOVE_MAKE_IT_RAIN': dict(power=120, accuracy=95, type='TYPE_STEEL', category='DAMAGE_CATEGORY_SPECIAL'),
+    'MOVE_MAKE_IT_RAIN': dict(power=120, accuracy=100, type='TYPE_STEEL', category='DAMAGE_CATEGORY_SPECIAL'),
     'MOVE_SHADOW_BALL': dict(power=80, type='TYPE_GHOST', category='DAMAGE_CATEGORY_SPECIAL'),
     'MOVE_THUNDER_PUNCH': dict(power=75, flags_has='punchingMove'),
     'MOVE_CRUNCH': dict(power=80, flags_has='bitingMove'),
@@ -1201,7 +1221,8 @@ KNOWN_MOVES = {
     'MOVE_KARATE_CHOP': dict(type='TYPE_FIGHTING', criticalHitStage=1),
     'MOVE_SWORDS_DANCE': dict(category='DAMAGE_CATEGORY_STATUS', pp=20),
     'MOVE_SPLASH': dict(power=0, category='DAMAGE_CATEGORY_STATUS'),
-    'MOVE_GIGA_DRAIN': dict(power=75, pp=10),
+    'MOVE_GIGA_DRAIN': dict(power=75, pp=10, secondary_has='50% drain'),
+    'MOVE_CLOSE_COMBAT': dict(power=120, accuracy=100, secondary_has='defense-1 spDef-1'),
     'MOVE_BITE': dict(type='TYPE_DARK', power=60),
     'MOVE_CHARM': dict(type='TYPE_FAIRY'),
 }
@@ -1234,7 +1255,8 @@ def validate(moves, learnsets, items):
         ('SPECIES_BULBASAUR levelup Vine Whip @3', has_lu('SPECIES_BULBASAUR', 'MOVE_VINE_WHIP', 3)),
         ('SPECIES_CHARIZARD tm has MOVE_FLAMETHROWER', 'MOVE_FLAMETHROWER' in learnsets.get('SPECIES_CHARIZARD', {}).get('tm', [])),
         ('SPECIES_PIKACHU tm has MOVE_THUNDERBOLT', 'MOVE_THUNDERBOLT' in learnsets.get('SPECIES_PIKACHU', {}).get('tm', [])),
-        ('SPECIES_GARCHOMP levelup has MOVE_EARTHQUAKE', has_lu('SPECIES_GARCHOMP', 'MOVE_EARTHQUAKE')),
+        ('SPECIES_GARCHOMP tm has MOVE_EARTHQUAKE', 'MOVE_EARTHQUAKE' in learnsets.get('SPECIES_GARCHOMP', {}).get('tm', [])),
+        ('SPECIES_GARCHOMP levelup has MOVE_DRAGON_CLAW @42', has_lu('SPECIES_GARCHOMP', 'MOVE_DRAGON_CLAW', 42)),
         ('SPECIES_GHOLDENGO levelup has MOVE_MAKE_IT_RAIN', has_lu('SPECIES_GHOLDENGO', 'MOVE_MAKE_IT_RAIN')),
         ('SPECIES_BULBASAUR egg has MOVE_PETAL_DANCE', 'MOVE_PETAL_DANCE' in learnsets.get('SPECIES_BULBASAUR', {}).get('egg', [])),
         ('SPECIES_MAGIKARP levelup has MOVE_SPLASH', has_lu('SPECIES_MAGIKARP', 'MOVE_SPLASH')),
