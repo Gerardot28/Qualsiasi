@@ -1,0 +1,33 @@
+include /home/user/Qualsiasi/tools/emu/scripts/boot_to_title.txt
+press START
+waittask Task_HandleMainMenuInput 600
+wait 10
+press A
+waittask Task_NewGameBirchSpeech_ThisIsAPokemon 2400
+loop 120
+  breakiftask Task_NewGameBirchSpeech_WaitToShowGenderMenu Task_NewGameBirchSpeech_ChooseGender
+  press A 6 30
+endloop
+waittask Task_NewGameBirchSpeech_ChooseGender 600
+waitstable 10 120
+press A
+waittask Task_NewGameBirchSpeech_WaitPressBeforeNameChoice 1200
+press A
+waitcb2 CB2_NamingScreen 600
+wait 60
+press START
+press A
+waittask Task_NewGameBirchSpeech_ProcessNameYesNoMenu 1200
+waitstable 10 120
+press A
+loop 60
+  breakiftask Task_NewGameBirchSpeech_WaitForPlayerShrink Task_NewGameBirchSpeech_FadePlayerToWhite Task_NewGameBirchSpeech_Cleanup
+  breakifcb2 CB2_Overworld
+  press A 6 30
+endloop
+waitcb2 CB2_Overworld 2400
+waitmap MAP_VERMILION_CITY 600
+wait 200
+mapinfo
+shot vermilion_start
+savestate base

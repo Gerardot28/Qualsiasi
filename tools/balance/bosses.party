@@ -1,0 +1,2802 @@
+/*
+Pokemon Multiverse - hand-authored boss teams (merged by trainer_gen.py).
+Only Items / AI (and party) are taken from here; Name, Class, Pic, Gender,
+Music and Double Battle stay as in vanilla. Missing moves are filled with
+mdb.best_moveset (TM allowed); moves a species cannot learn at that level are
+auto-replaced and reported. IVs default to 31 for Leader / Elite Four /
+Champion / Steven / Wally (Victory Road), otherwise level-scaled + 6.
+*/
+
+/* ===================== GYM LEADERS (first battle) ===================== */
+
+=== TRAINER_ROXANNE_1 ===
+Items: Potion / Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Roggenrola
+Level: 13
+Nature: Adamant
+- Rock Blast
+- Headbutt
+- Sand Attack
+- Harden
+
+Nacli
+Level: 14
+Nature: Impish
+- Rock Throw
+- Mud Shot
+- Headbutt
+- Harden
+
+Tyrunt @ Sitrus Berry
+Level: 15
+Nature: Adamant
+Ability: Strong Jaw
+- Rock Tomb
+- Bite
+- Stomp
+- Roar
+
+=== TRAINER_BRAWLY_1 ===
+Items: Super Potion / Super Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Riolu
+Level: 17
+Nature: Jolly
+- Force Palm
+- Quick Attack
+- Bulk Up
+- Feint
+
+Mienfoo
+Level: 17
+Nature: Jolly
+- Fake Out
+- Force Palm
+- Detect
+- Pound
+
+Croagunk
+Level: 18
+Nature: Adamant
+Ability: Dry Skin
+- Poison Jab
+- Revenge
+- Sucker Punch
+- Taunt
+
+Pawmo @ Sitrus Berry
+Level: 19
+Nature: Jolly
+- Arm Thrust
+- Nuzzle
+- Spark
+- Bite
+
+=== TRAINER_WATTSON_1 ===
+Items: Super Potion / Super Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Charjabug
+Level: 22
+Nature: Modest
+- Bug Bite
+- Spark
+- Mud-Slap
+- String Shot
+
+Helioptile
+Level: 22
+Nature: Timid
+Ability: Dry Skin
+- Parabolic Charge
+- Mud-Slap
+- Thunder Wave
+- Quick Attack
+
+Luxio
+Level: 23
+Nature: Adamant
+Ability: Intimidate
+- Spark
+- Bite
+- Quick Attack
+- Charge
+
+Rotom @ Sitrus Berry
+Level: 24
+Nature: Modest
+- Shock Wave
+- Hex
+- Thunder Wave
+- Confuse Ray
+
+=== TRAINER_FLANNERY_1 ===
+Items: Super Potion / Super Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Salandit
+Level: 26
+Nature: Timid
+- Flame Burst
+- Poison Fang
+- Dragon Rage
+- Sweet Scent
+
+Fletchinder
+Level: 27
+Nature: Jolly
+Ability: Flame Body
+- Flame Charge
+- Aerial Ace
+- Peck
+- Roost
+
+Houndoom
+Level: 28
+Nature: Timid
+Ability: Flash Fire
+- Flamethrower
+- Crunch
+- Roar
+- Smog
+
+Turtonator
+Level: 28
+Nature: Modest
+- Flamethrower
+- Dragon Pulse
+- Protect
+- Iron Defense
+
+Torkoal @ Charcoal
+Level: 29
+Nature: Modest
+Ability: Drought
+- Flamethrower
+- Body Slam
+- Rock Tomb
+- Will-O-Wisp
+
+=== TRAINER_NORMAN_1 ===
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Vigoroth
+Level: 31
+Nature: Jolly
+- Slash
+- Bulk Up
+- Facade
+- Shadow Claw
+
+Kangaskhan
+Level: 31
+Nature: Adamant
+Ability: Scrappy
+- Fake Out
+- Body Slam
+- Bite
+- Brick Break
+
+Lopunny
+Level: 31
+Nature: Jolly
+- Jump Kick
+- Return
+- Quick Attack
+- Baby-Doll Eyes
+
+Bewear
+Level: 32
+Nature: Adamant
+Ability: Fluffy
+- Brick Break
+- Body Slam
+- Payback
+- Bulk Up
+
+Ursaring @ Sitrus Berry
+Level: 33
+Nature: Adamant
+Ability: Guts
+- Slash
+- Shadow Claw
+- Bulldoze
+- Swords Dance
+
+=== TRAINER_WINONA_1 ===
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Swanna
+Level: 35
+Nature: Modest
+- Air Slash
+- Bubble Beam
+- Roost
+- Feather Dance
+
+Skarmory
+Level: 35
+Nature: Impish
+- Steel Wing
+- Aerial Ace
+- Spikes
+- Roost
+
+Hawlucha
+Level: 35
+Nature: Jolly
+- Aerial Ace
+- Brick Break
+- Hone Claws
+- Detect
+
+Talonflame
+Level: 36
+Nature: Jolly
+- Flame Charge
+- Acrobatics
+- Steel Wing
+- Roost
+
+Altaria @ Lum Berry
+Level: 37
+Nature: Adamant
+Ability: Natural Cure
+- Dragon Dance
+- Dragon Claw
+- Aerial Ace
+- Roost
+
+=== TRAINER_TATE_AND_LIZA_1 ===
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Solrock
+Level: 42
+Nature: Adamant
+- Rock Slide
+- Zen Headbutt
+- Sunny Day
+- Cosmic Power
+
+Lunatone
+Level: 42
+Nature: Modest
+- Psychic
+- Rock Slide
+- Rain Dance
+- Hypnosis
+
+Claydol
+Level: 42
+Nature: Relaxed
+- Earth Power
+- Psybeam
+- Reflect
+- Light Screen
+
+Bronzong
+Level: 43
+Nature: Relaxed
+- Trick Room
+- Gyro Ball
+- Psychic
+- Earthquake
+
+Reuniclus
+Level: 43
+Nature: Quiet
+Ability: Magic Guard
+- Psychic
+- Focus Blast
+- Shadow Ball
+- Recover
+
+Hatterene @ Sitrus Berry
+Level: 44
+Nature: Quiet
+Ability: Magic Bounce
+- Dazzling Gleam
+- Psychic
+- Mystical Fire
+- Calm Mind
+
+=== TRAINER_JUAN_1 ===
+Items: Hyper Potion / Full Heal
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pelipper
+Level: 46
+Nature: Modest
+Ability: Drizzle
+- Hurricane
+- Water Pulse
+- Roost
+- Protect
+
+Barraskewda
+Level: 47
+Nature: Jolly
+Ability: Swift Swim
+- Liquidation
+- Crunch
+- Psychic Fangs
+- Aqua Jet
+
+Ludicolo
+Level: 47
+Nature: Modest
+Ability: Swift Swim
+- Surf
+- Giga Drain
+- Ice Beam
+- Fake Out
+
+Crawdaunt
+Level: 47
+Nature: Adamant
+Ability: Adaptability
+- Crabhammer
+- Crunch
+- Aqua Jet
+- Swords Dance
+
+Lapras
+Level: 48
+Nature: Modest
+Ability: Water Absorb
+- Surf
+- Ice Beam
+- Thunderbolt
+- Sing
+
+Kingdra @ Sitrus Berry
+Level: 49
+Nature: Modest
+Ability: Swift Swim
+- Surf
+- Dragon Pulse
+- Ice Beam
+- Rain Dance
+
+/* ===================== ELITE FOUR / CHAMPION ===================== */
+
+=== TRAINER_SIDNEY ===
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+
+Zoroark @ Focus Sash
+Level: 52
+Nature: Timid
+- Night Daze
+- Flamethrower
+- Sludge Bomb
+- Nasty Plot
+
+Absol @ Scope Lens
+Level: 52
+Nature: Jolly
+Ability: Super Luck
+- Night Slash
+- Psycho Cut
+- Sucker Punch
+- Swords Dance
+
+Scrafty @ Sitrus Berry
+Level: 52
+Nature: Impish
+Ability: Intimidate
+- Drain Punch
+- Crunch
+- Bulk Up
+- Fake Out
+
+Honchkrow @ Sharp Beak
+Level: 53
+Nature: Adamant
+Ability: Moxie
+- Brave Bird
+- Night Slash
+- Sucker Punch
+- Heat Wave
+
+Krookodile @ Black Glasses
+Level: 53
+Nature: Jolly
+Ability: Intimidate
+- Earthquake
+- Crunch
+- Stone Edge
+- Dragon Claw
+
+Weavile @ Life Orb
+Level: 54
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+- Night Slash
+- Ice Punch
+- Low Kick
+- Swords Dance
+
+=== TRAINER_PHOEBE ===
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+
+Banette @ Sitrus Berry
+Level: 54
+Nature: Adamant
+Ability: Frisk
+- Shadow Claw
+- Sucker Punch
+- Will-O-Wisp
+- Thunder Wave
+
+Mimikyu @ Life Orb
+Level: 54
+Nature: Jolly
+- Play Rough
+- Shadow Claw
+- Swords Dance
+- Shadow Sneak
+
+Chandelure @ Choice Specs
+Level: 55
+Nature: Modest
+Ability: Flash Fire
+- Shadow Ball
+- Flamethrower
+- Energy Ball
+- Psychic
+
+Aegislash @ Leftovers
+Level: 55
+Nature: Quiet
+- Shadow Ball
+- Iron Head
+- King's Shield
+- Sacred Sword
+
+Gengar @ Black Sludge
+Level: 55
+Nature: Timid
+- Shadow Ball
+- Sludge Bomb
+- Thunderbolt
+- Hypnosis
+
+Dusknoir @ Leftovers
+Level: 56
+Nature: Adamant
+Ability: Frisk
+EVs: 252 HP / 252 Atk / 4 Def
+- Shadow Punch
+- Earthquake
+- Ice Punch
+- Will-O-Wisp
+
+=== TRAINER_GLACIA ===
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+
+Abomasnow @ Sitrus Berry
+Level: 56
+Nature: Modest
+Ability: Snow Warning
+- Blizzard
+- Giga Drain
+- Ice Shard
+- Earthquake
+
+Froslass @ Focus Sash
+Level: 56
+Nature: Timid
+- Blizzard
+- Shadow Ball
+- Spikes
+- Will-O-Wisp
+
+Cetitan @ Leftovers
+Level: 57
+Nature: Adamant
+Ability: Thick Fat
+- Icicle Crash
+- Earthquake
+- Body Slam
+- Belly Drum
+
+Mamoswine @ Never-Melt Ice
+Level: 57
+Nature: Adamant
+Ability: Thick Fat
+- Earthquake
+- Icicle Crash
+- Ice Shard
+- Stone Edge
+
+Weavile @ Life Orb
+Level: 57
+Nature: Jolly
+- Ice Punch
+- Night Slash
+- Low Kick
+- Ice Shard
+
+Walrein @ Leftovers
+Level: 58
+Nature: Modest
+Ability: Thick Fat
+EVs: 252 HP / 252 SpA / 4 SpD
+- Blizzard
+- Surf
+- Earth Power
+- Protect
+
+=== TRAINER_DRAKE ===
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+
+Flygon @ Soft Sand
+Level: 58
+Nature: Jolly
+- Earthquake
+- Dragon Claw
+- U-turn
+- Fire Punch
+
+Noivern @ Sitrus Berry
+Level: 58
+Nature: Timid
+- Draco Meteor
+- Hurricane
+- Flamethrower
+- Roost
+
+Goodra @ Leftovers
+Level: 58
+Nature: Modest
+Ability: Sap Sipper
+- Dragon Pulse
+- Sludge Bomb
+- Thunderbolt
+- Fire Blast
+
+Haxorus @ Lum Berry
+Level: 59
+Nature: Adamant
+Ability: Mold Breaker
+- Dragon Claw
+- Earthquake
+- Poison Jab
+- Dragon Dance
+
+Garchomp @ Yache Berry
+Level: 59
+Nature: Jolly
+Ability: Rough Skin
+- Earthquake
+- Dragon Claw
+- Stone Edge
+- Swords Dance
+
+Salamence @ Dragon Fang
+Level: 60
+Nature: Adamant
+Ability: Intimidate
+EVs: 4 HP / 252 Atk / 252 Spe
+- Dragon Claw
+- Earthquake
+- Fire Fang
+- Dragon Dance
+
+=== TRAINER_WALLACE ===
+Items: Full Restore / Full Restore / Full Restore
+AI: Smart Trainer
+
+Togekiss @ Leftovers
+Level: 59
+Nature: Modest
+Ability: Serene Grace
+EVs: 252 HP / 252 SpA / 4 SpD
+- Air Slash
+- Dazzling Gleam
+- Flamethrower
+- Roost
+
+Starmie @ Life Orb
+Level: 59
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+- Surf
+- Psychic
+- Thunderbolt
+- Ice Beam
+
+Gyarados @ Lum Berry
+Level: 60
+Nature: Adamant
+Ability: Intimidate
+EVs: 4 HP / 252 Atk / 252 Spe
+- Waterfall
+- Crunch
+- Earthquake
+- Dragon Dance
+
+Swampert @ Sitrus Berry
+Level: 61
+Nature: Adamant
+EVs: 252 HP / 252 Atk / 4 Def
+- Waterfall
+- Earthquake
+- Ice Punch
+- Stealth Rock
+
+Primarina @ Mystic Water
+Level: 61
+Nature: Modest
+EVs: 252 HP / 252 SpA / 4 SpD
+- Moonblast
+- Sparkling Aria
+- Psychic
+- Calm Mind
+
+Milotic @ Leftovers
+Level: 62
+Nature: Bold
+Ability: Marvel Scale
+EVs: 252 HP / 252 SpA / 4 Def
+- Surf
+- Ice Beam
+- Recover
+- Dragon Pulse
+
+=== TRAINER_STEVEN ===
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+
+Corviknight @ Leftovers
+Level: 76
+Nature: Impish
+EVs: 252 HP / 252 Def / 4 Atk
+- Brave Bird
+- Iron Head
+- Bulk Up
+- Roost
+
+Excadrill @ Life Orb
+Level: 77
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+- Earthquake
+- Iron Head
+- Rock Slide
+- Swords Dance
+
+Garganacl @ Leftovers
+Level: 77
+Nature: Careful
+EVs: 252 HP / 252 SpD / 4 Def
+- Salt Cure
+- Stone Edge
+- Earthquake
+- Recover
+
+Aegislash @ Leftovers
+Level: 77
+Nature: Quiet
+EVs: 252 HP / 252 SpA / 4 Def
+- Shadow Ball
+- Flash Cannon
+- King's Shield
+- Sacred Sword
+
+Aggron @ Sitrus Berry
+Level: 78
+Nature: Adamant
+Ability: Rock Head
+EVs: 252 HP / 252 Atk / 4 Def
+- Head Smash
+- Iron Head
+- Earthquake
+- Rock Polish
+
+Metagross @ Life Orb
+Level: 79
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+- Meteor Mash
+- Zen Headbutt
+- Earthquake
+- Bullet Punch
+
+/* ===================== WALLY ===================== */
+
+=== TRAINER_WALLY_MAUVILLE ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Budew
+Level: 16
+Nature: Modest
+- Mega Drain
+- Stun Spore
+- Water Sport
+
+Ralts @ Oran Berry
+Level: 17
+Nature: Modest
+Ability: Synchronize
+- Confusion
+- Disarming Voice
+- Double Team
+- Teleport
+
+=== TRAINER_WALLY_VR_1 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Magnezone
+Level: 45
+Nature: Modest
+- Thunderbolt
+- Flash Cannon
+- Thunder Wave
+- Tri Attack
+
+Altaria @ Sitrus Berry
+Level: 46
+Nature: Adamant
+- Dragon Dance
+- Dragon Claw
+- Aerial Ace
+- Roost
+
+Roserade @ Miracle Seed
+Level: 46
+Nature: Timid
+- Energy Ball
+- Sludge Bomb
+- Shadow Ball
+- Toxic Spikes
+
+Sylveon
+Level: 46
+Nature: Modest
+Ability: Pixilate
+- Hyper Voice
+- Moonblast
+- Calm Mind
+- Wish
+
+Tinkaton
+Level: 47
+Nature: Adamant
+- Gigaton Hammer
+- Play Rough
+- Knock Off
+- Stealth Rock
+
+Gardevoir @ Twisted Spoon
+Level: 48
+Nature: Modest
+Ability: Trace
+- Psychic
+- Moonblast
+- Thunderbolt
+- Calm Mind
+
+/* ===================== TEAM MAGMA ===================== */
+
+=== TRAINER_TABITHA_MT_CHIMNEY ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware
+
+Numel
+Level: 21
+Nature: Quiet
+- Ember
+- Magnitude
+- Focus Energy
+
+Sandile
+Level: 21
+Nature: Adamant
+- Bite
+- Sand Tomb
+- Torment
+
+Salandit
+Level: 22
+Nature: Timid
+- Poison Fang
+- Flame Burst
+- Sweet Scent
+
+Houndour @ Oran Berry
+Level: 23
+Nature: Timid
+- Fire Fang
+- Bite
+- Roar
+- Smog
+
+=== TRAINER_MAXIE_MT_CHIMNEY ===
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Thievul
+Level: 25
+Nature: Jolly
+- Snarl
+- Quick Attack
+- Thief
+- Nasty Plot
+
+Mudbray
+Level: 25
+Nature: Adamant
+Ability: Stamina
+- Bulldoze
+- Double Kick
+- Rock Smash
+- Iron Defense
+
+Numel
+Level: 26
+Nature: Quiet
+Ability: Simple
+- Flame Burst
+- Bulldoze
+- Amnesia
+- Lava Plume
+
+Houndoom @ Sitrus Berry
+Level: 27
+Nature: Timid
+Ability: Flash Fire
+- Flamethrower
+- Crunch
+- Roar
+- Nasty Plot
+
+=== TRAINER_TABITHA_MAGMA_HIDEOUT ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Salazzle
+Level: 35
+Nature: Timid
+Ability: Corrosion
+- Flamethrower
+- Venoshock
+- Toxic
+- Nasty Plot
+
+Krokorok
+Level: 35
+Nature: Jolly
+Ability: Intimidate
+- Crunch
+- Dig
+- Rock Tomb
+- Swagger
+
+Weezing
+Level: 36
+Nature: Bold
+Ability: Levitate
+- Sludge Bomb
+- Flamethrower
+- Will-O-Wisp
+- Toxic Spikes
+
+Camerupt @ Sitrus Berry
+Level: 37
+Nature: Quiet
+Ability: Solid Rock
+- Lava Plume
+- Earth Power
+- Yawn
+- Rock Slide
+
+=== TRAINER_MAXIE_MAGMA_HIDEOUT ===
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Crobat
+Level: 38
+Nature: Jolly
+- Cross Poison
+- Air Slash
+- Bite
+- Confuse Ray
+
+Coalossal
+Level: 38
+Nature: Brave
+Ability: Steam Engine
+- Heat Crash
+- Rock Slide
+- Stealth Rock
+- Will-O-Wisp
+
+Arcanine
+Level: 39
+Nature: Adamant
+Ability: Intimidate
+- Flare Blitz
+- Crunch
+- Extreme Speed
+- Wild Charge
+
+Camerupt @ Sitrus Berry
+Level: 40
+Nature: Quiet
+Ability: Solid Rock
+- Lava Plume
+- Earth Power
+- Rock Slide
+- Yawn
+
+=== TRAINER_TABITHA_MOSSDEEP ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware
+
+Weezing
+Level: 39
+Nature: Bold
+Ability: Levitate
+- Sludge Bomb
+- Flamethrower
+- Will-O-Wisp
+- Protect
+
+Salazzle
+Level: 41
+Nature: Timid
+Ability: Corrosion
+- Flamethrower
+- Sludge Bomb
+- Fake Out
+- Protect
+
+Krookodile @ Sitrus Berry
+Level: 42
+Nature: Jolly
+Ability: Intimidate
+- Earthquake
+- Crunch
+- Rock Slide
+- Protect
+
+=== TRAINER_MAXIE_MOSSDEEP ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Crobat
+Level: 44
+Nature: Jolly
+- Cross Poison
+- Air Slash
+- Super Fang
+- Protect
+
+Houndoom
+Level: 45
+Nature: Timid
+Ability: Flash Fire
+- Heat Wave
+- Dark Pulse
+- Sludge Bomb
+- Protect
+
+Camerupt @ Sitrus Berry
+Level: 46
+Nature: Quiet
+Ability: Solid Rock
+- Heat Wave
+- Earth Power
+- Rock Slide
+- Protect
+
+/* ===================== TEAM AQUA ===================== */
+
+=== TRAINER_SHELLY_WEATHER_INSTITUTE ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Mareanie
+Level: 31
+Nature: Bold
+- Venoshock
+- Bubble Beam
+- Toxic Spikes
+- Recover
+
+Pelipper
+Level: 31
+Nature: Modest
+- Water Pulse
+- Air Cutter
+- Roost
+- Mist
+
+Malamar @ Sitrus Berry
+Level: 32
+Nature: Adamant
+Ability: Contrary
+- Night Slash
+- Psycho Cut
+- Superpower
+- Topsy-Turvy
+
+=== TRAINER_MATT ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Liepard
+Level: 37
+Nature: Jolly
+Ability: Prankster
+- Night Slash
+- Fake Out
+- Thunder Wave
+- U-turn
+
+Swanna
+Level: 37
+Nature: Modest
+- Hurricane
+- Scald
+- Roost
+- Tailwind
+
+Crawdaunt @ Sitrus Berry
+Level: 38
+Nature: Adamant
+Ability: Adaptability
+- Crabhammer
+- Crunch
+- Aqua Jet
+- Swords Dance
+
+=== TRAINER_SHELLY_SEAFLOOR_CAVERN ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Toxapex
+Level: 39
+Nature: Bold
+Ability: Regenerator
+- Scald
+- Toxic
+- Recover
+- Baneful Bunker
+
+Pelipper
+Level: 40
+Nature: Modest
+Ability: Drizzle
+- Hurricane
+- Scald
+- Roost
+- U-turn
+
+Malamar @ Sitrus Berry
+Level: 41
+Nature: Adamant
+Ability: Contrary
+- Night Slash
+- Psycho Cut
+- Superpower
+- Rock Slide
+
+=== TRAINER_ARCHIE ===
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Honchkrow
+Level: 44
+Nature: Adamant
+Ability: Moxie
+- Brave Bird
+- Night Slash
+- Sucker Punch
+- Heat Wave
+
+Tentacruel
+Level: 44
+Nature: Timid
+Ability: Clear Body
+- Scald
+- Sludge Bomb
+- Rapid Spin
+- Toxic Spikes
+
+Golisopod
+Level: 45
+Nature: Adamant
+- First Impression
+- Liquidation
+- Leech Life
+- Brick Break
+
+Sharpedo @ Sitrus Berry
+Level: 46
+Nature: Adamant
+Ability: Speed Boost
+- Waterfall
+- Crunch
+- Ice Fang
+- Protect
+
+/* ===================== RIVAL (May / Brendan, identical teams) ===================== */
+
+=== TRAINER_MAY_ROUTE_103_TREECKO ===
+AI: Basic Trainer / HP Aware
+
+Fuecoco
+Level: 6
+Nature: Modest
+
+=== TRAINER_MAY_RUSTBORO_TREECKO ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rookidee
+Level: 14
+
+Chewtle
+Level: 15
+
+Crocalor @ Oran Berry
+Level: 16
+Nature: Modest
+
+=== TRAINER_MAY_ROUTE_110_TREECKO ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 19
+
+Chewtle
+Level: 19
+
+Steenee
+Level: 20
+
+Crocalor @ Sitrus Berry
+Level: 21
+Nature: Modest
+
+=== TRAINER_MAY_ROUTE_119_TREECKO ===
+Items: Super Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 31
+
+Lucario
+Level: 31
+
+Drednaw
+Level: 32
+
+Steenee
+Level: 32
+
+Crocalor @ Sitrus Berry
+Level: 33
+Nature: Modest
+
+=== TRAINER_MAY_LILYCOVE_TREECKO ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corviknight
+Level: 38
+
+Lucario
+Level: 37
+
+Hattrem
+Level: 36
+
+Drednaw
+Level: 38
+
+Tsareena
+Level: 38
+
+Skeledirge @ Sitrus Berry
+Level: 39
+Nature: Modest
+
+=== TRAINER_MAY_ROUTE_103_TORCHIC ===
+AI: Basic Trainer / HP Aware
+
+Froakie
+Level: 6
+Nature: Timid
+
+=== TRAINER_MAY_RUSTBORO_TORCHIC ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rookidee
+Level: 14
+
+Houndour
+Level: 15
+
+Frogadier @ Oran Berry
+Level: 16
+Nature: Timid
+
+=== TRAINER_MAY_ROUTE_110_TORCHIC ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 19
+
+Houndour
+Level: 19
+
+Steenee
+Level: 20
+
+Frogadier @ Sitrus Berry
+Level: 21
+Nature: Timid
+
+=== TRAINER_MAY_ROUTE_119_TORCHIC ===
+Items: Super Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 31
+
+Lucario
+Level: 31
+
+Houndoom
+Level: 32
+
+Steenee
+Level: 32
+
+Frogadier @ Sitrus Berry
+Level: 33
+Nature: Timid
+
+=== TRAINER_MAY_LILYCOVE_TORCHIC ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corviknight
+Level: 38
+
+Lucario
+Level: 37
+
+Hattrem
+Level: 36
+
+Houndoom
+Level: 38
+
+Tsareena
+Level: 38
+
+Greninja @ Sitrus Berry
+Level: 39
+Nature: Timid
+
+=== TRAINER_MAY_ROUTE_103_MUDKIP ===
+AI: Basic Trainer / HP Aware
+
+Turtwig
+Level: 6
+Nature: Adamant
+
+=== TRAINER_MAY_RUSTBORO_MUDKIP ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rookidee
+Level: 14
+
+Houndour
+Level: 15
+
+Turtwig @ Oran Berry
+Level: 16
+Nature: Adamant
+
+=== TRAINER_MAY_ROUTE_110_MUDKIP ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 19
+
+Houndour
+Level: 19
+
+Chewtle
+Level: 20
+
+Grotle @ Sitrus Berry
+Level: 21
+Nature: Adamant
+
+=== TRAINER_MAY_ROUTE_119_MUDKIP ===
+Items: Super Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 31
+
+Lucario
+Level: 31
+
+Houndoom
+Level: 32
+
+Drednaw
+Level: 32
+
+Torterra @ Sitrus Berry
+Level: 33
+Nature: Adamant
+
+=== TRAINER_MAY_LILYCOVE_MUDKIP ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corviknight
+Level: 38
+
+Lucario
+Level: 37
+
+Hattrem
+Level: 36
+
+Houndoom
+Level: 38
+
+Drednaw
+Level: 38
+
+Torterra @ Sitrus Berry
+Level: 39
+Nature: Adamant
+
+=== TRAINER_BRENDAN_ROUTE_103_TREECKO ===
+AI: Basic Trainer / HP Aware
+
+Fuecoco
+Level: 6
+Nature: Modest
+
+=== TRAINER_BRENDAN_RUSTBORO_TREECKO ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rookidee
+Level: 14
+
+Chewtle
+Level: 15
+
+Crocalor @ Oran Berry
+Level: 16
+Nature: Modest
+
+=== TRAINER_BRENDAN_ROUTE_110_TREECKO ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 19
+
+Chewtle
+Level: 19
+
+Steenee
+Level: 20
+
+Crocalor @ Sitrus Berry
+Level: 21
+Nature: Modest
+
+=== TRAINER_BRENDAN_ROUTE_119_TREECKO ===
+Items: Super Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 31
+
+Lucario
+Level: 31
+
+Drednaw
+Level: 32
+
+Steenee
+Level: 32
+
+Crocalor @ Sitrus Berry
+Level: 33
+Nature: Modest
+
+=== TRAINER_BRENDAN_LILYCOVE_TREECKO ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corviknight
+Level: 38
+
+Lucario
+Level: 37
+
+Hattrem
+Level: 36
+
+Drednaw
+Level: 38
+
+Tsareena
+Level: 38
+
+Skeledirge @ Sitrus Berry
+Level: 39
+Nature: Modest
+
+=== TRAINER_BRENDAN_ROUTE_103_TORCHIC ===
+AI: Basic Trainer / HP Aware
+
+Froakie
+Level: 6
+Nature: Timid
+
+=== TRAINER_BRENDAN_RUSTBORO_TORCHIC ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rookidee
+Level: 14
+
+Houndour
+Level: 15
+
+Frogadier @ Oran Berry
+Level: 16
+Nature: Timid
+
+=== TRAINER_BRENDAN_ROUTE_110_TORCHIC ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 19
+
+Houndour
+Level: 19
+
+Steenee
+Level: 20
+
+Frogadier @ Sitrus Berry
+Level: 21
+Nature: Timid
+
+=== TRAINER_BRENDAN_ROUTE_119_TORCHIC ===
+Items: Super Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 31
+
+Lucario
+Level: 31
+
+Houndoom
+Level: 32
+
+Steenee
+Level: 32
+
+Frogadier @ Sitrus Berry
+Level: 33
+Nature: Timid
+
+=== TRAINER_BRENDAN_LILYCOVE_TORCHIC ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corviknight
+Level: 38
+
+Lucario
+Level: 37
+
+Hattrem
+Level: 36
+
+Houndoom
+Level: 38
+
+Tsareena
+Level: 38
+
+Greninja @ Sitrus Berry
+Level: 39
+Nature: Timid
+
+=== TRAINER_BRENDAN_ROUTE_103_MUDKIP ===
+AI: Basic Trainer / HP Aware
+
+Turtwig
+Level: 6
+Nature: Adamant
+
+=== TRAINER_BRENDAN_RUSTBORO_MUDKIP ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rookidee
+Level: 14
+
+Houndour
+Level: 15
+
+Turtwig @ Oran Berry
+Level: 16
+Nature: Adamant
+
+=== TRAINER_BRENDAN_ROUTE_110_MUDKIP ===
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 19
+
+Houndour
+Level: 19
+
+Chewtle
+Level: 20
+
+Grotle @ Sitrus Berry
+Level: 21
+Nature: Adamant
+
+=== TRAINER_BRENDAN_ROUTE_119_MUDKIP ===
+Items: Super Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corvisquire
+Level: 31
+
+Lucario
+Level: 31
+
+Houndoom
+Level: 32
+
+Drednaw
+Level: 32
+
+Torterra @ Sitrus Berry
+Level: 33
+Nature: Adamant
+
+=== TRAINER_BRENDAN_LILYCOVE_MUDKIP ===
+Items: Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Corviknight
+Level: 38
+
+Lucario
+Level: 37
+
+Hattrem
+Level: 36
+
+Houndoom
+Level: 38
+
+Drednaw
+Level: 38
+
+Torterra @ Sitrus Berry
+Level: 39
+Nature: Adamant
+
+/* ===================== REMATCHES (post-game, 55-75) ===================== */
+
+=== TRAINER_ROXANNE_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Probopass @ Leftovers
+Level: 57
+Nature: Relaxed
+
+Aerodactyl @ Focus Sash
+Level: 57
+Nature: Jolly
+
+Gigalith @ Sitrus Berry
+Level: 58
+Nature: Adamant
+
+Garganacl @ Leftovers
+Level: 58
+Nature: Careful
+
+Rhyperior @ Life Orb
+Level: 59
+Nature: Adamant
+
+Tyrantrum @ Lum Berry
+Level: 60
+Nature: Adamant
+
+=== TRAINER_ROXANNE_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Probopass @ Leftovers
+Level: 62
+Nature: Relaxed
+
+Aerodactyl @ Focus Sash
+Level: 62
+Nature: Jolly
+
+Gigalith @ Sitrus Berry
+Level: 63
+Nature: Adamant
+
+Garganacl @ Leftovers
+Level: 63
+Nature: Careful
+
+Rhyperior @ Life Orb
+Level: 64
+Nature: Adamant
+
+Tyrantrum @ Lum Berry
+Level: 65
+Nature: Adamant
+
+=== TRAINER_ROXANNE_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Probopass @ Leftovers
+Level: 67
+Nature: Relaxed
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Aerodactyl @ Focus Sash
+Level: 67
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Gigalith @ Sitrus Berry
+Level: 68
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Garganacl @ Leftovers
+Level: 68
+Nature: Careful
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Rhyperior @ Life Orb
+Level: 69
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Tyrantrum @ Lum Berry
+Level: 70
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_ROXANNE_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Probopass @ Leftovers
+Level: 72
+Nature: Relaxed
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Aerodactyl @ Focus Sash
+Level: 72
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Gigalith @ Sitrus Berry
+Level: 73
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Garganacl @ Leftovers
+Level: 73
+Nature: Careful
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Rhyperior @ Life Orb
+Level: 74
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Tyrantrum @ Lum Berry
+Level: 75
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_BRAWLY_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pawmot @ Sitrus Berry
+Level: 57
+Nature: Jolly
+
+Hariyama @ Flame Orb
+Level: 57
+Nature: Adamant
+Ability: Guts
+
+Mienshao @ Life Orb
+Level: 58
+Nature: Jolly
+
+Toxicroak @ Black Sludge
+Level: 58
+Nature: Adamant
+
+Lucario @ Life Orb
+Level: 59
+Nature: Timid
+
+Conkeldurr @ Flame Orb
+Level: 60
+Nature: Adamant
+Ability: Guts
+
+=== TRAINER_BRAWLY_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pawmot @ Sitrus Berry
+Level: 62
+Nature: Jolly
+
+Hariyama @ Flame Orb
+Level: 62
+Nature: Adamant
+Ability: Guts
+
+Mienshao @ Life Orb
+Level: 63
+Nature: Jolly
+
+Toxicroak @ Black Sludge
+Level: 63
+Nature: Adamant
+
+Lucario @ Life Orb
+Level: 64
+Nature: Timid
+
+Conkeldurr @ Flame Orb
+Level: 65
+Nature: Adamant
+Ability: Guts
+
+=== TRAINER_BRAWLY_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pawmot @ Sitrus Berry
+Level: 67
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Hariyama @ Flame Orb
+Level: 67
+Nature: Adamant
+Ability: Guts
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Mienshao @ Life Orb
+Level: 68
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Toxicroak @ Black Sludge
+Level: 68
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lucario @ Life Orb
+Level: 69
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Conkeldurr @ Flame Orb
+Level: 70
+Nature: Adamant
+Ability: Guts
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_BRAWLY_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pawmot @ Sitrus Berry
+Level: 72
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Hariyama @ Flame Orb
+Level: 72
+Nature: Adamant
+Ability: Guts
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Mienshao @ Life Orb
+Level: 73
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Toxicroak @ Black Sludge
+Level: 73
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lucario @ Life Orb
+Level: 74
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Conkeldurr @ Flame Orb
+Level: 75
+Nature: Adamant
+Ability: Guts
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_WATTSON_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rotom @ Sitrus Berry
+Level: 57
+Nature: Timid
+
+Heliolisk @ Choice Specs
+Level: 57
+Nature: Timid
+
+Bellibolt @ Leftovers
+Level: 58
+Nature: Modest
+
+Luxray @ Life Orb
+Level: 58
+Nature: Adamant
+
+Electivire @ Expert Belt
+Level: 59
+Nature: Adamant
+
+Magnezone @ Leftovers
+Level: 60
+Nature: Modest
+Ability: Sturdy
+
+=== TRAINER_WATTSON_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rotom @ Sitrus Berry
+Level: 62
+Nature: Timid
+
+Heliolisk @ Choice Specs
+Level: 62
+Nature: Timid
+
+Bellibolt @ Leftovers
+Level: 63
+Nature: Modest
+
+Luxray @ Life Orb
+Level: 63
+Nature: Adamant
+
+Electivire @ Expert Belt
+Level: 64
+Nature: Adamant
+
+Magnezone @ Leftovers
+Level: 65
+Nature: Modest
+Ability: Sturdy
+
+=== TRAINER_WATTSON_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rotom @ Sitrus Berry
+Level: 67
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Heliolisk @ Choice Specs
+Level: 67
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Bellibolt @ Leftovers
+Level: 68
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Luxray @ Life Orb
+Level: 68
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Electivire @ Expert Belt
+Level: 69
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Magnezone @ Leftovers
+Level: 70
+Nature: Modest
+Ability: Sturdy
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_WATTSON_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Rotom @ Sitrus Berry
+Level: 72
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Heliolisk @ Choice Specs
+Level: 72
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Bellibolt @ Leftovers
+Level: 73
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Luxray @ Life Orb
+Level: 73
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Electivire @ Expert Belt
+Level: 74
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Magnezone @ Leftovers
+Level: 75
+Nature: Modest
+Ability: Sturdy
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_FLANNERY_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Torkoal @ Heat Rock
+Level: 57
+Nature: Modest
+Ability: Drought
+
+Houndoom @ Life Orb
+Level: 57
+Nature: Timid
+
+Salazzle @ Focus Sash
+Level: 58
+Nature: Timid
+Ability: Corrosion
+
+Centiskorch @ Sitrus Berry
+Level: 58
+Nature: Adamant
+
+Turtonator @ White Herb
+Level: 59
+Nature: Modest
+
+Volcarona @ Lum Berry
+Level: 60
+Nature: Timid
+Ability: Flame Body
+
+=== TRAINER_FLANNERY_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Torkoal @ Heat Rock
+Level: 62
+Nature: Modest
+Ability: Drought
+
+Houndoom @ Life Orb
+Level: 62
+Nature: Timid
+
+Salazzle @ Focus Sash
+Level: 63
+Nature: Timid
+Ability: Corrosion
+
+Centiskorch @ Sitrus Berry
+Level: 63
+Nature: Adamant
+
+Turtonator @ White Herb
+Level: 64
+Nature: Modest
+
+Volcarona @ Lum Berry
+Level: 65
+Nature: Timid
+Ability: Flame Body
+
+=== TRAINER_FLANNERY_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Torkoal @ Heat Rock
+Level: 67
+Nature: Modest
+Ability: Drought
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Houndoom @ Life Orb
+Level: 67
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Salazzle @ Focus Sash
+Level: 68
+Nature: Timid
+Ability: Corrosion
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Centiskorch @ Sitrus Berry
+Level: 68
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Turtonator @ White Herb
+Level: 69
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Volcarona @ Lum Berry
+Level: 70
+Nature: Timid
+Ability: Flame Body
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_FLANNERY_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Torkoal @ Heat Rock
+Level: 72
+Nature: Modest
+Ability: Drought
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Houndoom @ Life Orb
+Level: 72
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Salazzle @ Focus Sash
+Level: 73
+Nature: Timid
+Ability: Corrosion
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Centiskorch @ Sitrus Berry
+Level: 73
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Turtonator @ White Herb
+Level: 74
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Volcarona @ Lum Berry
+Level: 75
+Nature: Timid
+Ability: Flame Body
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_NORMAN_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Kangaskhan @ Silk Scarf
+Level: 57
+Nature: Adamant
+Ability: Scrappy
+
+Lopunny @ Life Orb
+Level: 57
+Nature: Jolly
+
+Bewear @ Sitrus Berry
+Level: 58
+Nature: Adamant
+Ability: Fluffy
+
+Porygon-Z @ Choice Specs
+Level: 58
+Nature: Modest
+
+Ursaring @ Flame Orb
+Level: 59
+Nature: Adamant
+Ability: Guts
+
+Slaking @ Choice Band
+Level: 60
+Nature: Adamant
+
+=== TRAINER_NORMAN_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Kangaskhan @ Silk Scarf
+Level: 62
+Nature: Adamant
+Ability: Scrappy
+
+Lopunny @ Life Orb
+Level: 62
+Nature: Jolly
+
+Bewear @ Sitrus Berry
+Level: 63
+Nature: Adamant
+Ability: Fluffy
+
+Porygon-Z @ Choice Specs
+Level: 63
+Nature: Modest
+
+Ursaring @ Flame Orb
+Level: 64
+Nature: Adamant
+Ability: Guts
+
+Slaking @ Choice Band
+Level: 65
+Nature: Adamant
+
+=== TRAINER_NORMAN_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Kangaskhan @ Silk Scarf
+Level: 67
+Nature: Adamant
+Ability: Scrappy
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lopunny @ Life Orb
+Level: 67
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Bewear @ Sitrus Berry
+Level: 68
+Nature: Adamant
+Ability: Fluffy
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Porygon-Z @ Choice Specs
+Level: 68
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Ursaring @ Flame Orb
+Level: 69
+Nature: Adamant
+Ability: Guts
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Slaking @ Choice Band
+Level: 70
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_NORMAN_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Kangaskhan @ Silk Scarf
+Level: 72
+Nature: Adamant
+Ability: Scrappy
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lopunny @ Life Orb
+Level: 72
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Bewear @ Sitrus Berry
+Level: 73
+Nature: Adamant
+Ability: Fluffy
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Porygon-Z @ Choice Specs
+Level: 73
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Ursaring @ Flame Orb
+Level: 74
+Nature: Adamant
+Ability: Guts
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Slaking @ Choice Band
+Level: 75
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_WINONA_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Skarmory @ Leftovers
+Level: 57
+Nature: Impish
+
+Hawlucha @ White Herb
+Level: 57
+Nature: Jolly
+
+Talonflame @ Sharp Beak
+Level: 58
+Nature: Jolly
+
+Noivern @ Life Orb
+Level: 58
+Nature: Timid
+
+Altaria @ Lum Berry
+Level: 59
+Nature: Adamant
+Ability: Natural Cure
+
+Dragonite @ Sitrus Berry
+Level: 60
+Nature: Adamant
+
+=== TRAINER_WINONA_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Skarmory @ Leftovers
+Level: 62
+Nature: Impish
+
+Hawlucha @ White Herb
+Level: 62
+Nature: Jolly
+
+Talonflame @ Sharp Beak
+Level: 63
+Nature: Jolly
+
+Noivern @ Life Orb
+Level: 63
+Nature: Timid
+
+Altaria @ Lum Berry
+Level: 64
+Nature: Adamant
+Ability: Natural Cure
+
+Dragonite @ Sitrus Berry
+Level: 65
+Nature: Adamant
+
+=== TRAINER_WINONA_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Skarmory @ Leftovers
+Level: 67
+Nature: Impish
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Hawlucha @ White Herb
+Level: 67
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Talonflame @ Sharp Beak
+Level: 68
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Noivern @ Life Orb
+Level: 68
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Altaria @ Lum Berry
+Level: 69
+Nature: Adamant
+Ability: Natural Cure
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Dragonite @ Sitrus Berry
+Level: 70
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_WINONA_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Skarmory @ Leftovers
+Level: 72
+Nature: Impish
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Hawlucha @ White Herb
+Level: 72
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Talonflame @ Sharp Beak
+Level: 73
+Nature: Jolly
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Noivern @ Life Orb
+Level: 73
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Altaria @ Lum Berry
+Level: 74
+Nature: Adamant
+Ability: Natural Cure
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Dragonite @ Sitrus Berry
+Level: 75
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_TATE_AND_LIZA_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Solrock @ Sitrus Berry
+Level: 57
+Nature: Brave
+
+Lunatone @ Sitrus Berry
+Level: 57
+Nature: Quiet
+
+Bronzong @ Leftovers
+Level: 58
+Nature: Relaxed
+
+Reuniclus @ Life Orb
+Level: 58
+Nature: Quiet
+Ability: Magic Guard
+
+Hatterene @ Leftovers
+Level: 59
+Nature: Quiet
+Ability: Magic Bounce
+
+Metagross @ Lum Berry
+Level: 60
+Nature: Adamant
+
+=== TRAINER_TATE_AND_LIZA_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Solrock @ Sitrus Berry
+Level: 62
+Nature: Brave
+
+Lunatone @ Sitrus Berry
+Level: 62
+Nature: Quiet
+
+Bronzong @ Leftovers
+Level: 63
+Nature: Relaxed
+
+Reuniclus @ Life Orb
+Level: 63
+Nature: Quiet
+Ability: Magic Guard
+
+Hatterene @ Leftovers
+Level: 64
+Nature: Quiet
+Ability: Magic Bounce
+
+Metagross @ Lum Berry
+Level: 65
+Nature: Adamant
+
+=== TRAINER_TATE_AND_LIZA_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Solrock @ Sitrus Berry
+Level: 67
+Nature: Brave
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lunatone @ Sitrus Berry
+Level: 67
+Nature: Quiet
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Bronzong @ Leftovers
+Level: 68
+Nature: Relaxed
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Reuniclus @ Life Orb
+Level: 68
+Nature: Quiet
+Ability: Magic Guard
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Hatterene @ Leftovers
+Level: 69
+Nature: Quiet
+Ability: Magic Bounce
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Metagross @ Lum Berry
+Level: 70
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_TATE_AND_LIZA_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Solrock @ Sitrus Berry
+Level: 72
+Nature: Brave
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lunatone @ Sitrus Berry
+Level: 72
+Nature: Quiet
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Bronzong @ Leftovers
+Level: 73
+Nature: Relaxed
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Reuniclus @ Life Orb
+Level: 73
+Nature: Quiet
+Ability: Magic Guard
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Hatterene @ Leftovers
+Level: 74
+Nature: Quiet
+Ability: Magic Bounce
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Metagross @ Lum Berry
+Level: 75
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+=== TRAINER_JUAN_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pelipper @ Damp Rock
+Level: 57
+Nature: Modest
+Ability: Drizzle
+
+Barraskewda @ Life Orb
+Level: 57
+Nature: Jolly
+Ability: Swift Swim
+
+Ludicolo @ Leftovers
+Level: 58
+Nature: Modest
+Ability: Swift Swim
+
+Crawdaunt @ Focus Sash
+Level: 58
+Nature: Adamant
+Ability: Adaptability
+
+Lapras @ Sitrus Berry
+Level: 59
+Nature: Modest
+
+Kingdra @ Mystic Water
+Level: 60
+Nature: Modest
+Ability: Swift Swim
+
+=== TRAINER_JUAN_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pelipper @ Damp Rock
+Level: 62
+Nature: Modest
+Ability: Drizzle
+
+Barraskewda @ Life Orb
+Level: 62
+Nature: Jolly
+Ability: Swift Swim
+
+Ludicolo @ Leftovers
+Level: 63
+Nature: Modest
+Ability: Swift Swim
+
+Crawdaunt @ Focus Sash
+Level: 63
+Nature: Adamant
+Ability: Adaptability
+
+Lapras @ Sitrus Berry
+Level: 64
+Nature: Modest
+
+Kingdra @ Mystic Water
+Level: 65
+Nature: Modest
+Ability: Swift Swim
+
+=== TRAINER_JUAN_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pelipper @ Damp Rock
+Level: 67
+Nature: Modest
+Ability: Drizzle
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Barraskewda @ Life Orb
+Level: 67
+Nature: Jolly
+Ability: Swift Swim
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Ludicolo @ Leftovers
+Level: 68
+Nature: Modest
+Ability: Swift Swim
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Crawdaunt @ Focus Sash
+Level: 68
+Nature: Adamant
+Ability: Adaptability
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lapras @ Sitrus Berry
+Level: 69
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Kingdra @ Mystic Water
+Level: 70
+Nature: Modest
+Ability: Swift Swim
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_JUAN_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Pelipper @ Damp Rock
+Level: 72
+Nature: Modest
+Ability: Drizzle
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Barraskewda @ Life Orb
+Level: 72
+Nature: Jolly
+Ability: Swift Swim
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Ludicolo @ Leftovers
+Level: 73
+Nature: Modest
+Ability: Swift Swim
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Crawdaunt @ Focus Sash
+Level: 73
+Nature: Adamant
+Ability: Adaptability
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Lapras @ Sitrus Berry
+Level: 74
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Kingdra @ Mystic Water
+Level: 75
+Nature: Modest
+Ability: Swift Swim
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_WALLY_VR_2 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Magnezone @ Leftovers
+Level: 57
+Nature: Modest
+Ability: Sturdy
+
+Altaria @ Lum Berry
+Level: 57
+Nature: Adamant
+Ability: Natural Cure
+
+Roserade @ Life Orb
+Level: 58
+Nature: Timid
+
+Sylveon @ Leftovers
+Level: 58
+Nature: Modest
+Ability: Pixilate
+
+Tinkaton @ Sitrus Berry
+Level: 59
+Nature: Adamant
+
+Gardevoir @ Choice Specs
+Level: 60
+Nature: Modest
+
+=== TRAINER_WALLY_VR_3 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Magnezone @ Leftovers
+Level: 62
+Nature: Modest
+Ability: Sturdy
+
+Altaria @ Lum Berry
+Level: 62
+Nature: Adamant
+Ability: Natural Cure
+
+Roserade @ Life Orb
+Level: 63
+Nature: Timid
+
+Sylveon @ Leftovers
+Level: 63
+Nature: Modest
+Ability: Pixilate
+
+Tinkaton @ Sitrus Berry
+Level: 64
+Nature: Adamant
+
+Gardevoir @ Choice Specs
+Level: 65
+Nature: Modest
+
+=== TRAINER_WALLY_VR_4 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Magnezone @ Leftovers
+Level: 67
+Nature: Modest
+Ability: Sturdy
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Altaria @ Lum Berry
+Level: 67
+Nature: Adamant
+Ability: Natural Cure
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Roserade @ Life Orb
+Level: 68
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Sylveon @ Leftovers
+Level: 68
+Nature: Modest
+Ability: Pixilate
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Tinkaton @ Sitrus Berry
+Level: 69
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Gardevoir @ Choice Specs
+Level: 70
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe
+
+=== TRAINER_WALLY_VR_5 ===
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+
+Magnezone @ Leftovers
+Level: 72
+Nature: Modest
+Ability: Sturdy
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Altaria @ Lum Berry
+Level: 72
+Nature: Adamant
+Ability: Natural Cure
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Roserade @ Life Orb
+Level: 73
+Nature: Timid
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Sylveon @ Leftovers
+Level: 73
+Nature: Modest
+Ability: Pixilate
+EVs: 4 HP / 252 SpA / 252 Spe
+
+Tinkaton @ Sitrus Berry
+Level: 74
+Nature: Adamant
+EVs: 4 HP / 252 Atk / 252 Spe
+
+Gardevoir @ Choice Specs
+Level: 75
+Nature: Modest
+EVs: 4 HP / 252 SpA / 252 Spe

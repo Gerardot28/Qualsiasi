@@ -1,0 +1,26 @@
+# In-game save test: new game -> moving truck -> START menu -> SAVE -> YES,
+# then wait until the game has really written the cartridge Flash.
+# Run with --sav FILE to get a real 128K Flash save (+16 byte RTC block)
+# that continue_from_save.txt (or any emulator) can load.
+# Needs symbols (uses new_game_to_truck_robust.txt).
+include new_game_to_truck_robust.txt
+# in the truck, the player has control
+press START
+wait 20
+shot sv_00_start_menu
+# BAG / <name> / SAVE / OPTION / EXIT
+press DOWN
+press DOWN
+press A
+# save summary window + "Would you like to save the game?" + YES/NO
+textbox sv_01_save_prompt 900
+wait 10
+press A
+# YES -> "SAVING... DON'T TURN OFF THE POWER." -> flash written -> "<NAME> saved the game."
+waitsavedata 1800
+textbox sv_02_saved 900
+press A
+wait 60
+shot sv_03_after_save
+mapinfo
+expectmap MAP_INSIDE_OF_TRUCK

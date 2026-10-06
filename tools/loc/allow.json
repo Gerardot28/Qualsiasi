@@ -1,0 +1,3 @@
+{
+  "_comment": "Per-string width allowances in px for ctextcheck.py. Keys: 'file:LINE', 'file:SYMBOL', 'SYMBOL' (e.g. gText_Foo, ITEM_POTION.description, gItemsInfo/ITEM_POTION.description) or a file path / glob for a whole file. Keys starting with '_' are ignored."
+}

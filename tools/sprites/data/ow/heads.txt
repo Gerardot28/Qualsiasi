@@ -1,0 +1,48 @@
+# Overworld head stamps (16 px wide). Stamp chars: ' ' or '?' = keep underlying pixel,
+# '_' = force transparent, other chars = palette letters (see data/palettes.txt, set "ow").
+# Each stamp's first row is placed at the y given by the frame's @stamp directive.
+
+== down
+______o_________
+__o__oho____o___
+_oho_ohRo__oho__
+_ohRoohrRooohRo_
+_ohrRhhrrRhhrRo_
+oohrrhrrrrRhrRoo
+_ohhrrrrrrrrrRRo
+_ohrrrrrrrrrrRo_
+_oRhrRrrRrrRrRo_
+_oRRRRRrRRRRRRo_
+_bSoRssRRssRoSb_
+
+== up
+_________o______
+___o____oho__o__
+__oho__ohRo_oho_
+_ohRooohrRoohRo_
+_ohrRhhrrRhhrRo_
+oohrrhrrrrRhrRoo
+_ohhrrhrrrhrrRRo
+_ohrrrrrrrrrrRo_
+_oRrrRrrrRrrRRo_
+_oRRrRRrRRrRRRo_
+_bdRRoRRRoRRRdb_
+_bdoRRoRoRRoodb_
+__bdSoSSoSoSdb__
+
+== side
+______o_________
+___o__oho__o____
+__oho_ohRooho___
+__ohRoohrRohRo_o
+__ohrhhrrRhrRooo
+_oohrrrrrrrrRRo_
+_ohhrrrrrrrrrRRo
+ohhrrrrrrrrrrRo_
+_ooRrRrrrrrrRRRo
+__oRoRRrrRrRRRo_
+__osssoRRRRRRo__
+__bssJsboRRRRo__
+__bssJSdbSdRok__
+___bddddbdbRo___
+____bbddddk_____

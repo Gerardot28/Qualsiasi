@@ -1,0 +1,35 @@
+diff --git a/src/title_screen.c b/src/title_screen.c
+index cd85d7d6..19237e7e 100644
+--- a/src/title_screen.c
++++ b/src/title_screen.c
+@@ -487,13 +487,13 @@ static void SpriteCB_PokemonLogoShine(struct Sprite *sprite)
+ 
+             backgroundColor = _RGB(sprite->sBgColor, sprite->sBgColor, sprite->sBgColor);
+ 
+-            // Flash the background green for 4 frames of movement.
++            // Flash the background (theme colour: light violet) for 4 frames of movement.
+             // Otherwise use the updating color.
+             if (sprite->x == DISPLAY_WIDTH / 2 + (3 * SHINE_SPEED)
+              || sprite->x == DISPLAY_WIDTH / 2 + (4 * SHINE_SPEED)
+              || sprite->x == DISPLAY_WIDTH / 2 + (5 * SHINE_SPEED)
+              || sprite->x == DISPLAY_WIDTH / 2 + (6 * SHINE_SPEED))
+-                gPlttBufferFaded[0] = RGB(24, 31, 12);
++                gPlttBufferFaded[0] = RGB(25, 18, 31);
+             else
+                 gPlttBufferFaded[0] = backgroundColor;
+         }
+@@ -862,10 +862,11 @@ static void UpdateLegendaryMarkingColor(u8 frameNum)
+ {
+     if ((frameNum % 4) == 0) // Change color every 4th frame
+     {
++        // Pulse between gold (31, 26, 10) and violet (14, 6, 24).
+         s32 intensity = Cos(frameNum, Q_8_8(0.5)) + Q_8_8(0.5);
+-        u32 r = 31 - Q_8_8_TO_INT(intensity * 31);
+-        u32 g = 31 - Q_8_8_TO_INT(intensity * 22);
+-        u32 b = 12;
++        u32 r = 31 - Q_8_8_TO_INT(intensity * 17);
++        u32 g = 26 - Q_8_8_TO_INT(intensity * 20);
++        u32 b = 10 + Q_8_8_TO_INT(intensity * 14);
+ 
+         u16 color = RGB(r, g, b);
+         LoadPalette(&color, BG_PLTT_ID(14) + 15, sizeof(color));

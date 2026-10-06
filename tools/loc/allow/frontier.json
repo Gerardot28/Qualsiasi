@@ -1,0 +1,21 @@
+{
+ "_comment": "Batch frontier (battle_frontier_trainers.h, battle_tent.h, trainer_hill.h, apprentice.h, battle_dome.c, frontier_util.c). Width allowances verified against the struct fields / window templates cited in each _why entry.",
+ "src/data/battle_frontier/battle_frontier_trainers.h": 42,
+ "src/data/battle_frontier/battle_tent.h": 42,
+ "_why src/data/battle_frontier/battle_frontier_trainers.h,src/data/battle_frontier/battle_tent.h": "Only .trainerName strings in these files. include/battle_frontier.h: struct BattleFrontierTrainer { u8 trainerName[PLAYER_NAME_LENGTH + 1]; } with PLAYER_NAME_LENGTH = 7 (include/constants/global.h), i.e. any 7-char name; shown where the player's own 7-char name is shown (dome tourney tree / info card windows of 8 tiles, battle text {B_TRAINER1_NAME}, which tools/loc assumes at 7 chars = 42px). Limit = 7 x 6px.",
+ "src/data/battle_frontier/apprentice.h": 42,
+ "_why src/data/battle_frontier/apprentice.h": "Only .name strings. include/apprentice.h: struct ApprenticeTrainer { u8 name[NUM_LANGUAGES - 1][PLAYER_NAME_LENGTH + 1]; } -> 7 chars = 42px, same display slots as the player name (battle text, Battle Tower records).",
+ "src/data/battle_frontier/trainer_hill.h": 60,
+ "_why src/data/battle_frontier/trainer_hill.h": "Only .name and .nickname strings. include/trainer_hill.h: struct TrainerHillTrainer { u8 name[TRAINER_NAME_LENGTH + 1]; } (TRAINER_NAME_LENGTH = 10, same as every regular trainer in trainers.party) and include/global.h: struct BattleTowerPokemon { u8 nickname[VANILLA_POKEMON_NAME_LENGTH + 1]; } (10). Limit = 10 x 6px. Nicknames are the official species names (all <= 10 bytes, checked).",
+ "src/battle_dome.c:sBattleDomePotentialTexts": 208,
+ "src/battle_dome.c:sBattleDomeOpponentStyleTexts": 208,
+ "src/battle_dome.c:sBattleDomeOpponentStatsTexts": 208,
+ "_why src/battle_dome.c:sBattleDomePotentialTexts,sBattleDomeOpponentStyleTexts,sBattleDomeOpponentStatsTexts": "battle_dome.c DisplayTrainerInfoOnCard: printed one line each (y = 4 / 20 / 36) with FONT_NORMAL at currentX = 0 into WIN_TRAINER_FLAVOR_TEXT of sInfoCardWindowTemplates (width 26 tiles = 208px, height 7 tiles).",
+ "src/battle_dome.c:sBattleDomeWinTexts": 208,
+ "src/battle_dome.c:sBattleDomeWinTexts/DOME_TEXT_WON_USING_MOVE": 179,
+ "_why src/battle_dome.c:sBattleDomeWinTexts": "battle_dome.c DisplayMatchInfoOnCard: StringExpandPlaceholders + FONT_NORMAL at x = 0 into WIN_MATCH_WIN_TEXT (width 26 tiles = 208px). {STR_VAR_1} is a trainer name (BufferDomeWinString: player / dome trainer / brain name, <= 7 chars, real <= 42px but measured at 60px), so 208 measured leaves >= 18px spare. DOME_TEXT_WON_USING_MOVE also holds {STR_VAR_2} = a move name (<= 16 chars, measured at only 60px), so it keeps the original 179px.",
+ "src/battle_dome.c:sBattleDomeMatchNumberTexts": 140,
+ "_why src/battle_dome.c:sBattleDomeMatchNumberTexts": "battle_dome.c DisplayMatchInfoOnCard: FONT_SHORT, centred with GetStringCenterAlignXOffsetWithLetterSpacing(..., 0xA0 = 160px) in WIN_MATCH_NUMBER (width 23 tiles = 184px). Capped at 140px (FONT_NORMAL measure) to leave margin for FONT_SHORT glyph differences.",
+ "src/frontier_util.c:gFrontierBrainInfo": 200,
+ "_why src/frontier_util.c:gFrontierBrainInfo": "lostTexts / wonTexts reach battle text through CopyFrontierBrainText -> CopyFrontierTrainerText -> {B_TRAINER1_WIN_TEXT}/{B_TRAINER1_LOSE_TEXT} (battle_message.c), printed in B_WIN_MSG (battle_bg.c: width 26 tiles = 208px; sTextOnWindowsInfo_Normal FONT_NORMAL x = 0). 200px = battle limit for a line followed by the continue arrow; max 2 lines kept."
+}

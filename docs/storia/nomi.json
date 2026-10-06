@@ -1,0 +1,751 @@
+{
+ "game": {
+  "title": "Pokémon Multiverse",
+  "header": "PKMULTIVERSE",
+  "tagline": "Ogni Varco è una nuova avventura.",
+  "act": "Atto 1: Hoenn"
+ },
+ "mapsec": {
+  "MAPSEC_LITTLEROOT_TOWN": "Albanova",
+  "MAPSEC_OLDALE_TOWN": "Solarosa",
+  "MAPSEC_DEWFORD_TOWN": "Bluruvia",
+  "MAPSEC_LAVARIDGE_TOWN": "Cuordilava",
+  "MAPSEC_FALLARBOR_TOWN": "Brunifoglia",
+  "MAPSEC_VERDANTURF_TOWN": "Mentania",
+  "MAPSEC_PACIFIDLOG_TOWN": "Orocea",
+  "MAPSEC_PETALBURG_CITY": "Petalipoli",
+  "MAPSEC_SLATEPORT_CITY": "Porto Selcepoli",
+  "MAPSEC_MAUVILLE_CITY": "Ciclamipoli",
+  "MAPSEC_RUSTBORO_CITY": "Ferrugipoli",
+  "MAPSEC_FORTREE_CITY": "Forestopoli",
+  "MAPSEC_LILYCOVE_CITY": "Porto Alghepoli",
+  "MAPSEC_MOSSDEEP_CITY": "Verdeazzupoli",
+  "MAPSEC_SOOTOPOLIS_CITY": "Ceneride",
+  "MAPSEC_EVER_GRANDE_CITY": "Iridopoli",
+  "MAPSEC_ROUTE_101": "Percorso 101",
+  "MAPSEC_ROUTE_102": "Percorso 102",
+  "MAPSEC_ROUTE_103": "Percorso 103",
+  "MAPSEC_ROUTE_104": "Percorso 104",
+  "MAPSEC_ROUTE_105": "Percorso 105",
+  "MAPSEC_ROUTE_106": "Percorso 106",
+  "MAPSEC_ROUTE_107": "Percorso 107",
+  "MAPSEC_ROUTE_108": "Percorso 108",
+  "MAPSEC_ROUTE_109": "Percorso 109",
+  "MAPSEC_ROUTE_110": "Percorso 110",
+  "MAPSEC_ROUTE_111": "Percorso 111",
+  "MAPSEC_ROUTE_112": "Percorso 112",
+  "MAPSEC_ROUTE_113": "Percorso 113",
+  "MAPSEC_ROUTE_114": "Percorso 114",
+  "MAPSEC_ROUTE_115": "Percorso 115",
+  "MAPSEC_ROUTE_116": "Percorso 116",
+  "MAPSEC_ROUTE_117": "Percorso 117",
+  "MAPSEC_ROUTE_118": "Percorso 118",
+  "MAPSEC_ROUTE_119": "Percorso 119",
+  "MAPSEC_ROUTE_120": "Percorso 120",
+  "MAPSEC_ROUTE_121": "Percorso 121",
+  "MAPSEC_ROUTE_122": "Percorso 122",
+  "MAPSEC_ROUTE_123": "Percorso 123",
+  "MAPSEC_ROUTE_124": "Percorso 124",
+  "MAPSEC_ROUTE_125": "Percorso 125",
+  "MAPSEC_ROUTE_126": "Percorso 126",
+  "MAPSEC_ROUTE_127": "Percorso 127",
+  "MAPSEC_ROUTE_128": "Percorso 128",
+  "MAPSEC_ROUTE_129": "Percorso 129",
+  "MAPSEC_ROUTE_130": "Percorso 130",
+  "MAPSEC_ROUTE_131": "Percorso 131",
+  "MAPSEC_ROUTE_132": "Percorso 132",
+  "MAPSEC_ROUTE_133": "Percorso 133",
+  "MAPSEC_ROUTE_134": "Percorso 134",
+  "MAPSEC_UNDERWATER_124": "Sott'acqua",
+  "MAPSEC_UNDERWATER_126": "Sott'acqua",
+  "MAPSEC_UNDERWATER_127": "Sott'acqua",
+  "MAPSEC_UNDERWATER_128": "Sott'acqua",
+  "MAPSEC_UNDERWATER_SOOTOPOLIS": "Sott'acqua",
+  "MAPSEC_GRANITE_CAVE": "Grotta Pietrosa",
+  "MAPSEC_MT_CHIMNEY": "Monte Camino",
+  "MAPSEC_SAFARI_ZONE": "Zona Safari",
+  "MAPSEC_BATTLE_FRONTIER": "Parco Lotta",
+  "MAPSEC_PETALBURG_WOODS": "Bosco Petalo",
+  "MAPSEC_RUSTURF_TUNNEL": "Tunnel Menferro",
+  "MAPSEC_ABANDONED_SHIP": "Vecchia Nave",
+  "MAPSEC_NEW_MAUVILLE": "Ciclanova",
+  "MAPSEC_METEOR_FALLS": "Cascate Meteora",
+  "MAPSEC_METEOR_FALLS2": "Cascate Meteora",
+  "MAPSEC_MT_PYRE": "Monte Pira",
+  "MAPSEC_AQUA_HIDEOUT_OLD": "Covo Omega",
+  "MAPSEC_SHOAL_CAVE": "Grotta Ondosa",
+  "MAPSEC_SEAFLOOR_CAVERN": "Antro Abissale",
+  "MAPSEC_UNDERWATER_SEAFLOOR_CAVERN": "Sott'acqua",
+  "MAPSEC_VICTORY_ROAD": "Via Vittoria",
+  "MAPSEC_MIRAGE_ISLAND": "Isola Miraggio",
+  "MAPSEC_CAVE_OF_ORIGIN": "Grotta dei Tempi",
+  "MAPSEC_SOUTHERN_ISLAND": "Isola Remota",
+  "MAPSEC_FIERY_PATH": "Cammino Ardente",
+  "MAPSEC_FIERY_PATH2": "Cammino Ardente",
+  "MAPSEC_JAGGED_PASS": "Passo Selvaggio",
+  "MAPSEC_JAGGED_PASS2": "Passo Selvaggio",
+  "MAPSEC_SEALED_CHAMBER": "Sala Incisa",
+  "MAPSEC_UNDERWATER_SEALED_CHAMBER": "Sott'acqua",
+  "MAPSEC_SCORCHED_SLAB": "Grottino Solare",
+  "MAPSEC_ISLAND_CAVE": "Grotta Insulare",
+  "MAPSEC_DESERT_RUINS": "Rovine Sabbiose",
+  "MAPSEC_ANCIENT_TOMB": "Tomba Antica",
+  "MAPSEC_INSIDE_OF_TRUCK": "Nel Camion",
+  "MAPSEC_SKY_PILLAR": "Torre dei Cieli",
+  "MAPSEC_SECRET_BASE": "Base Segreta",
+  "MAPSEC_DYNAMIC": null,
+  "MAPSEC_PALLET_TOWN": "Biancavilla",
+  "MAPSEC_VIRIDIAN_CITY": "Smeraldopoli",
+  "MAPSEC_PEWTER_CITY": "Plumbeopoli",
+  "MAPSEC_CERULEAN_CITY": "Celestopoli",
+  "MAPSEC_LAVENDER_TOWN": "Lavandonia",
+  "MAPSEC_VERMILION_CITY": "Aranciopoli",
+  "MAPSEC_CELADON_CITY": "Azzurropoli",
+  "MAPSEC_FUCHSIA_CITY": "Fucsiapoli",
+  "MAPSEC_CINNABAR_ISLAND": "Isola Cannella",
+  "MAPSEC_INDIGO_PLATEAU": "Altopiano Blu",
+  "MAPSEC_SAFFRON_CITY": "Zafferanopoli",
+  "MAPSEC_ROUTE_4_POKECENTER": "Percorso 4",
+  "MAPSEC_ROUTE_10_POKECENTER": "Percorso 10",
+  "MAPSEC_ROUTE_1": "Percorso 1",
+  "MAPSEC_ROUTE_2": "Percorso 2",
+  "MAPSEC_ROUTE_3": "Percorso 3",
+  "MAPSEC_ROUTE_4": "Percorso 4",
+  "MAPSEC_ROUTE_5": "Percorso 5",
+  "MAPSEC_ROUTE_6": "Percorso 6",
+  "MAPSEC_ROUTE_7": "Percorso 7",
+  "MAPSEC_ROUTE_8": "Percorso 8",
+  "MAPSEC_ROUTE_9": "Percorso 9",
+  "MAPSEC_ROUTE_10": "Percorso 10",
+  "MAPSEC_ROUTE_11": "Percorso 11",
+  "MAPSEC_ROUTE_12": "Percorso 12",
+  "MAPSEC_ROUTE_13": "Percorso 13",
+  "MAPSEC_ROUTE_14": "Percorso 14",
+  "MAPSEC_ROUTE_15": "Percorso 15",
+  "MAPSEC_ROUTE_16": "Percorso 16",
+  "MAPSEC_ROUTE_17": "Percorso 17",
+  "MAPSEC_ROUTE_18": "Percorso 18",
+  "MAPSEC_ROUTE_19": "Percorso 19",
+  "MAPSEC_ROUTE_20": "Percorso 20",
+  "MAPSEC_ROUTE_21": "Percorso 21",
+  "MAPSEC_ROUTE_22": "Percorso 22",
+  "MAPSEC_ROUTE_23": "Percorso 23",
+  "MAPSEC_ROUTE_24": "Percorso 24",
+  "MAPSEC_ROUTE_25": "Percorso 25",
+  "MAPSEC_VIRIDIAN_FOREST": "Bosco Smeraldo",
+  "MAPSEC_MT_MOON": "Monte Luna",
+  "MAPSEC_S_S_ANNE": "M/N Anna",
+  "MAPSEC_UNDERGROUND_PATH": "Via Sotterranea",
+  "MAPSEC_UNDERGROUND_PATH_2": "Via Sotterranea",
+  "MAPSEC_DIGLETTS_CAVE": "Grotta Diglett",
+  "MAPSEC_KANTO_VICTORY_ROAD": "Via Vittoria",
+  "MAPSEC_ROCKET_HIDEOUT": "Rifugio Rocket",
+  "MAPSEC_SILPH_CO": "Silph SpA",
+  "MAPSEC_POKEMON_MANSION": "Villa Pokémon",
+  "MAPSEC_KANTO_SAFARI_ZONE": "Zona Safari",
+  "MAPSEC_POKEMON_LEAGUE": "Lega Pokémon",
+  "MAPSEC_ROCK_TUNNEL": "Tunnel Roccioso",
+  "MAPSEC_SEAFOAM_ISLANDS": "Isole Spumarine",
+  "MAPSEC_POKEMON_TOWER": "Torre Pokémon",
+  "MAPSEC_CERULEAN_CAVE": "Grotta Celeste",
+  "MAPSEC_POWER_PLANT": "Centrale Elett.",
+  "MAPSEC_ONE_ISLAND": "Primisola",
+  "MAPSEC_TWO_ISLAND": "Secondisola",
+  "MAPSEC_THREE_ISLAND": "Terzisola",
+  "MAPSEC_FOUR_ISLAND": "Quartisola",
+  "MAPSEC_FIVE_ISLAND": "Quintisola",
+  "MAPSEC_SEVEN_ISLAND": "Settimisola",
+  "MAPSEC_SIX_ISLAND": "Sestisola",
+  "MAPSEC_KINDLE_ROAD": "Via Vulcanica",
+  "MAPSEC_TREASURE_BEACH": "Riva del Tesoro",
+  "MAPSEC_CAPE_BRINK": "Capo Estremo",
+  "MAPSEC_BOND_BRIDGE": "Ponte Abbraccio",
+  "MAPSEC_THREE_ISLE_PORT": "Porto Terzisola",
+  "MAPSEC_RESORT_GORGEOUS": "Perla dei Mari",
+  "MAPSEC_WATER_LABYRINTH": "Labirinto Marino",
+  "MAPSEC_FIVE_ISLE_MEADOW": "Prato Quintisola",
+  "MAPSEC_MEMORIAL_PILLAR": "Colonna Rocciosa",
+  "MAPSEC_OUTCAST_ISLAND": "Isola Solitaria",
+  "MAPSEC_GREEN_PATH": "Via Verde",
+  "MAPSEC_WATER_PATH": "Via Marina",
+  "MAPSEC_RUIN_VALLEY": "Valle Antica",
+  "MAPSEC_TRAINER_TOWER": "Torre Allenatori",
+  "MAPSEC_CANYON_ENTRANCE": "Ingresso Canyon",
+  "MAPSEC_SEVAULT_CANYON": "Canyon Seption",
+  "MAPSEC_TANOBY_RUINS": "Rovine Florabeto",
+  "MAPSEC_SEVII_ISLE_22": "Settipelago 22",
+  "MAPSEC_SEVII_ISLE_23": "Settipelago 23",
+  "MAPSEC_SEVII_ISLE_24": "Settipelago 24",
+  "MAPSEC_NAVEL_ROCK_FRLG": "Monte Cordone",
+  "MAPSEC_MT_EMBER": "Monte Brace",
+  "MAPSEC_BERRY_FOREST": "Bosco Baccoso",
+  "MAPSEC_ICEFALL_CAVE": "Grotta Gelata",
+  "MAPSEC_ROCKET_WAREHOUSE": "Magazzino Rocket",
+  "MAPSEC_TRAINER_TOWER_2": "Torre Allenatori",
+  "MAPSEC_DOTTED_HOLE": "Cripta dei Punti",
+  "MAPSEC_LOST_CAVE": "Grotta Sperduta",
+  "MAPSEC_PATTERN_BUSH": "Bosco Disegnato",
+  "MAPSEC_ALTERING_CAVE_FRLG": "Grotta Mutevole",
+  "MAPSEC_TANOBY_CHAMBERS": "Sale Florabeto",
+  "MAPSEC_THREE_ISLE_PATH": "Via Terzisola",
+  "MAPSEC_TANOBY_KEY": "Chiave Florabeto",
+  "MAPSEC_BIRTH_ISLAND_FRLG": "Isola Materna",
+  "MAPSEC_MONEAN_CHAMBER": "Sala A-loe",
+  "MAPSEC_LIPTOO_CHAMBER": "Sala B-etulla",
+  "MAPSEC_WEEPTH_CHAMBER": "Sala C-iclamino",
+  "MAPSEC_DILFORD_CHAMBER": "Sala D-afne",
+  "MAPSEC_SCUFIB_CHAMBER": "Sala E-dera",
+  "MAPSEC_RIXY_CHAMBER": "Sala F-elce",
+  "MAPSEC_VIAPOIS_CHAMBER": "Sala G-ardenia",
+  "MAPSEC_EMBER_SPA": "Terme Laviche",
+  "MAPSEC_SPECIAL_AREA": "Area Speciale",
+  "MAPSEC_AQUA_HIDEOUT": "Covo Omega",
+  "MAPSEC_MAGMA_HIDEOUT": "Covo Alpha",
+  "MAPSEC_MIRAGE_TOWER": "Torre Miraggio",
+  "MAPSEC_BIRTH_ISLAND": "Isola Materna",
+  "MAPSEC_FARAWAY_ISLAND": "Isola Suprema",
+  "MAPSEC_ARTISAN_CAVE": "Grotta Artistica",
+  "MAPSEC_MARINE_CAVE": "Grotta Mare",
+  "MAPSEC_UNDERWATER_MARINE_CAVE": "Sott'acqua",
+  "MAPSEC_TERRA_CAVE": "Grotta Terra",
+  "MAPSEC_UNDERWATER_105": "Sott'acqua",
+  "MAPSEC_UNDERWATER_125": "Sott'acqua",
+  "MAPSEC_UNDERWATER_129": "Sott'acqua",
+  "MAPSEC_DESERT_UNDERPASS": "Tunnel Sabbioso",
+  "MAPSEC_ALTERING_CAVE": "Grotta Mutevole",
+  "MAPSEC_NAVEL_ROCK": "Monte Cordone",
+  "MAPSEC_TRAINER_HILL": "Colle Allenatori"
+ },
+ "trainer_classes": {
+  "PKMN_TRAINER_1": {
+   "en": "{PKMN} TRAINER",
+   "it": "Allenatore"
+  },
+  "PKMN_TRAINER_2": {
+   "en": "{PKMN} TRAINER",
+   "it": "Allenatore"
+  },
+  "HIKER": {
+   "en": "HIKER",
+   "it": "Montanaro"
+  },
+  "TEAM_AQUA": {
+   "en": "TEAM AQUA",
+   "it": "Team Omega"
+  },
+  "PKMN_BREEDER": {
+   "en": "{PKMN} BREEDER",
+   "it": "Allevatore"
+  },
+  "COOLTRAINER": {
+   "en": "COOLTRAINER",
+   "it": "Fantallenat."
+  },
+  "BIRD_KEEPER": {
+   "en": "BIRD KEEPER",
+   "it": "Ornitologo"
+  },
+  "COLLECTOR": {
+   "en": "COLLECTOR",
+   "it": "Raccoglitore"
+  },
+  "SWIMMER_M": {
+   "en": "SWIMMER♂",
+   "it": "Nuotatore"
+  },
+  "TEAM_MAGMA": {
+   "en": "TEAM MAGMA",
+   "it": "Team Alpha"
+  },
+  "EXPERT": {
+   "en": "EXPERT",
+   "it": "Esperto"
+  },
+  "AQUA_ADMIN": {
+   "en": "AQUA ADMIN",
+   "it": "Admin Omega"
+  },
+  "BLACK_BELT": {
+   "en": "BLACK BELT",
+   "it": "Cinturanera"
+  },
+  "AQUA_LEADER": {
+   "en": "AQUA LEADER",
+   "it": "Capo Omega"
+  },
+  "HEX_MANIAC": {
+   "en": "HEX MANIAC",
+   "it": "Occultista"
+  },
+  "AROMA_LADY": {
+   "en": "AROMA LADY",
+   "it": "Profumiera"
+  },
+  "RUIN_MANIAC": {
+   "en": "RUIN MANIAC",
+   "it": "Archeologo"
+  },
+  "INTERVIEWER": {
+   "en": "INTERVIEWER",
+   "it": "Giornalista"
+  },
+  "TUBER_F": {
+   "en": "TUBER",
+   "it": "Bagnante"
+  },
+  "TUBER_M": {
+   "en": "TUBER",
+   "it": "Bagnante"
+  },
+  "LADY": {
+   "en": "LADY",
+   "it": "Signorina"
+  },
+  "BEAUTY": {
+   "en": "BEAUTY",
+   "it": "Bellezza"
+  },
+  "RICH_BOY": {
+   "en": "RICH BOY",
+   "it": "Riccastro"
+  },
+  "POKEMANIAC": {
+   "en": "POKéMANIAC",
+   "it": "Pokémaniaco"
+  },
+  "GUITARIST": {
+   "en": "GUITARIST",
+   "it": "Chitarrista"
+  },
+  "KINDLER": {
+   "en": "KINDLER",
+   "it": "Fuochista"
+  },
+  "CAMPER": {
+   "en": "CAMPER",
+   "it": "Esploratore"
+  },
+  "PICNICKER": {
+   "en": "PICNICKER",
+   "it": "Gitante"
+  },
+  "BUG_MANIAC": {
+   "en": "BUG MANIAC",
+   "it": "Insettomane"
+  },
+  "PSYCHIC": {
+   "en": "PSYCHIC",
+   "it": "Sensitivo"
+  },
+  "GENTLEMAN": {
+   "en": "GENTLEMAN",
+   "it": "Gentiluomo"
+  },
+  "ELITE_FOUR": {
+   "en": "ELITE FOUR",
+   "it": "Superquattro"
+  },
+  "LEADER": {
+   "en": "LEADER",
+   "it": "Capopalestra"
+  },
+  "SCHOOL_KID": {
+   "en": "SCHOOL KID",
+   "it": "Scolaro"
+  },
+  "SR_AND_JR": {
+   "en": "SR. AND JR.",
+   "it": "Padre&Figlio"
+  },
+  "WINSTRATE": {
+   "en": "WINSTRATE",
+   "it": "Vincenti"
+  },
+  "POKEFAN": {
+   "en": "POKéFAN",
+   "it": "Pokéfan"
+  },
+  "YOUNGSTER": {
+   "en": "YOUNGSTER",
+   "it": "Giovanotto"
+  },
+  "CHAMPION": {
+   "en": "CHAMPION",
+   "it": "Campione"
+  },
+  "FISHERMAN": {
+   "en": "FISHERMAN",
+   "it": "Pescatore"
+  },
+  "TRIATHLETE": {
+   "en": "TRIATHLETE",
+   "it": "Triatleta"
+  },
+  "DRAGON_TAMER": {
+   "en": "DRAGON TAMER",
+   "it": "Domadraghi"
+  },
+  "NINJA_BOY": {
+   "en": "NINJA BOY",
+   "it": "Bimbo Ninja"
+  },
+  "BATTLE_GIRL": {
+   "en": "BATTLE GIRL",
+   "it": "Lottatrice"
+  },
+  "PARASOL_LADY": {
+   "en": "PARASOL LADY",
+   "it": "Dama Parasol"
+  },
+  "SWIMMER_F": {
+   "en": "SWIMMER♀",
+   "it": "Nuotatrice"
+  },
+  "TWINS": {
+   "en": "TWINS",
+   "it": "Gemelle"
+  },
+  "SAILOR": {
+   "en": "SAILOR",
+   "it": "Marinaio"
+  },
+  "COOLTRAINER_2": {
+   "en": "COOLTRAINER",
+   "it": "Fantallenat."
+  },
+  "MAGMA_ADMIN": {
+   "en": "MAGMA ADMIN",
+   "it": "Admin Alpha"
+  },
+  "RIVAL": {
+   "en": "{PKMN} TRAINER",
+   "it": "Sfidante"
+  },
+  "BUG_CATCHER": {
+   "en": "BUG CATCHER",
+   "it": "Pigliamosche"
+  },
+  "PKMN_RANGER": {
+   "en": "{PKMN} RANGER",
+   "it": "Ranger"
+  },
+  "MAGMA_LEADER": {
+   "en": "MAGMA LEADER",
+   "it": "Capo Alpha"
+  },
+  "LASS": {
+   "en": "LASS",
+   "it": "Ragazzina"
+  },
+  "YOUNG_COUPLE": {
+   "en": "YOUNG COUPLE",
+   "it": "Fidanzati"
+  },
+  "OLD_COUPLE": {
+   "en": "OLD COUPLE",
+   "it": "Vecchi Sposi"
+  },
+  "SIS_AND_BRO": {
+   "en": "SIS AND BRO",
+   "it": "Fratelli"
+  },
+  "SALON_MAIDEN": {
+   "en": "SALON MAIDEN",
+   "it": "Dama Torre"
+  },
+  "DOME_ACE": {
+   "en": "DOME ACE",
+   "it": "Asso Cupola"
+  },
+  "PALACE_MAVEN": {
+   "en": "PALACE MAVEN",
+   "it": "Guru Palazzo"
+  },
+  "ARENA_TYCOON": {
+   "en": "ARENA TYCOON",
+   "it": "Boss Arena"
+  },
+  "FACTORY_HEAD": {
+   "en": "FACTORY HEAD",
+   "it": "Capofabbrica"
+  },
+  "PIKE_QUEEN": {
+   "en": "PIKE QUEEN",
+   "it": "Regina Serpe"
+  },
+  "PYRAMID_KING": {
+   "en": "PYRAMID KING",
+   "it": "Re Piramide"
+  },
+  "RS_PROTAG": {
+   "en": "{PKMN} TRAINER",
+   "it": "Allenatore"
+  }
+ },
+ "characters": {
+  "PLAYER": "{PLAYER}",
+  "MOM": "Mamma",
+  "DAD": "Papà",
+  "NORMAN": "Norman",
+  "PROF_BIRCH": "Prof. Birch",
+  "BIRCH": "Prof. Birch",
+  "RIVAL": "Arianna",
+  "MAY": "Arianna",
+  "BRENDAN": "Arianna",
+  "RIVALS_MOM": "Signora Birch",
+  "WALLY": "Lino",
+  "WALLYS_MOM": "Mamma di Lino",
+  "WALLYS_DAD": "Papà di Lino",
+  "WALLYS_UNCLE": "Zio di Lino",
+  "STEVEN": "Rocco",
+  "STEVEN_FULL": "Rocco Petri",
+  "MR_STONE": "Sig. Petri",
+  "DEVON_CORP": "Devon S.p.A.",
+  "DEVON_RESEARCHER": "Ricercatore Devon",
+  "MR_BRINEY": "Capitan Scoglio",
+  "BRINEY": "Scoglio",
+  "PEEKO": "Peeko",
+  "CAPT_STERN": "Capitan Stern",
+  "STERN": "Stern",
+  "PROF_COZMO": "Prof. Cozmo",
+  "COZMO": "Cozmo",
+  "LANETTE": "Lanette",
+  "BILL": "Bill",
+  "SCOTT": "Scott",
+  "TRICK_MASTER": "Maestro Trucco",
+  "WINSTRATES": "Famiglia Vincenti",
+  "DAYCARE_MAN": "Nonno della Pensione",
+  "DAYCARE_LADY": "Nonna della Pensione",
+  "GABBY": "Gabby",
+  "TY": "Ty",
+  "WANDA": "Wanda",
+  "RYDEL": "Rydel",
+  "MT_PYRE_OLD_COUPLE": "Custodi del Monte Pira",
+  "ARCHIE": "Ulisse",
+  "MAXIE": "Ettore",
+  "TABITHA": "Ruggero",
+  "COURTNEY": "Morgana",
+  "MATT": "Baldo",
+  "SHELLY": "Ondina",
+  "GRUNT": "Recluta",
+  "AQUA_GRUNT": "Recluta Omega",
+  "MAGMA_GRUNT": "Recluta Alpha",
+  "TEAM_AQUA": "Team Omega",
+  "TEAM_MAGMA": "Team Alpha",
+  "NURSE": "Infermiera",
+  "CLERK": "Commesso",
+  "GYM_GUIDE": "Guida Palestra",
+  "ROXANNE": "Petra",
+  "BRAWLY": "Rudi",
+  "WATTSON": "Walter",
+  "FLANNERY": "Fiammetta",
+  "WINONA": "Alice",
+  "TATE": "Tell",
+  "LIZA": "Pat",
+  "JUAN": "Rodolfo",
+  "SIDNEY": "Fosco",
+  "PHOEBE": "Ester",
+  "GLACIA": "Frida",
+  "DRAKE": "Drake",
+  "WALLACE": "Adriano"
+ },
+ "trainer_names": {
+  "MAY": "Arianna",
+  "BRENDAN": "Arianna",
+  "WALLY": "Lino",
+  "STEVEN": "Rocco",
+  "MAXIE": "Ettore",
+  "ARCHIE": "Ulisse",
+  "TABITHA": "Ruggero",
+  "COURTNEY": "Morgana",
+  "MATT": "Baldo",
+  "SHELLY": "Ondina",
+  "GRUNT": "Recluta",
+  "ROXANNE": "Petra",
+  "BRAWLY": "Rudi",
+  "WATTSON": "Walter",
+  "FLANNERY": "Fiammetta",
+  "NORMAN": "Norman",
+  "WINONA": "Alice",
+  "TATE&LIZA": "Tell e Pat",
+  "TATE": "Tell",
+  "LIZA": "Pat",
+  "JUAN": "Rodolfo",
+  "SIDNEY": "Fosco",
+  "PHOEBE": "Ester",
+  "GLACIA": "Frida",
+  "DRAKE": "Drake",
+  "WALLACE": "Adriano",
+  "ANABEL": "Anabel",
+  "TUCKER": "Tucker",
+  "SPENSER": "Spenser",
+  "GRETA": "Greta",
+  "NOLAND": "Noland",
+  "LUCY": "Lucy",
+  "BRANDON": "Brandon"
+ },
+ "rival": {
+  "name": "Arianna",
+  "sprite": "MAY",
+  "note": "Figlia del Prof. Birch. Usare lo stesso nome anche nel ramo BRENDAN (irraggiungibile)."
+ },
+ "player_default_names": [
+  "Dante",
+  "Enea",
+  "Leo",
+  "Rio",
+  "Elia",
+  "Ivo"
+ ],
+ "teams": {
+  "parent_org": {
+   "name": "Società Soglia",
+   "note": "Gruppo di ricerca sui Varchi, sciolto dopo l'Incidente di Ciclanova."
+  },
+  "TEAM_MAGMA": {
+   "name": "Team Alpha",
+   "sprite": "rosso (Magma)",
+   "leader": "Ettore",
+   "admins": [
+    "Ruggero",
+    "Morgana"
+   ],
+   "grunt": "Recluta",
+   "class_grunt": "Team Alpha",
+   "class_admin": "Admin Alpha",
+   "class_leader": "Capo Alpha",
+   "goal": "Risvegliare Groudon (Ancora della Terra) per sigillare Hoenn e chiudere ogni Varco per sempre.",
+   "motto": "Hoenn resta Hoenn!",
+   "hideout": "Covo Alpha"
+  },
+  "TEAM_AQUA": {
+   "name": "Team Omega",
+   "sprite": "blu (Aqua)",
+   "leader": "Ulisse",
+   "admins": [
+    "Baldo",
+    "Ondina"
+   ],
+   "grunt": "Recluta",
+   "class_grunt": "Team Omega",
+   "class_admin": "Admin Omega",
+   "class_leader": "Capo Omega",
+   "goal": "Risvegliare Kyogre (Ancora del Mare) per far salpare Hoenn nel multiverso e tenere aperti tutti i Varchi.",
+   "motto": "Oltre ogni mare!",
+   "hideout": "Covo Omega"
+  }
+ },
+ "key_items": {
+  "ITEM_DEVON_PARTS": {
+   "name": "Merce Devon",
+   "desc": "Componenti Devon\ndi uno stabilizza-\ntore di Varchi."
+  },
+  "ITEM_LETTER": {
+   "name": "Lettera",
+   "desc": "Lettera del Sig.\nPetri per suo\nfiglio Rocco."
+  },
+  "ITEM_METEORITE": {
+   "name": "Meteorite",
+   "desc": "Frammento di un\nantico Varco. Vibra\nse c'è un Varco."
+  },
+  "ITEM_MAGMA_EMBLEM": {
+   "name": "Stemma Alpha",
+   "desc": "Lo stemma del\nTeam Alpha. Apre\nil loro covo."
+  },
+  "ITEM_RED_ORB": {
+   "name": "Gemma Rossa",
+   "desc": "Gemma che risveglia\nle Ancore. Non va\nseparata dalla Blu."
+  },
+  "ITEM_BLUE_ORB": {
+   "name": "Gemma Blu",
+   "desc": "Gemma che risveglia\nle Ancore. Non va\ndivisa dalla Rossa."
+  },
+  "ITEM_DEVON_SCOPE": {
+   "name": "Devonscopio",
+   "desc": "Visore Devon che\nrivela Pokémon e\nVarchi invisibili."
+  },
+  "ITEM_SCANNER": {
+   "name": "Scanner",
+   "desc": "Registra le onde\ndi un Varco marino.\nÈ di Capitan Stern."
+  },
+  "ITEM_GO_GOGGLES": {
+   "name": "Occhialoni",
+   "desc": "Occhiali che\nproteggono dalla\nsabbia. Di Arianna."
+  },
+  "ITEM_SS_TICKET": {
+   "name": "Biglietto Nave",
+   "desc": "Biglietto per la\nMotonave Acqua.\nRegalo di Norman."
+  }
+ },
+ "glossary": {
+  "Rift": "Varco",
+  "Rifts": "Varchi",
+  "Great Rift": "Grande Varco",
+  "Scar": "Cicatrice",
+  "Threshold": "Soglia",
+  "Convergence": "Convergenza",
+  "Anchor": "Ancora",
+  "Sky Guardian (Rayquaza)": "Custode della Volta",
+  "Multiverse": "Multiverso",
+  "Trainer": "Allenatore/Allenatrice",
+  "Gym": "Palestra",
+  "Gym Leader": "Capopalestra",
+  "Badge": "Medaglia",
+  "Elite Four": "Superquattro",
+  "Champion": "Campione",
+  "Pokémon League": "Lega Pokémon",
+  "Hall of Fame": "Sala d'Onore",
+  "TM": "MT",
+  "HM": "MN",
+  "Cut": "Taglio",
+  "Fly": "Volo",
+  "Surf": "Surf",
+  "Strength": "Forza",
+  "Flash": "Flash",
+  "Rock Smash": "Spaccaroccia",
+  "Waterfall": "Cascata",
+  "Dive": "Sub",
+  "Box": "Box",
+  "PC": "PC",
+  "Bike": "Bici",
+  "Running Shoes": "Scarpe da Corsa",
+  "Day Care": "Pensione Pokémon",
+  "Pokémon Contest": "Gare Pokémon",
+  "Pokéblock": "Pokémella",
+  "Pokéblocks": "Pokémelle",
+  "Safari Zone": "Zona Safari",
+  "Battle Frontier": "Parco Lotta",
+  "Potion": "Pozione",
+  "Super Potion": "Superpozione",
+  "Hyper Potion": "Iperpozione",
+  "Full Restore": "Ricarica Totale",
+  "Revive": "Revitalizzante",
+  "Antidote": "Antidoto",
+  "Rare Candy": "Caramella Rara",
+  "Poké Ball": "Poké Ball",
+  "Great Ball": "Mega Ball",
+  "Ultra Ball": "Ultra Ball",
+  "Pokédex": "Pokédex",
+  "Pokémon Center": "Centro Pokémon",
+  "Poké Mart": "Pokémon Market",
+  "Route": "Percorso",
+  "Exp. Share": "Condividi Esp.",
+  "Itemfinder": "Ricerca Strum.",
+  "Grunt": "Recluta",
+  "Devon Corporation": "Devon S.p.A.",
+  "S.S. Tidal": "M/N Acqua",
+  "Gym Guide": "Guida Palestra",
+  "Trainer's School": "Scuola Allenatori",
+  "Weather Institute": "Istituto Meteo",
+  "Space Center": "Centro Spaziale",
+  "Oceanic Museum": "Museo Oceanografico",
+  "Cable Car": "Funivia",
+  "Team Magma": "Team Alpha",
+  "Team Aqua": "Team Omega",
+  "Red Orb": "Gemma Rossa",
+  "Blue Orb": "Gemma Blu",
+  "Magma Emblem": "Stemma Alpha",
+  "Devon Goods": "Merce Devon",
+  "New Mauville": "Ciclanova"
+ }
+}

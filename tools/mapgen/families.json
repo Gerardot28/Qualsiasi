@@ -1,0 +1,592 @@
+{
+  "_doc": "Tileset families. A map uses exactly one family (= one primary + one secondary tileset). Terrain chars come from classes/<primary>.json (+ classes/<secondary>.json); stamps must be 'general/*' or belong to the family. 'train' = which layouts the autotiler learns from ('outdoor' = all Hoenn town/route secondaries, or an explicit list of secondaries). 'border' = 2x2 metatiles drawn outside the map.",
+  "_border_by_class": "outdoor families pick their border from the most common class on the map edge",
+  "_outdoor_secondaries": [
+    "gTileset_Petalburg",
+    "gTileset_Rustboro",
+    "gTileset_Dewford",
+    "gTileset_Slateport",
+    "gTileset_Mauville",
+    "gTileset_Lavaridge",
+    "gTileset_Fallarbor",
+    "gTileset_Fortree",
+    "gTileset_Lilycove",
+    "gTileset_Mossdeep",
+    "gTileset_Sootopolis",
+    "gTileset_EverGrande",
+    "gTileset_Pacifidlog"
+  ],
+  "petalburg": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Petalburg",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "1D4",
+      "1D5",
+      "1DC",
+      "1DD"
+    ],
+    "look": "Littleroot / Oldale / Petalburg: round trees, red-roof & Littleroot houses, green hedges, Petalburg gym. Best default for towns and early routes.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "rustboro": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Rustboro",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "1D4",
+      "1D5",
+      "1DC",
+      "1DD"
+    ],
+    "look": "Rustboro City / Route 104 / Petalburg Woods: grey-stone city buildings, Rustboro gym, Pokemon school.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "dewford": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Dewford",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "243",
+      "243",
+      "243",
+      "243"
+    ],
+    "look": "Dewford / Routes 105-107: island, beach sand, palm-like trees (secondary), blue-roof houses.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "slateport": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Slateport",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "170",
+      "170",
+      "170",
+      "170"
+    ],
+    "look": "Slateport / Routes 108-109: harbour city, beach, market stalls, museum.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "mauville": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Mauville",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "170",
+      "170",
+      "170",
+      "170"
+    ],
+    "look": "Mauville / Verdanturf / Routes 110,111,117,118: modern city blocks, bike path, desert route.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "lavaridge": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Lavaridge",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "271",
+      "271",
+      "271",
+      "271"
+    ],
+    "look": "Lavaridge / Route 112 / Mt Chimney / Jagged Pass: volcanic, hot springs.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "fallarbor": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Fallarbor",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "26B",
+      "26C",
+      "273",
+      "274"
+    ],
+    "look": "Fallarbor / Routes 113-115: volcanic ash, ash grass, mountains.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "fortree": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Fortree",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "0C6",
+      "0C6",
+      "0C6",
+      "0C6"
+    ],
+    "look": "Fortree / Routes 119-120: tree houses, dense forest, rainy routes.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "lilycove": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Lilycove",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "170",
+      "170",
+      "170",
+      "170"
+    ],
+    "look": "Lilycove / Routes 121-123 / Safari Zone: seaside city, department store, contest hall.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "mossdeep": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Mossdeep",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "170",
+      "170",
+      "170",
+      "170"
+    ],
+    "look": "Mossdeep / Routes 124-129: white-stone island town, space center, sea routes.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "sootopolis": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Sootopolis",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "2D9",
+      "2D9",
+      "2D9",
+      "2D9"
+    ],
+    "look": "Sootopolis: crater city carved in white rock around a lake.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "pacifidlog": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Pacifidlog",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "170",
+      "170",
+      "170",
+      "170"
+    ],
+    "look": "Pacifidlog / Routes 131-134: floating log town on the sea.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "ever_grande": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_EverGrande",
+    "kind": "outdoor",
+    "train": "outdoor",
+    "border": [
+      "170",
+      "170",
+      "170",
+      "170"
+    ],
+    "look": "Ever Grande City: waterfalls, Pokemon League building.",
+    "border_by_class": {
+      "T": [
+        "0C6",
+        "0C7",
+        "0C7",
+        "0C6"
+      ],
+      "Y": [
+        "1D4",
+        "1D5",
+        "1DC",
+        "1DD"
+      ],
+      "W": [
+        "170",
+        "170",
+        "170",
+        "170"
+      ],
+      "#": [
+        "071",
+        "071",
+        "071",
+        "071"
+      ]
+    }
+  },
+  "cave": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Cave",
+    "kind": "cave",
+    "train": [
+      "gTileset_Cave"
+    ],
+    "border": [
+      "211",
+      "211",
+      "211",
+      "211"
+    ],
+    "look": "Brown cave (Granite Cave, Victory Road, Shoal Cave). '.' floor, '#' rock wall (draw walls >= 2 thick), '~' cave water, '=' ledge, 's' sandy floor.",
+    "train_layouts": [
+      "GraniteCave_",
+      "ArtisanCave_",
+      "AlteringCave",
+      "VictoryRoad_",
+      "ShoalCave_LowTideInnerRoom",
+      "ShoalCave_LowTideLowerRoom",
+      "ShoalCave_LowTideStairsRoom",
+      "ShoalCave_HighTideInnerRoom",
+      "DesertUnderpass",
+      "ScorchedSlab"
+    ]
+  },
+  "cave_dark": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Cave",
+    "kind": "cave",
+    "train": [
+      "gTileset_Cave"
+    ],
+    "border": [
+      "211",
+      "211",
+      "211",
+      "211"
+    ],
+    "train_layouts": [
+      "SeafloorCavern_",
+      "MarineCave_",
+      "TerraCave_",
+      "SealedChamber_"
+    ],
+    "look": "Grey-walled sea cave (Seafloor Cavern, Marine/Terra Cave). Same chars as 'cave'."
+  },
+  "cave_stone": {
+    "primary": "gTileset_General",
+    "secondary": "gTileset_Cave",
+    "kind": "cave",
+    "train": [
+      "gTileset_Cave"
+    ],
+    "border": [
+      "211",
+      "211",
+      "211",
+      "211"
+    ],
+    "train_layouts": [
+      "CaveOfOrigin_"
+    ],
+    "look": "Pale stone cave (Cave of Origin). Same chars as 'cave'."
+  }
+}

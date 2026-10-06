@@ -1,0 +1,59 @@
+{
+ "_comment": "Width allowances (px, FONT_NORMAL measure) for batch text-b. Each value verified against the window template / print call cited in the matching _why entry.",
+
+ "src/data/text/ribbon_descriptions.h": 128,
+ "_why src/data/text/ribbon_descriptions.h": "PrintRibbonNameAndDescription (pokenav_ribbons_summary.c) prints each of the 2 lines with AddTextPrinterParameterized3(ribbonCountWindowId, FONT_NORMAL, x=0); sRibbonCountWindowTemplate width 16 tiles = 128 px.",
+ "src/pokenav_ribbons_summary.c:gText_RibbonsF700": 110,
+ "_why src/pokenav_ribbons_summary.c:gText_RibbonsF700": "PrintCurrentMonRibbonCount: FONT_NORMAL x=0 in sRibbonCountWindowTemplate (16 tiles = 128 px); {DYNAMIC 0} is at most 2 digits, 110 leaves >= 18 px for them.",
+
+ "src/data/lilycove_lady.h": 64,
+ "_why src/data/lilycove_lady.h": "All strings are copied into gStringVar1/2 (BufferFavorLadyRequest, BufferContestLadyCategoryAndMonName) and only shown inside field message boxes in data/scripts/lilycove_lady.inc, whose STR_VAR lines were validated with the 60 px STR_VAR assumption and are all short (longest STR_VAR line < 150 px in a 208+ px box). monName also goes to tv contestLady.nickname[VANILLA_POKEMON_NAME_LENGTH+1] via StringCopy: all names kept <= 8 bytes.",
+
+ "src/berry_tag_screen.c:sText_SizeSlash": 38,
+ "src/berry_tag_screen.c:sText_FirmSlash": 38,
+ "_why src/berry_tag_screen.c:sText_SizeSlash": "PrintBerrySize/PrintBerryFirmness print the label at x=0 in WIN_SIZE_FIRM and the value at x=0x28 (40 px); labels must stay < 40 px.",
+ "sBerryFirmnessStrings/BERRY_FIRMNESS_VERY_SOFT": 104,
+ "sBerryFirmnessStrings/BERRY_FIRMNESS_SOFT": 104,
+ "sBerryFirmnessStrings/BERRY_FIRMNESS_VERY_HARD": 104,
+ "_why sBerryFirmnessStrings": "PrintBerryFirmness: FONT_NORMAL at x=0x28 (40) in WIN_SIZE_FIRM, width 18 tiles = 144 px -> 104 px available.",
+ "src/berry_tag_screen.c:sText_BerryTag": 64,
+ "_why src/berry_tag_screen.c:sText_BerryTag": "AddBerryTagTextToBg0: centered with GetStringCenterAlignXOffset(FONT_NORMAL, .., 0x40) in WIN_BERRY_TAG, width 8 tiles = 64 px.",
+
+ "src/tv.c:sText_Good": 60,
+ "src/tv.c:sText_VeryGood": 60,
+ "src/tv.c:sText_Excellent": 60,
+ "src/tv.c:sText_SoSo": 60,
+ "src/tv.c:sText_Bad": 60,
+ "_why src/tv.c:sText_Good": "DoTVShow3CheersForPokeblocks copies these into gStringVar2, shown via ShowFieldMessage in gTV3CheersForPokeblocksText01/03 (data/text/tv.inc); the script validator budgets {STR_VAR_2} at 10 chars x 6 = 60 px.",
+
+ "src/berry_fix_program.c:sText_BerryProgramUpdate": 208,
+ "_why src/berry_fix_program.c:sText_BerryProgramUpdate": "BerryFix_SetScene: FONT_NORMAL, centered in WIN_TITLE, width 26 tiles = 208 px.",
+ "src/berry_fix_program.c:sText_RubySapphire": 100,
+ "src/berry_fix_program.c:sText_Emerald": 100,
+ "_why src/berry_fix_program.c:sText_RubySapphire": "Printed with FONT_SMALL (68 px real) centered in WIN_TURN_OFF_TITLE (14 tiles = 112 px) and WIN_GAME_NAMES (30 tiles); FONT_NORMAL measure capped at 100.",
+ "src/berry_fix_program.c:sText_BerryProgramWillBeUpdatedPressA": 224,
+ "src/berry_fix_program.c:sText_EnsureGBAConnectionMatches": 224,
+ "src/berry_fix_program.c:sText_TurnOffPowerHoldingStartSelect": 224,
+ "src/berry_fix_program.c:sText_TransmittingPleaseWait": 224,
+ "src/berry_fix_program.c:sText_PleaseFollowInstructionsOnScreen": 224,
+ "src/berry_fix_program.c:sText_TransmissionFailureTryAgain": 224,
+ "_why src/berry_fix_program.c body": "BerryFix_SetScene: AddTextPrinterParameterized3(WIN_MSG_BODY, FONT_NORMAL, x=0); WIN_MSG_BODY width 28 tiles = 224 px, height 8 tiles = 4 lines (line counts kept).",
+
+ "src/pokenav_match_call_gfx.c:gText_NumberRegistered": 86,
+ "src/pokenav_match_call_gfx.c:gText_NumberOfBattles": 86,
+ "_why src/pokenav_match_call_gfx.c:gText_NumberRegistered": "PrintMatchCallInfoLabel: FONT_NARROW at x=2 in sMatchCallInfoBoxWindowTemplate (11 tiles = 88 px); the number is on its own row below.",
+ "src/pokenav_match_call_gfx.c:gText_TrainerCloseBy": 192,
+ "_why src/pokenav_match_call_gfx.c:gText_TrainerCloseBy": "PrintTrainerIsCloseBy: FONT_NORMAL x=0 in sCallMsgBoxWindowTemplate (28 tiles = 224 px); capped at the 192 px PokéNav budget.",
+ "src/pokenav_match_call_gfx.c:gText_Unknown": 88,
+ "_why src/pokenav_match_call_gfx.c:gText_Unknown": "PrintMatchCallLocation: FONT_NARROW centered in 88 px (sMatchCallLocationWindowTemplate, 11 tiles).",
+ "sMatchCallOptionTexts/MATCH_CALL_OPTION_CALL": 72,
+ "sMatchCallOptionTexts/MATCH_CALL_OPTION_CHECK": 72,
+ "sMatchCallOptionTexts/MATCH_CALL_OPTION_CANCEL": 72,
+ "_why sMatchCallOptionTexts": "PrintMatchCallSelectionOptions: FONT_NARROW at x=16 in sMatchCallInfoBoxWindowTemplate (88 px) -> 72 px.",
+
+ "src/pokenav_match_call_list.c:gText_CallCantBeMadeHere": 192,
+ "_why src/pokenav_match_call_list.c:gText_CallCantBeMadeHere": "Returned by GetMatchCallMessageText and printed by PrintMatchCallMessage (pokenav_match_call_gfx.c): FONT_NORMAL x=32 in sCallMsgBoxWindowTemplate (224 px) -> 192 px.",
+
+ "src/lilycove_lady.c:BufferQuizAuthorName": 42,
+ "_why src/lilycove_lady.c:BufferQuizAuthorName": "StringCopy_PlayerName into gStringVar1 (PLAYER_NAME_LENGTH 7 chars; 'Signora' = 7); shown as {STR_VAR_1} in lilycove_lady.inc where a player name is budgeted 7 x 6 = 42 px."
+}

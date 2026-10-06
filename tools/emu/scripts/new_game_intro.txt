@@ -1,0 +1,13 @@
+# New game from power-on to the first map (pokeemerald-expansion 1.17 baseline):
+# title -> NEW GAME -> Professor Birch's speech -> gender -> default name ->
+# moving truck -> Littleroot Town.  Pure frame timings, see new_game_to_truck.txt.
+include new_game_to_truck.txt
+# f7952: truck door open
+# walk out of the truck (5 tiles to the right) -> Littleroot Town, Mom greets the player
+hold RIGHT 80
+wait 100
+shot ng_21_littleroot    # f8132
+mapinfo
+expectmap MAP_LITTLEROOT_TOWN
+wait 240
+shot ng_22_littleroot_mom    # f8372

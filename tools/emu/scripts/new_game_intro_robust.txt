@@ -1,0 +1,11 @@
+# New game from power-on to Littleroot Town (first map), independent of text
+# length/speed: see new_game_to_truck_robust.txt.  Needs symbols (pokeemerald.elf).
+include new_game_to_truck_robust.txt
+# walk out of the truck (5 tiles to the right)
+hold RIGHT 80
+waitmap MAP_LITTLEROOT_TOWN 600
+wait 100
+shot rb_22_littleroot
+mapinfo
+expectmap MAP_LITTLEROOT_TOWN
+textbox rb_23_littleroot_mom

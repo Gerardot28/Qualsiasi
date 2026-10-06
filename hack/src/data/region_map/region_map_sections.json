@@ -1,0 +1,1635 @@
+{
+  "map_sections": [
+    {
+      "id": "MAPSEC_LITTLEROOT_TOWN",
+      "name": "Albanova",
+      "x": 4,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_OLDALE_TOWN",
+      "name": "Solarosa",
+      "x": 4,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_DEWFORD_TOWN",
+      "name": "Bluruvia",
+      "x": 2,
+      "y": 14,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_LAVARIDGE_TOWN",
+      "name": "Cuordilava",
+      "x": 5,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FALLARBOR_TOWN",
+      "name": "Brunifoglia",
+      "x": 3,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_VERDANTURF_TOWN",
+      "name": "Mentania",
+      "x": 4,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PACIFIDLOG_TOWN",
+      "name": "Orocea",
+      "x": 17,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PETALBURG_CITY",
+      "name": "Petalipoli",
+      "x": 1,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SLATEPORT_CITY",
+      "name": "Porto Selcepoli",
+      "x": 8,
+      "y": 10,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_MAUVILLE_CITY",
+      "name": "Ciclamipoli",
+      "x": 8,
+      "y": 6,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_RUSTBORO_CITY",
+      "name": "Ferrugipoli",
+      "x": 0,
+      "y": 5,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_FORTREE_CITY",
+      "name": "Forestopoli",
+      "x": 12,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_LILYCOVE_CITY",
+      "name": "Porto Alghepoli",
+      "x": 18,
+      "y": 3,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MOSSDEEP_CITY",
+      "name": "Verdeazzupoli",
+      "x": 24,
+      "y": 5,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SOOTOPOLIS_CITY",
+      "name": "Ceneride",
+      "x": 21,
+      "y": 7,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_EVER_GRANDE_CITY",
+      "name": "Iridopoli",
+      "x": 27,
+      "y": 8,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_101",
+      "name": "Percorso 101",
+      "x": 4,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_102",
+      "name": "Percorso 102",
+      "x": 2,
+      "y": 9,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_103",
+      "name": "Percorso 103",
+      "x": 4,
+      "y": 8,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_104",
+      "name": "Percorso 104",
+      "x": 0,
+      "y": 7,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_105",
+      "name": "Percorso 105",
+      "x": 0,
+      "y": 10,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_106",
+      "name": "Percorso 106",
+      "x": 0,
+      "y": 13,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_107",
+      "name": "Percorso 107",
+      "x": 3,
+      "y": 14,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_108",
+      "name": "Percorso 108",
+      "x": 6,
+      "y": 14,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_109",
+      "name": "Percorso 109",
+      "x": 8,
+      "y": 12,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_110",
+      "name": "Percorso 110",
+      "x": 8,
+      "y": 7,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_111",
+      "name": "Percorso 111",
+      "x": 8,
+      "y": 0,
+      "width": 1,
+      "height": 6
+    },
+    {
+      "id": "MAPSEC_ROUTE_112",
+      "name": "Percorso 112",
+      "x": 6,
+      "y": 3,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_113",
+      "name": "Percorso 113",
+      "x": 4,
+      "y": 0,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_114",
+      "name": "Percorso 114",
+      "x": 1,
+      "y": 0,
+      "width": 2,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_115",
+      "name": "Percorso 115",
+      "x": 0,
+      "y": 2,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_116",
+      "name": "Percorso 116",
+      "x": 1,
+      "y": 5,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_117",
+      "name": "Percorso 117",
+      "x": 5,
+      "y": 6,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_118",
+      "name": "Percorso 118",
+      "x": 10,
+      "y": 6,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_119",
+      "name": "Percorso 119",
+      "x": 11,
+      "y": 0,
+      "width": 1,
+      "height": 6
+    },
+    {
+      "id": "MAPSEC_ROUTE_120",
+      "name": "Percorso 120",
+      "x": 13,
+      "y": 0,
+      "width": 1,
+      "height": 4
+    },
+    {
+      "id": "MAPSEC_ROUTE_121",
+      "name": "Percorso 121",
+      "x": 14,
+      "y": 3,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_122",
+      "name": "Percorso 122",
+      "x": 16,
+      "y": 4,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_123",
+      "name": "Percorso 123",
+      "x": 12,
+      "y": 6,
+      "width": 5,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_124",
+      "name": "Percorso 124",
+      "x": 20,
+      "y": 3,
+      "width": 4,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_125",
+      "name": "Percorso 125",
+      "x": 24,
+      "y": 3,
+      "width": 2,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_126",
+      "name": "Percorso 126",
+      "x": 20,
+      "y": 6,
+      "width": 3,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_127",
+      "name": "Percorso 127",
+      "x": 23,
+      "y": 6,
+      "width": 3,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_128",
+      "name": "Percorso 128",
+      "x": 23,
+      "y": 9,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_129",
+      "name": "Percorso 129",
+      "x": 24,
+      "y": 10,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_130",
+      "name": "Percorso 130",
+      "x": 21,
+      "y": 10,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_131",
+      "name": "Percorso 131",
+      "x": 18,
+      "y": 10,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_132",
+      "name": "Percorso 132",
+      "x": 15,
+      "y": 10,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_133",
+      "name": "Percorso 133",
+      "x": 12,
+      "y": 10,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_134",
+      "name": "Percorso 134",
+      "x": 9,
+      "y": 10,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_124",
+      "name": "Sott'acqua",
+      "x": 20,
+      "y": 3,
+      "width": 4,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_126",
+      "name": "Sott'acqua",
+      "x": 20,
+      "y": 6,
+      "width": 3,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_127",
+      "name": "Sott'acqua",
+      "x": 23,
+      "y": 6,
+      "width": 3,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_128",
+      "name": "Sott'acqua",
+      "x": 23,
+      "y": 9,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_SOOTOPOLIS",
+      "name": "Sott'acqua",
+      "x": 21,
+      "y": 7,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_GRANITE_CAVE",
+      "name": "Grotta Pietrosa",
+      "x": 1,
+      "y": 13,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MT_CHIMNEY",
+      "name": "Monte Camino",
+      "x": 6,
+      "y": 2,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SAFARI_ZONE",
+      "name": "Zona Safari",
+      "x": 16,
+      "y": 2,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_BATTLE_FRONTIER",
+      "name": "Parco Lotta",
+      "x": 22,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PETALBURG_WOODS",
+      "name": "Bosco Petalo",
+      "x": 0,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_RUSTURF_TUNNEL",
+      "name": "Tunnel Menferro",
+      "x": 2,
+      "y": 5,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ABANDONED_SHIP",
+      "name": "Vecchia Nave",
+      "x": 6,
+      "y": 14,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_NEW_MAUVILLE",
+      "name": "Ciclanova",
+      "x": 8,
+      "y": 7,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_METEOR_FALLS",
+      "name": "Cascate Meteora",
+      "x": 0,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_METEOR_FALLS2",
+      "name": "Cascate Meteora",
+      "x": 1,
+      "y": 2,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MT_PYRE",
+      "name": "Monte Pira",
+      "x": 16,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_AQUA_HIDEOUT_OLD",
+      "name": "Covo Omega",
+      "x": 19,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SHOAL_CAVE",
+      "name": "Grotta Ondosa",
+      "x": 24,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEAFLOOR_CAVERN",
+      "name": "Antro Abissale",
+      "x": 24,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_SEAFLOOR_CAVERN",
+      "name": "Sott'acqua",
+      "x": 24,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_VICTORY_ROAD",
+      "name": "Via Vittoria",
+      "x": 27,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MIRAGE_ISLAND",
+      "name": "Isola Miraggio",
+      "x": 17,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_CAVE_OF_ORIGIN",
+      "name": "Grotta dei Tempi",
+      "x": 21,
+      "y": 7,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SOUTHERN_ISLAND",
+      "name": "Isola Remota",
+      "x": 12,
+      "y": 14,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FIERY_PATH",
+      "name": "Cammino Ardente",
+      "x": 6,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FIERY_PATH2",
+      "name": "Cammino Ardente",
+      "x": 7,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_JAGGED_PASS",
+      "name": "Passo Selvaggio",
+      "x": 6,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_JAGGED_PASS2",
+      "name": "Passo Selvaggio",
+      "x": 7,
+      "y": 2,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEALED_CHAMBER",
+      "name": "Sala Incisa",
+      "x": 11,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_SEALED_CHAMBER",
+      "name": "Sott'acqua",
+      "x": 11,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SCORCHED_SLAB",
+      "name": "Grottino Solare",
+      "x": 13,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ISLAND_CAVE",
+      "name": "Grotta Insulare",
+      "x": 0,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_DESERT_RUINS",
+      "name": "Rovine Sabbiose",
+      "x": 8,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ANCIENT_TOMB",
+      "name": "Tomba Antica",
+      "x": 13,
+      "y": 2,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_INSIDE_OF_TRUCK",
+      "name": "Nel Camion"
+    },
+    {
+      "id": "MAPSEC_SKY_PILLAR",
+      "name": "Torre dei Cieli",
+      "x": 19,
+      "y": 10,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SECRET_BASE",
+      "name": "Base Segreta"
+    },
+    {
+      "id": "MAPSEC_DYNAMIC"
+    },
+    {
+      "id": "MAPSEC_PALLET_TOWN",
+      "name": "Biancavilla",
+      "x": 4,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_VIRIDIAN_CITY",
+      "name": "Smeraldopoli",
+      "x": 4,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PEWTER_CITY",
+      "name": "Plumbeopoli",
+      "x": 4,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_CERULEAN_CITY",
+      "name": "Celestopoli",
+      "x": 14,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_LAVENDER_TOWN",
+      "name": "Lavandonia",
+      "x": 18,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_VERMILION_CITY",
+      "name": "Aranciopoli",
+      "x": 14,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_CELADON_CITY",
+      "name": "Azzurropoli",
+      "x": 11,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FUCHSIA_CITY",
+      "name": "Fucsiapoli",
+      "x": 12,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_CINNABAR_ISLAND",
+      "name": "Isola Cannella",
+      "x": 4,
+      "y": 14,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_INDIGO_PLATEAU",
+      "name": "Altopiano Blu",
+      "x": 2,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SAFFRON_CITY",
+      "name": "Zafferanopoli",
+      "x": 14,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_4_POKECENTER",
+      "name": "Percorso 4",
+      "name_clone": true,
+      "x": 8,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_10_POKECENTER",
+      "name": "Percorso 10",
+      "name_clone": true,
+      "x": 18,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_1",
+      "name": "Percorso 1",
+      "x": 4,
+      "y": 9,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_2",
+      "name": "Percorso 2",
+      "x": 4,
+      "y": 5,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_3",
+      "name": "Percorso 3",
+      "x": 5,
+      "y": 4,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_4",
+      "name": "Percorso 4",
+      "x": 8,
+      "y": 3,
+      "width": 6,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_5",
+      "name": "Percorso 5",
+      "x": 14,
+      "y": 4,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_6",
+      "name": "Percorso 6",
+      "x": 14,
+      "y": 7,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_7",
+      "name": "Percorso 7",
+      "x": 12,
+      "y": 6,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_8",
+      "name": "Percorso 8",
+      "x": 15,
+      "y": 6,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_9",
+      "name": "Percorso 9",
+      "x": 15,
+      "y": 3,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_10",
+      "name": "Percorso 10",
+      "x": 18,
+      "y": 3,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_ROUTE_11",
+      "name": "Percorso 11",
+      "x": 15,
+      "y": 9,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_12",
+      "name": "Percorso 12",
+      "x": 18,
+      "y": 7,
+      "width": 1,
+      "height": 5
+    },
+    {
+      "id": "MAPSEC_ROUTE_13",
+      "name": "Percorso 13",
+      "x": 16,
+      "y": 11,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_14",
+      "name": "Percorso 14",
+      "x": 15,
+      "y": 11,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_15",
+      "name": "Percorso 15",
+      "x": 13,
+      "y": 12,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_16",
+      "name": "Percorso 16",
+      "x": 7,
+      "y": 6,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_17",
+      "name": "Percorso 17",
+      "x": 7,
+      "y": 7,
+      "width": 1,
+      "height": 5
+    },
+    {
+      "id": "MAPSEC_ROUTE_18",
+      "name": "Percorso 18",
+      "x": 7,
+      "y": 12,
+      "width": 5,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_19",
+      "name": "Percorso 19",
+      "x": 12,
+      "y": 13,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_20",
+      "name": "Percorso 20",
+      "x": 5,
+      "y": 14,
+      "width": 7,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_21",
+      "name": "Percorso 21",
+      "x": 4,
+      "y": 12,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_22",
+      "name": "Percorso 22",
+      "x": 2,
+      "y": 8,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROUTE_23",
+      "name": "Percorso 23",
+      "x": 2,
+      "y": 4,
+      "width": 1,
+      "height": 4
+    },
+    {
+      "id": "MAPSEC_ROUTE_24",
+      "name": "Percorso 24",
+      "x": 14,
+      "y": 1,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_ROUTE_25",
+      "name": "Percorso 25",
+      "x": 15,
+      "y": 1,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_VIRIDIAN_FOREST",
+      "name": "Bosco Smeraldo",
+      "x": 4,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MT_MOON",
+      "name": "Monte Luna",
+      "x": 9,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_S_S_ANNE",
+      "name": "M/N Anna",
+      "x": 14,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_UNDERGROUND_PATH",
+      "name": "Via Sotterranea",
+      "x": 14,
+      "y": 7,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_UNDERGROUND_PATH_2",
+      "name": "Via Sotterranea",
+      "name_clone": true,
+      "x": 12,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_DIGLETTS_CAVE",
+      "name": "Grotta Diglett",
+      "x": 15,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_KANTO_VICTORY_ROAD",
+      "name": "Via Vittoria",
+      "x": 2,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROCKET_HIDEOUT",
+      "name": "Rifugio Rocket",
+      "x": 11,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SILPH_CO",
+      "name": "Silph SpA",
+      "x": 14,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_POKEMON_MANSION",
+      "name": "Villa Pokémon",
+      "x": 4,
+      "y": 14,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_KANTO_SAFARI_ZONE",
+      "name": "Zona Safari",
+      "x": 12,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_POKEMON_LEAGUE",
+      "name": "Lega Pokémon",
+      "x": 2,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROCK_TUNNEL",
+      "name": "Tunnel Roccioso",
+      "x": 18,
+      "y": 5,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEAFOAM_ISLANDS",
+      "name": "Isole Spumarine",
+      "x": 8,
+      "y": 14,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_POKEMON_TOWER",
+      "name": "Torre Pokémon",
+      "x": 18,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_CERULEAN_CAVE",
+      "name": "Grotta Celeste",
+      "x": 13,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_POWER_PLANT",
+      "name": "Centrale Elett.",
+      "x": 18,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ONE_ISLAND",
+      "name": "Primisola",
+      "x": 1,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_TWO_ISLAND",
+      "name": "Secondisola",
+      "x": 9,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_THREE_ISLAND",
+      "name": "Terzisola",
+      "x": 18,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FOUR_ISLAND",
+      "name": "Quartisola",
+      "x": 3,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FIVE_ISLAND",
+      "name": "Quintisola",
+      "x": 16,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEVEN_ISLAND",
+      "name": "Settimisola",
+      "x": 5,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SIX_ISLAND",
+      "name": "Sestisola",
+      "x": 17,
+      "y": 5,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_KINDLE_ROAD",
+      "name": "Via Vulcanica",
+      "x": 2,
+      "y": 3,
+      "width": 1,
+      "height": 6
+    },
+    {
+      "id": "MAPSEC_TREASURE_BEACH",
+      "name": "Riva del Tesoro",
+      "x": 1,
+      "y": 9,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_CAPE_BRINK",
+      "name": "Capo Estremo",
+      "x": 9,
+      "y": 7,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_BOND_BRIDGE",
+      "name": "Ponte Abbraccio",
+      "x": 13,
+      "y": 12,
+      "width": 4,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_THREE_ISLE_PORT",
+      "name": "Porto Terzisola",
+      "x": 18,
+      "y": 13,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_RESORT_GORGEOUS",
+      "name": "Perla dei Mari",
+      "x": 16,
+      "y": 9,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_WATER_LABYRINTH",
+      "name": "Labirinto Marino",
+      "x": 14,
+      "y": 10,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_FIVE_ISLE_MEADOW",
+      "name": "Prato Quintisola",
+      "x": 17,
+      "y": 10,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_MEMORIAL_PILLAR",
+      "name": "Colonna Rocciosa",
+      "x": 18,
+      "y": 12,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_OUTCAST_ISLAND",
+      "name": "Isola Solitaria",
+      "x": 15,
+      "y": 0,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_GREEN_PATH",
+      "name": "Via Verde",
+      "x": 15,
+      "y": 3,
+      "width": 3,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_WATER_PATH",
+      "name": "Via Marina",
+      "x": 18,
+      "y": 3,
+      "width": 1,
+      "height": 5
+    },
+    {
+      "id": "MAPSEC_RUIN_VALLEY",
+      "name": "Valle Antica",
+      "x": 16,
+      "y": 7,
+      "width": 2,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_TRAINER_TOWER",
+      "name": "Torre Allenatori",
+      "x": 5,
+      "y": 6,
+      "width": 1,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_CANYON_ENTRANCE",
+      "name": "Ingresso Canyon",
+      "x": 5,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEVAULT_CANYON",
+      "name": "Canyon Seption",
+      "x": 6,
+      "y": 9,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_TANOBY_RUINS",
+      "name": "Rovine Florabeto",
+      "x": 3,
+      "y": 12,
+      "width": 7,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEVII_ISLE_22",
+      "name": "Settipelago 22",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_SEVII_ISLE_23",
+      "name": "Settipelago 23",
+      "x": 3,
+      "y": 14,
+      "width": 6,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SEVII_ISLE_24",
+      "name": "Settipelago 24",
+      "x": 2,
+      "y": 12,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_NAVEL_ROCK_FRLG",
+      "name": "Monte Cordone",
+      "x": 10,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MT_EMBER",
+      "name": "Monte Brace",
+      "x": 2,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_BERRY_FOREST",
+      "name": "Bosco Baccoso",
+      "x": 14,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ICEFALL_CAVE",
+      "name": "Grotta Gelata",
+      "x": 3,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ROCKET_WAREHOUSE",
+      "name": "Magazzino Rocket",
+      "x": 17,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_TRAINER_TOWER_2",
+      "name": "Torre Allenatori",
+      "name_clone": true,
+      "x": 5,
+      "y": 6,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_DOTTED_HOLE",
+      "name": "Cripta dei Punti",
+      "x": 16,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_LOST_CAVE",
+      "name": "Grotta Sperduta",
+      "x": 18,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PATTERN_BUSH",
+      "name": "Bosco Disegnato",
+      "x": 17,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ALTERING_CAVE_FRLG",
+      "name": "Grotta Mutevole",
+      "x": 15,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_TANOBY_CHAMBERS",
+      "name": "Sale Florabeto",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_THREE_ISLE_PATH",
+      "name": "Via Terzisola",
+      "x": 18,
+      "y": 13,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_TANOBY_KEY",
+      "name": "Chiave Florabeto",
+      "x": 6,
+      "y": 9,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_BIRTH_ISLAND_FRLG",
+      "name": "Isola Materna",
+      "x": 18,
+      "y": 13,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MONEAN_CHAMBER",
+      "name": "Sala A-loe",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_LIPTOO_CHAMBER",
+      "name": "Sala B-etulla",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_WEEPTH_CHAMBER",
+      "name": "Sala C-iclamino",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_DILFORD_CHAMBER",
+      "name": "Sala D-afne",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_SCUFIB_CHAMBER",
+      "name": "Sala E-dera",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_RIXY_CHAMBER",
+      "name": "Sala F-elce",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_VIAPOIS_CHAMBER",
+      "name": "Sala G-ardenia",
+      "x": 9,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_EMBER_SPA",
+      "name": "Terme Laviche"
+    },
+    {
+      "id": "MAPSEC_SPECIAL_AREA",
+      "name": "Area Speciale"
+    },
+    {
+      "id": "MAPSEC_AQUA_HIDEOUT",
+      "name": "Covo Omega",
+      "x": 19,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MAGMA_HIDEOUT",
+      "name": "Covo Alpha",
+      "x": 6,
+      "y": 3,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MIRAGE_TOWER",
+      "name": "Torre Miraggio",
+      "x": 8,
+      "y": 2,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_BIRTH_ISLAND",
+      "name": "Isola Materna"
+    },
+    {
+      "id": "MAPSEC_FARAWAY_ISLAND",
+      "name": "Isola Suprema"
+    },
+    {
+      "id": "MAPSEC_ARTISAN_CAVE",
+      "name": "Grotta Artistica",
+      "x": 22,
+      "y": 12,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_MARINE_CAVE",
+      "name": "Grotta Mare"
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_MARINE_CAVE",
+      "name": "Sott'acqua"
+    },
+    {
+      "id": "MAPSEC_TERRA_CAVE",
+      "name": "Grotta Terra"
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_105",
+      "name": "Sott'acqua",
+      "x": 0,
+      "y": 10,
+      "width": 1,
+      "height": 3
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_125",
+      "name": "Sott'acqua",
+      "x": 24,
+      "y": 3,
+      "width": 2,
+      "height": 2
+    },
+    {
+      "id": "MAPSEC_UNDERWATER_129",
+      "name": "Sott'acqua",
+      "x": 24,
+      "y": 10,
+      "width": 2,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_DESERT_UNDERPASS",
+      "name": "Tunnel Sabbioso",
+      "x": 2,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ALTERING_CAVE",
+      "name": "Grotta Mutevole",
+      "x": 6,
+      "y": 8,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_NAVEL_ROCK",
+      "name": "Monte Cordone"
+    },
+    {
+      "id": "MAPSEC_TRAINER_HILL",
+      "name": "Colle Allenatori",
+      "x": 8,
+      "y": 4,
+      "width": 1,
+      "height": 1
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Build outputs / ROMs must never be committed
+*.gba
+*.sav
+*.ss[0-9]
+__pycache__/
+*.pyc
+build/
+out/

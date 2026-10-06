@@ -1,0 +1,22 @@
+# Boot the ROM and reach the title screen (pokeemerald-expansion 1.17 baseline timings).
+# Frame numbers in comments are absolute frames since power-on.
+#
+#   f0-120     copyright screen
+#   f170-430   "Powered by pret x RHH" splash
+#   f480-600   Game Freak logo -> intro cutscene (grass / Brendan+May on bikes)
+#   START      skips the intro; title animation ~390 frames later
+wait 300
+shot boot_splash
+wait 300
+shot boot_intro
+# f600: skip the intro cutscene
+press START
+# title logo flashes in, then Rayquaza + "PRESS START" (blinking)
+wait 200
+shot title_logo
+wait 284
+# f1100: full title screen (fades in at f1044) with PRESS START visible
+# (PRESS START blinks; visible e.g. f1060-1124)
+shot title
+shot title_2x 2
+mapinfo

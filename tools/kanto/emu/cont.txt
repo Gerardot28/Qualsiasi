@@ -1,0 +1,10 @@
+include /home/user/Qualsiasi/tools/emu/scripts/boot_to_title.txt
+press START
+waittask Task_HandleMainMenuInput 600
+wait 30
+shot ct_00_main_menu
+press A
+waitcb2 CB2_Overworld 1200
+wait 200
+mapinfo
+shot ct_01_continued
