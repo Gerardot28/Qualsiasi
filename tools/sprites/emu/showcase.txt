@@ -12,7 +12,7 @@ press A
 wait 120
 repeat 80 A 4 30
 repeat 14 A 4 20
-wait 30
+wait 90
 shot 03_birch_boy.ppm
 # rest of Birch's speech (name entry is auto-filled with A's and confirmed)
 repeat 82 A 4 30
@@ -22,14 +22,16 @@ repeat 6 B 4 20
 hold RIGHT 60
 wait 300
 shot 04_littleroot_arrive.ppm
-repeat 38 A 4 16
-press A 4 6
+repeat 39 A 4 16
+press A 4 10
 shot 05_littleroot_walk_a.ppm
-wait 4
+wait 6
 shot 06_littleroot_walk_b.ppm
-wait 4
+press A 4 10
 shot 07_littleroot_walk_c.ppm
-repeat 9 A 4 16
+wait 6
+shot 08_littleroot_walk_d.ppm
+repeat 7 A 4 16
 repeat 32 A 4 20
 repeat 24 A 2 6
 savestate house.ss
