@@ -369,23 +369,81 @@ def apply_code_patches(tree, dry=False):
 
 # --------------------------------------------------------------------------- previews
 
-def preview(frames, pal, path, scale=4, cols=None, bg=((150, 196, 128), (160, 206, 138)), gap=2):
-    rgb = {letter: gba_round(c) for letter, c in pal}
-    w, h = len(frames[0][1][0]), len(frames[0][1])
-    n = len(frames)
-    cols = cols or n
-    rows = (n + cols - 1) // cols
-    W, H = cols * (w + gap) + gap, rows * (h + gap) + gap
-    im = Image.new('RGB', (W, H), (90, 90, 96))
+GRASS = ((150, 196, 128), (160, 206, 138))
+WATER = ((40, 90, 140), (46, 98, 150))
+
+# palette the *game* uses for the original art of each sheet (for before/after previews)
+ORIG_PALETTE = {
+    'ow_underwater': 'graphics/object_events/palettes/player_underwater.pal',
+    'ow': 'graphics/object_events/palettes/brendan.pal',
+    'trainer': 'graphics/trainers/palettes/brendan.pal',
+}
+
+
+def read_jasc(path):
+    lines = [l.strip() for l in open(path, encoding='utf-8', errors='replace').read().splitlines() if l.strip()]
+    return [tuple(int(v) for v in l.split()[:3]) for l in lines[3:19]]
+
+
+def split_png(path, w, h, layout, palette=None):
+    """Original sheet -> list of RGB frame images (index 0 -> None)."""
+    im = Image.open(path)
+    pal = palette or [tuple(im.getpalette()[i * 3:i * 3 + 3]) for i in range(16)]
     px = im.load()
-    for i, (_, g) in enumerate(frames):
-        ox, oy = gap + (i % cols) * (w + gap), gap + (i // cols) * (h + gap)
-        for y, row in enumerate(g):
-            for x, c in enumerate(row):
-                px[ox + x, oy + y] = bg[((x // 8) + (y // 8)) % 2] if c == TRANSPARENT else rgb[c]
+    n = (im.size[0] // w) if layout == 'h' else (im.size[1] // h)
+    frames = []
+    for f in range(n):
+        ox, oy = (f * w, 0) if layout == 'h' else (0, f * h)
+        frames.append([[None if px[ox + x, oy + y] % 16 == 0 else gba_round(pal[px[ox + x, oy + y] % 16])
+                        for x in range(w)] for y in range(h)])
+    return frames
+
+
+def grid_rgb(grid, pal):
+    rgb = {letter: gba_round(c) for letter, c in pal}
+    return [[None if c == TRANSPARENT else rgb[c] for c in row] for row in grid]
+
+
+def draw_rows(rows_of_frames, path, scale=4, cols=None, bg=GRASS, gap=2, labels=None):
+    """rows_of_frames: list of lists of RGB frames (None = transparent). Each list may wrap into
+    several lines of `cols` frames. Optional text label per group."""
+    from PIL import ImageDraw
+    w, h = len(rows_of_frames[0][0][0]), len(rows_of_frames[0][0])
+    cols = cols or max(len(r) for r in rows_of_frames)
+    label_h = 10 if labels else 0
+    lines = []
+    for gi, frames in enumerate(rows_of_frames):
+        for i in range(0, len(frames), cols):
+            lines.append((gi if i == 0 else None, frames[i:i + cols]))
+    W = cols * (w + gap) + gap
+    H = sum((label_h if gi is not None else 0) + h + gap for gi, _ in lines) + gap
+    im = Image.new('RGB', (W, H), (70, 70, 76))
+    px = im.load()
+    d = ImageDraw.Draw(im)
+    y0 = gap
+    for gi, frames in lines:
+        if gi is not None and labels:
+            d.text((gap, y0), labels[gi], fill=(235, 235, 235))
+            y0 += label_h
+        for i, fr in enumerate(frames):
+            ox = gap + i * (w + gap)
+            for y in range(h):
+                for x in range(w):
+                    c = fr[y][x]
+                    px[ox + x, y0 + y] = bg[((x // 8) + (y // 8)) % 2] if c is None else c
+        y0 += h + gap
     im = im.resize((W * scale, H * scale), Image.NEAREST)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     im.save(path)
+
+
+def default_cols(w, n):
+    return min(n, 4 if w == 64 else 9)
+
+
+def preview(frames, pal, path, scale=4, cols=None, bg=GRASS):
+    w = len(frames[0][1][0])
+    draw_rows([[grid_rgb(g, pal) for _, g in frames]], path, scale, cols or default_cols(w, len(frames)), bg)
 
 
 # --------------------------------------------------------------------------- main
@@ -439,11 +497,22 @@ def main():
                 print('%s: %s' % (status, rel))
 
     if args.previews:
+        src_tree = args.source or args.tree
         for rel, frames, palname, out, layout in built:
             name = os.path.splitext(rel.replace('/', '_'))[0]
-            cols = 8 if w == 64 else None
-            preview(frames, pals[palname], os.path.join(args.previews, name + '.png'), 4,
-                    cols=(4 if len(frames[0][1]) == 64 else None))
+            w, h = len(frames[0][1][0]), len(frames[0][1])
+            bg = WATER if palname == 'ow_underwater' else GRASS
+            new = [grid_rgb(g, pals[palname]) for _, g in frames]
+            groups, labels = [new], ['new: ' + out]
+            if src_tree and os.path.exists(os.path.join(src_tree, out)):
+                pal_file = ORIG_PALETTE.get(palname)
+                if out.endswith('intro/scene_2/brendan.png'):
+                    pal_file = 'graphics/intro/scene_2/player.pal'
+                opal = read_jasc(os.path.join(src_tree, pal_file)) if pal_file else None
+                orig = split_png(os.path.join(src_tree, out), w, h, layout, opal)
+                groups, labels = [orig, new], ['original', 'new']
+            draw_rows(groups, os.path.join(args.previews, name + '.png'), 4, default_cols(w, len(frames)), bg,
+                      labels=labels)
         print('previews in %s' % args.previews)
 
 
