@@ -278,9 +278,7 @@ class Gen:
                 'one_pct': all(rates[i] <= 1 for i in idx),
                 'reachable': reachable,
             }
-            ctx['early'] = max(mons[i]['max_level'] for i in idx) <= wc.EARLY_LEVEL or \
-                min(mons[i2]['max_level'] for i2 in range(len(mons))) <= wc.EARLY_LEVEL and \
-                max(m['max_level'] for m in mons) <= wc.EARLY_LEVEL
+            ctx['early'] = ctx['max_level'] <= wc.EARLY_LEVEL
             ctx['strong_used'] = strong_used
             best = self.choose(field, L, ctx, pref, used, L not in free, hab_kind)
             if best is None:
@@ -360,9 +358,10 @@ class Gen:
                         'one_pct': all(rates[i] <= 1 for i in idx),
                         'reachable': True,
                     }
-                    ctx['early'] = max(m['max_level'] for m in mons) <= wc.EARLY_LEVEL
+                    ctx['early'] = ctx['max_level'] <= wc.EARLY_LEVEL
                     if ctx['early'] and db.is_strong_family(root):
-                        if any(db.is_strong_family(db.root(m['species'])) for m in mons):
+                        if any(db.is_strong_family(db.root(mons[i]['species'])) and
+                               mons[i]['max_level'] <= wc.EARLY_LEVEL for i in range(len(mons))):
                             continue
                     s = self.pick_member(root, field, L, ctx, prefer_basic=True)
                     if s is None or not db.is_basic(s):
