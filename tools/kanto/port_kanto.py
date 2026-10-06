@@ -346,7 +346,7 @@ KANTO_FLAGS_COUNT = 0x200          # 64 bytes of SaveBlock1 (flags[] grows by th
 FLAG_INIT_DONE = 'FLAG_KANTO_FLAGS_INITIALIZED'
 STUB_VERSION = 2
 TRAVEL_FILE = 'data/scripts/kanto_travel.inc'
-VERMILION_ARRIVAL = (23, 31)       # in front of the Vermilion harbor sailor (VermilionCity_Frlg)
+VERMILION_ARRIVAL = (24, 32)       # facing the Vermilion harbor ferry sailor (VermilionCity_Frlg, 24,33)
 LILYCOVE_RETURN = ('MAP_LILYCOVE_CITY_HARBOR', 8, 11)  # where the SS Tidal lets the player off
 # object scripts that get a hand-written body instead of a placeholder: (map, original label) -> body lines
 SPECIAL_STUBS = {
@@ -401,6 +401,23 @@ class Tree:
         if not os.path.exists(path):
             return {}
         return dict(re.findall(r'^(\w+)::\s*\n\s*finditem\s+(ITEM_\w+)\s*$', read(path), re.M))
+
+    _shared = None
+
+    def shared_blocks(self):
+        """label -> body of the FRLG shared scripts (data/scripts/*_frlg.inc: trainers, item balls, ...)."""
+        if self._shared is None:
+            self._shared = {}
+            sdir = self.p('data/scripts')
+            for fn in sorted(os.listdir(sdir)) if os.path.isdir(sdir) else []:
+                if fn.endswith('_frlg.inc'):
+                    self._shared.update(parse_blocks(read(os.path.join(sdir, fn))))
+        return self._shared
+
+    def orig_blocks(self, name):
+        blocks = dict(self.shared_blocks())
+        blocks.update(parse_blocks(self.orig_scripts(name)))
+        return blocks
 
     def orig_scripts(self, name):
         """Original FRLG scripts of a map (scripts_frlg_orig.inc once ported, else scripts.inc)."""
@@ -635,7 +652,7 @@ def write_stubs(tree, name, force=False):
     orig_text = tree.orig_scripts(name)
     if not os.path.exists(opath):
         write(opath, orig_text)
-    blocks = parse_blocks(orig_text)
+    blocks = tree.orig_blocks(name)
     entries = {}  # label -> dict(kind, comments, orig)
 
     def add(label, kind, comment, orig_label, lid=None):
@@ -775,7 +792,7 @@ def patch_mapsec_names(root):
     n = 0
     for e in data['map_sections']:
         it = MAINLAND_MAPSECS.get(e['id'])
-        if it and e.get('name') != it and (e.get('name') or '').isupper():
+        if it and e.get('name') != it and not any(c.islower() for c in (e.get('name') or '').replace('é', '')):
             e['name'] = it
             n += 1
     if n:
@@ -948,13 +965,24 @@ def build_inventory(tree, ported, flags, init_hidden):
     wild = wild_tables(tree.root)
     heal = {h['map']: h['id'] for h in tree.heal}
     respawn = {h.get('respawn_map'): h['id'] for h in tree.heal if h.get('respawn_map')}
-    emerald_specials = None
+    # specials that Emerald's own scripts use (the rest are FRLG-only: need porting/replacing when writing)
+    em_text = []
+    for n in tree.order:
+        if not tree.is_kanto(n):
+            path = os.path.join(tree.maps_dir, n, 'scripts.inc')
+            if os.path.exists(path):
+                em_text.append(read(path))
+    sdir = tree.p('data/scripts')
+    for fn in os.listdir(sdir):
+        if fn.endswith('.inc') and not fn.endswith('_frlg.inc'):
+            em_text.append(read(os.path.join(sdir, fn)))
+    emerald_specials = set(re.findall(r'^\s*(?:special|specialvar\s+\w+,)\s+(\w+)', '\n'.join(em_text), re.M))
     maps = []
     for n in ported:
         d = tree.maps[n]
-        blocks = parse_blocks(tree.orig_scripts(n))
-        orig_text = '\n'.join(blocks.values())
-        specials = sorted(set(re.findall(r'\b(?:special|specialvar\s+\w+,)\s+(\w+)', orig_text)))
+        orig_text = tree.orig_scripts(n)
+        blocks = tree.orig_blocks(n)
+        specials = sorted(set(re.findall(r'^\s*(?:special|specialvar\s+\w+,)\s+(\w+)', orig_text, re.M)))
         e = {'map': n, 'id': d['id'], 'group': tree.group_of[n], 'mapsec': d.get('region_map_section'),
              'name_it': MAINLAND_MAPSECS.get(d.get('region_map_section')), 'kind': map_kind(tree, n),
              'layout': d.get('layout'), 'music': d.get('music'), 'map_type': d.get('map_type'),
@@ -962,7 +990,8 @@ def build_inventory(tree, ported, flags, init_hidden):
              'heal_location': heal.get(d['id']), 'respawn_for': respawn.get(d['id']),
              'wild_encounters': wild.get(d['id'], []),
              'objects': [], 'item_balls': [], 'signs': [], 'hidden_items': [], 'coord_events': [],
-             'warps': [], 'connections': [], 'orig_specials': specials}
+             'warps': [], 'connections': [], 'orig_specials': specials,
+             'orig_specials_frlg_only': [x for x in specials if x not in emerald_specials]}
         for i, o in enumerate(d.get('object_events') or []):
             if o.get('type') == 'clone':
                 e['objects'].append({'index': i + 1, 'clone_of': o.get('target_map') + '/' + str(o.get('target_local_id')),
