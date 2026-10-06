@@ -10,7 +10,7 @@ non contiene la ROM originale.
 |------|--------------|
 | `setup.sh` | ricostruisce la ROM originale da pret/pokeemerald e compila Flips, tutto in `/home/user/work/bps/` |
 | `make_patch.sh` | crea `hack.bps` con Flips e lo verifica prima di pubblicarlo |
-| `bps.py` | lettore e applicatore BPS indipendente (Python, senza dipendenze), usato per il doppio controllo e per `info` e `hash` |
+| `bps.py` | lettore e applicatore BPS indipendente (Python, senza dipendenze), usato per il doppio controllo e per `info`, `hash` e `check` |
 
 Nel repository non devono finire ROM né binari: il `.gitignore` esclude
 `*.gba`. La patch `.bps`, che per la baseline pesa circa 16 MB, conviene
@@ -66,10 +66,16 @@ Cosa fa:
 
 1. Controlla che `VANILLA` abbia lo SHA-1 dell'Emerald USA/Europe. Se non
    corrisponde si ferma; con `--allow-any-source` dà solo un avviso. Si ferma
-   anche se la hack è identica alla vanilla.
+   anche se la hack è identica alla vanilla o supera 32 MiB. Con
+   `bps.py check` controlla l'header della hack e stampa solo degli avvisi
+   (codice diverso da `BPEE`, `.gameName` mancante, checksum dell'header
+   errato).
 2. Esegue `flips --create --bps-delta` e scrive la patch in un file
    temporaneo. Con `--linear` usa la modalità lineare: è più veloce ma la
-   patch è molto più grande.
+   patch è molto più grande. Attenzione: in test casuali `--bps-linear` di
+   Flips ha prodotto patch rotte (rifiutate dallo stesso Flips) in circa il
+   2% dei casi; sulla baseline funziona, e in ogni caso i due controlli
+   successivi le bloccano. Il default delta non ha mai sbagliato.
 3. **Round trip 1**: `flips --apply` sulla vanilla, poi confronta lo SHA-1 del
    risultato con `HACK`.
 4. **Round trip 2**: `python3 -I bps.py verify`, un'implementazione BPS
@@ -77,6 +83,8 @@ Cosa fa:
 5. Solo se entrambi i controlli passano sposta la patch in `OUT.bps`.
    `--notes FILE` scrive anche un testo con dimensione, CRC32, MD5 e SHA-1 di
    ROM richiesta, ROM risultante e patch, da copiare nella pagina della release.
+   Il CRC32 del file `.bps` è sempre `2144DF1C` (ogni BPS termina con il CRC32
+   di sé stesso), quindi per identificare la patch usare SHA-1 o MD5.
 
 Variabili d'ambiente:
 
@@ -98,6 +106,7 @@ Strumenti di analisi:
 ```sh
 python3 -I tools/bps/bps.py info hack.bps          # dimensioni, CRC32, statistiche dei comandi
 python3 -I tools/bps/bps.py hash rom.gba hack.bps  # dimensione, CRC32, MD5, SHA-1 e header GBA
+python3 -I tools/bps/bps.py check hack.gba         # avvisi sull'header (BPEE, .gameName, checksum)
 python3 -I tools/bps/bps.py apply hack.bps rom.gba out.gba
 python3 -I tools/bps/bps.py verify hack.bps rom.gba atteso.gba
 ```
@@ -126,6 +135,9 @@ risultato SHA-1 `e2d4600d…` uguale alla baseline:
 
 `bps.py` è stato confrontato anche con Flips su 50 coppie di file casuali
 (delta e linear, inserimenti, cancellazioni e sequenze RLE): 0 errori.
+In una seconda verifica (686 patch casuali, 343 delta e 343 lineari) `bps.py`
+ha ricostruito tutte le patch delta; ha rifiutato solo 8 patch `--bps-linear`
+che erano rotte, e che anche `flips --apply` rifiutava.
 
 ---
 

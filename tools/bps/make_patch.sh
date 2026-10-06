@@ -86,6 +86,9 @@ run_logged() {
 case "$OUT" in *.bps|*.BPS) ;; *) die "output name must end in .bps: $OUT" ;; esac
 OUTDIR=$(dirname "$OUT")
 [ -d "$OUTDIR" ] || die "output directory does not exist: $OUTDIR"
+if [ -n "$NOTES" ]; then
+  [ -d "$(dirname "$NOTES")" ] || die "notes directory does not exist: $(dirname "$NOTES")"
+fi
 
 V_SHA1=$(sha1 "$VANILLA")
 H_SHA1=$(sha1 "$HACK")
@@ -100,6 +103,10 @@ if [ "$V_SHA1" != "$EMERALD_SHA1" ]; then
 fi
 [ "$V_SHA1" != "$H_SHA1" ] || die "hack and vanilla are identical, nothing to patch"
 [ "$(fsize "$HACK")" -le 33554432 ] || die "hack is larger than 32 MiB, the GBA cartridge limit"
+# header sanity (warnings only): game code BPEE, .gameName, complement checksum
+if [ -n "$PYTHON" ] && command -v "$PYTHON" >/dev/null 2>&1; then
+  "$PYTHON" -I "$BPS_PY" check "$HACK" >&2 || true
+fi
 
 # --- create ----------------------------------------------------------------
 TMPD=$(mktemp -d "${TMPDIR:-/tmp}/make_patch.XXXXXX")
@@ -134,7 +141,7 @@ echo "patch    $OUT  ($P_SIZE bytes, sha1 $P_SHA1)"
 
 if [ -n "$NOTES" ]; then
   if [ -n "$PYTHON" ] && command -v "$PYTHON" >/dev/null 2>&1; then
-    HASHES=$("$PYTHON" -I "$BPS_PY" hash "$VANILLA" "$HACK" "$OUT")
+    HASHES=$("$PYTHON" -I "$BPS_PY" hash --basename "$VANILLA" "$HACK" "$OUT")
   else
     HASHES="vanilla sha1 $V_SHA1
 hack sha1 $H_SHA1

@@ -31,6 +31,7 @@ DEFAULT_ROOT = os.environ.get('PEX_ROOT', '/home/user/work/mapgen-tree')
 DEFAULT_OUT = '/home/user/work/mapgen-out/stamps'
 
 OUTDOOR_PRIMARIES = {'gTileset_General'}
+CAVE_SECONDARIES = {'gTileset_Cave', 'gTileset_MeteorFalls', 'gTileset_RusturfTunnel', 'gTileset_NavelRock'}
 
 DOOR_BEHAVIORS = {
     'MB_ANIMATED_DOOR': 'door', 'MB_NON_ANIMATED_DOOR': 'door', 'MB_PETALBURG_GYM_DOOR': 'door',
@@ -64,7 +65,13 @@ def family_of(secondary):
     return out
 
 
-def kind_for(dest_map, behavior_kind):
+def kind_for(dest_map, behavior_kind, in_cave=False):
+    if behavior_kind == 'ladder':
+        return 'ladder'
+    if behavior_kind.startswith('exit') or behavior_kind == 'stairs':
+        return behavior_kind
+    if in_cave:
+        return 'passage'
     d = dest_map.replace('MAP_', '')
     for pat, k in KIND_RULES:
         if pat in d:
@@ -177,6 +184,11 @@ def auto_extract(project, verbose=False):
                 cells = {(x, y)} | {c for c in trace_component(blocks, cls_fn, x, y, max_up=2, max_side=2, max_down=1)}
             if cls_fn(m) != terrain.UNKNOWN:
                 cells = {(x, y)}
+            if len(cells) == 1 and bk in ('door', 'exit_south', 'exit_north', 'exit_east', 'exit_west'):
+                # a lone door/exit tile (cave mouth, passage, exit gap): keep its frame so the
+                # surrounding rock/wall matches when it is stamped somewhere else
+                cells = {(xx, yy) for xx in range(x - 1, x + 2) for yy in range(y - 1, y + 1)
+                         if 0 <= xx < L.width and 0 <= yy < L.height}
             used |= cells
             groups.append({'cells': cells, 'doors': [{'x': x, 'y': y, 'behavior': bname, 'warp_index': wi,
                                                       'dest_map': w['dest_map'],
@@ -186,7 +198,7 @@ def auto_extract(project, verbose=False):
             if len(g['cells']) > 200:
                 continue
             d0 = g['doors'][0]
-            kind = kind_for(d0['dest_map'], g['bk'])
+            kind = kind_for(d0['dest_map'], g['bk'], in_cave=L.secondary_symbol in CAVE_SECONDARIES)
             st = make_stamp(P, L, g['cells'], g['doors'], {'map': name, 'dest_map': d0['dest_map']})
             st['kind'] = kind
             stamps.append(st)

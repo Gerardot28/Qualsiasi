@@ -89,7 +89,7 @@ def main():
 
     # ---- Pokemon Center: heal
     hp, mx, lvl = party_hp(e)
-    check('party: Mudkip lv30 present', lvl == 30 and mx > 0, 'hp=%d/%d lvl=%d' % (hp, mx, lvl))
+    check('party: Mudkip lv10 present', lvl == 10 and mx > 0, 'hp=%d/%d lvl=%d' % (hp, mx, lvl))
     e.run(['write16 gParties+0x56 3'], 'hurt')
     hp2, _, _ = party_hp(e)
     check('hp lowered for the nurse test', hp2 == 3, 'hp=%d' % hp2)

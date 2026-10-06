@@ -14,6 +14,7 @@ STEPS.txt is a list of commands, one per line ('#' starts a comment):
     combo KEY1+KEY2 [MS]      hold several keys together (e.g. R+START for the debug menu)
     shot NAME                 save the emulator framebuffer (240x160) as OUTDIR/NAME.png (mGBA F12)
     fastforward on|off        toggle mGBA fast-forward (Shift+Tab)
+    dump ADDR LEN NAME        (with EMU_GDB=1) save LEN bytes of GBA memory at ADDR (hex) to OUTDIR/NAME.bin
 
 GBA keys (mGBA-Qt default keyboard map): A=x  B=z  L=a  R=s  START=Return  SELECT=BackSpace
 UP/DOWN/LEFT/RIGHT = arrows. You can use the GBA names (A, B, L, R, START, SELECT, UP, ...).
@@ -29,6 +30,64 @@ KEYMAP = {
     'A': 'x', 'B': 'z', 'L': 'a', 'R': 's', 'START': 'Return', 'SELECT': 'BackSpace',
     'UP': 'Up', 'DOWN': 'Down', 'LEFT': 'Left', 'RIGHT': 'Right',
 }
+
+
+class Gdb:
+    """Minimal GDB remote-serial-protocol client for mGBA's gdb stub (mgba-qt -g, port 2345)."""
+    def __init__(self, port=2345):
+        import socket
+        for _ in range(50):
+            try:
+                self.s = socket.create_connection(('127.0.0.1', port), timeout=5)
+                break
+            except OSError:
+                time.sleep(0.2)
+        self.buf = b''
+
+    def _recv_packet(self):
+        while True:
+            while b'#' not in self.buf or len(self.buf) < self.buf.index(b'#') + 3:
+                self.buf += self.s.recv(65536)
+            start = self.buf.find(b'$')
+            end = self.buf.index(b'#')
+            data = self.buf[start + 1:end]
+            self.buf = self.buf[end + 3:]
+            self.s.sendall(b'+')
+            return data
+
+    def send(self, data, expect_reply=True):
+        pkt = b'$' + data + b'#' + ('%02x' % (sum(data) & 0xff)).encode()
+        self.s.sendall(pkt)
+        # wait for ack
+        while not self.buf:
+            self.buf += self.s.recv(65536)
+        if self.buf[:1] == b'+':
+            self.buf = self.buf[1:]
+        return self._recv_packet() if expect_reply else None
+
+    def cont(self):
+        self.send(b'c', expect_reply=False)
+
+    def interrupt(self):
+        self.s.sendall(b'\x03')
+        r = self._recv_packet()
+        while not (r.startswith(b'S') or r.startswith(b'T')):
+            r = self._recv_packet()
+        return r
+
+    def read(self, addr, length):
+        out = b''
+        while length > 0:
+            n = min(length, 0x100)
+            r = self.send(b'm%x,%x' % (addr, n))
+            while len(r) != 2 * n:  # skip stray stop/notification packets
+                if r.startswith(b'E'):
+                    raise RuntimeError('gdb read error %r at %x' % (r, addr))
+                r = self._recv_packet()
+            out += bytes.fromhex(r.decode())
+            addr += n
+            length -= n
+        return out
 
 
 def xdo(*args):
@@ -49,8 +108,16 @@ def main():
     wrom = os.path.join(work, 'game.gba')
     shutil.copy(rom, wrom)
     log = open(os.path.join(work, 'mgba.log'), 'w')
-    proc = subprocess.Popen(['/usr/games/mgba-qt', '-C', 'displayDriver=0', '-C', 'audioSync=0', '-C', 'videoSync=1', '-C', 'mute=1', '-2', wrom],
-                            stdout=log, stderr=subprocess.STDOUT)
+    use_gdb = os.environ.get('EMU_GDB') == '1'
+    cmdline = ['/usr/games/mgba-qt', '-C', 'displayDriver=0', '-C', 'audioSync=0', '-C', 'videoSync=1', '-C', 'mute=1', '-2']
+    if use_gdb:
+        cmdline.append('-g')
+    proc = subprocess.Popen(cmdline + [wrom], stdout=log, stderr=subprocess.STDOUT)
+    gdb = None
+    if use_gdb:
+        time.sleep(2)
+        gdb = Gdb()
+        gdb.cont()
     wid = None
     for _ in range(50):
         time.sleep(0.2)
@@ -119,6 +186,14 @@ def main():
                 for k in reversed(keys):
                     xdo('keyup', k)
                 time.sleep(0.05)
+            elif cmd == 'dump':
+                # dump ADDR LEN NAME  (needs EMU_GDB=1)
+                gdb.interrupt()
+                data = gdb.read(int(parts[1], 16), int(parts[2], 16))
+                gdb.cont()
+                with open(os.path.join(outdir, parts[3] + '.bin'), 'wb') as f:
+                    f.write(data)
+                print('dump', parts[3], len(data))
             elif cmd == 'fastforward':
                 xdo('key', 'shift+Tab')
             elif cmd == 'shot':

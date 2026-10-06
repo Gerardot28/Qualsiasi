@@ -49,6 +49,12 @@ CLASS_LIMITS = {
     'pokenav': LIMIT_POKENAV,
 }
 BOX_CLASSES = ('field', 'battle', 'pokenav')
+# Fixed (non-scrolling) windows: class -> (width px, visible rows)
+#   tutor_desc: src/field_specials.c sBattleFrontierTutor_WindowTemplate, 12x6 tiles,
+#               printed at x = 0 by ShowBattleFrontierTutorMoveDescription
+FIXED_WINDOWS = {
+    'tutor_desc': (12 * 8, 3),
+}
 
 # Placeholder defaults (pixels).  FD xx ids, see charmap.txt / string_util.c
 PH_PLAYER, PH_STR1, PH_STR2, PH_STR3, PH_KUN, PH_RIVAL = 0x01, 0x02, 0x03, 0x04, 0x05, 0x06
@@ -835,13 +841,18 @@ BASE_USAGE = {
     # scripts/trainer_battle.inc + battle_setup.c: intro/cannot-battle texts are
     # shown with ShowFieldMessage, defeat/victory texts inside the battle box.
     'trainerbattle': {2: 'field', 3: 'battle', 7: 'field', 8: 'battle', 10: 'battle', 11: 'field'},
+    # asm/macros/event.inc: lose texts of multi battles (multi_2_vs_2, multi_2_vs_1)
+    'setmultitrainerbattle': {1: 'battle', 3: 'battle'},
     '.4byte': {},
 }
 # `loadword 0, Text` + callstd -> standard message box (msgbox macro)
 LOADWORD_MSG = ('loadword', 1)
 # C usage patterns that clearly show a field message box
 C_FIELD_CALLS = ('ShowFieldMessage', 'ShowFieldAutoScrollMessage', 'DisplayItemMessageOnField',
-                 'ShowFieldMessageFromBuffer')
+                 'ShowFieldMessageFromBuffer',
+                 'ShowSaveMessage')      # src/start_menu.c: gStringVar4 + AddTextPrinterForMessage (window 0)
+# C calls that print in the battle message window (B_WIN_MSG, 26 tiles)
+C_BATTLE_CALLS = ('BattlePutTextOnWindow', 'BattleStringExpandPlaceholdersToDisplayedString')
 # C files whose text tables are displayed in a known window (see --calibrate)
 # (verified in the C sources: tv.c / battle_pyramid.c / birch_pc.c call ShowFieldMessage,
 #  apprentice texts are expanded into gStringVar4 and shown with `message`,
@@ -856,7 +867,23 @@ C_FILE_CLASSES = {
     'src/pokenav_match_call_data.c': 'pokenav',
     # printed with AddTextPrinterParameterized2(0, FONT_NORMAL, ...) in the message window 0
     'src/data/battle_frontier/battle_frontier_exchange_corner.h': 'field',
+    'src/data/script_menu.h': 'field',          # link-service descriptions (script_menu.c, window 0)
+    'src/main_menu.c': 'field',                 # Birch speech: gStringVar4 + AddTextPrinterForMessage, 27 tiles
+    'src/pokemon.c': 'field',                   # natureGirlMessage -> ShowFieldMessage (field_specials.c)
+    'src/battle_message.c': 'battle',           # gBattleStringsTable entries -> B_WIN_MSG
+    'src/secret_base.c': 'battle',              # GetSecretBaseTrainerLoseText -> trainer lose text
 }
+# Labels displayed through C tables / accessor functions that the generic scan
+# cannot follow (verified by hand in the C sources).  label regex -> class
+LABEL_CLASS_OVERRIDES = [
+    # src/field_specials.c ShowFrontierManiacMessage / ShowFrontierGambler*Message:
+    # ShowFieldMessage(sTable[...])
+    (re.compile(r'BattleFrontier_Lounge[23]_Text_\w+$'), 'field'),
+    # src/mauville_old_man.c: ShowFieldMessage(GetStoryTextByStat(stat))
+    (re.compile(r'MauvilleCity_PokemonCenter_1F_Text_\w+Story$'), 'field'),
+    # src/field_specials.c ShowBattleFrontierTutorMoveDescription: 12x6-tile window
+    (re.compile(r'BattleFrontier_Lounge7_Text_\w+Desc$'), 'tutor_desc'),
+]
 
 IDENT_RE = re.compile(r'[A-Za-z_]\w*')
 
@@ -985,6 +1012,8 @@ class UsageIndex:
                 cls = set()
                 if call in C_FIELD_CALLS:
                     cls.add('field')
+                elif call in C_BATTLE_CALLS:
+                    cls.add('battle')
                 elif rel in C_FILE_CLASSES:
                     cls.add(C_FILE_CLASSES[rel])
                 self.refs[lbl].append(('C:' + (call or '-'), -1, frozenset(cls), rel, no))
@@ -995,6 +1024,10 @@ class UsageIndex:
         classes = set()
         for r in refs:
             classes |= r[2]
+        if refs:
+            for rx, cls in LABEL_CLASS_OVERRIDES:
+                if rx.match(label):
+                    classes.add(cls)
         if not refs:
             return set(), 'unreferenced'
         if classes:
@@ -1204,9 +1237,19 @@ class LabelInfo:
         self.classes = classes
         self.desc = desc
         box = [c for c in classes if c in CLASS_LIMITS]
+        fixed = [c for c in classes if c in FIXED_WINDOWS]
         self.box = bool(box)
-        self.cls = min(box, key=lambda c: CLASS_LIMITS[c]) if box else None
-        base = CLASS_LIMITS[self.cls] if box else LIMIT_FIELD
+        self.fixed_rows = None
+        if box:
+            self.cls = min(box, key=lambda c: CLASS_LIMITS[c])
+            base = CLASS_LIMITS[self.cls]
+        elif fixed:
+            # fixed window of known size (not a scrolling message box)
+            self.cls = min(fixed, key=lambda c: FIXED_WINDOWS[c][0])
+            base, self.fixed_rows = FIXED_WINDOWS[self.cls]
+        else:
+            self.cls = None
+            base = LIMIT_FIELD
         self.base_limit = base
         # a line followed by \p or \l must leave room for the down arrow
         self.base_arrow = base - DOWN_ARROW_W if self.box else base
@@ -1480,6 +1523,8 @@ class Checker:
                 what = 'the %s box' % li.cls
                 if li.preexisting_overflow:
                     what += ' (limit raised to the vanilla width of this label)'
+            elif li.fixed_rows:
+                what = 'the %s window (%dpx)' % (li.cls, li.base_limit)
             else:
                 what = 'unclassified text [%s] (limit = max(vanilla %dpx, %dpx))' % (
                     li.desc, max(li.vanilla_max, li.vanilla_max_arrow), LIMIT_FIELD)
@@ -1519,15 +1564,20 @@ class Checker:
                          'text inserted via bufferstring is wider than the vanilla one (%dpx vs %dpx): '
                          'check the lines that print it through {STR_VAR_n}' % (w, vw))
         if not li.box:
-            # unknown window: only warn if the text uses more rows per box than vanilla did
-            allowed = max(li.vanilla_max_row, 1)
+            if li.fixed_rows:
+                # fixed window: rows beyond its height are not visible
+                allowed, sev = max(li.fixed_rows, li.vanilla_max_row + 1) - 1, 'error'
+                what = 'the %s window shows only %d row(s)' % (li.cls, allowed + 1)
+            else:
+                # unknown window: only warn if the text uses more rows per box than vanilla did
+                allowed, sev = max(li.vanilla_max_row, 1), 'warning'
+                what = 'unclassified text; the original never used more than %d row(s) per box' % (allowed + 1)
             row = 0
             for dl in dlines:
                 if dl['glyphs'] and row > allowed:
-                    self.add('warning', 'BOXLINES', rel, dl['line'], label,
-                             'unclassified text drawn on row %d of its box; the original never used more than '
-                             '%d row(s) per box (\\n adds a row, \\l scrolls, \\p clears)' % (row + 1, allowed + 1),
-                             text=dl['text'])
+                    self.add(sev, 'BOXLINES', rel, dl['line'], label,
+                             'text drawn on row %d: %s (\\n adds a row, \\l scrolls, \\p clears)'
+                             % (row + 1, what), text=dl['text'])
                     break
                 t = dl['term']
                 if t == 'n':
@@ -1627,12 +1677,12 @@ def calibrate(ctx, rels, out):
                 continue
             seen.add(b.label)
             li = LabelInfo(ctx, b.label, [x for x in af.blocks if x.label == b.label])
-            cls = li.cls if li.box else ('unclassified' if li.desc != 'unreferenced' else 'unreferenced')
+            cls = li.cls if li.cls else ('unclassified' if li.desc != 'unreferenced' else 'unreferenced')
             if li.ph_override:
                 cal_labels += 1
             if li.preexisting_overflow:
                 preexist.append((max(li.vanilla_max, li.vanilla_max_arrow), li.base_limit, rel, b.label, cls))
-            if not li.box:
+            if not li.cls:
                 unclassified[li.desc.split('(')[0]] += 1
                 for r in ctx.index.refs.get(b.label, []):
                     if r[0].startswith('C'):
@@ -1677,7 +1727,7 @@ def calibrate(ctx, rels, out):
         hist = []
         for lo, hi in zip(buckets, buckets[1:]):
             hist.append('%d-%d:%d' % (lo, hi - 1, sum(1 for x in ws if lo <= x < hi)))
-        lim = CLASS_LIMITS.get(cls.split()[0], LIMIT_FIELD)
+        lim = CLASS_LIMITS.get(cls.split()[0], FIXED_WINDOWS.get(cls.split()[0], (LIMIT_FIELD,))[0])
         w('  %-13s lines=%6d max=%3d p99=%3d p999=%3d  >%d: %d   %s' % (
             cls, len(ws), ws[-1] if ws else 0, ws[int(len(ws) * .99)] if ws else 0,
             ws[int(len(ws) * .999)] if ws else 0, lim, sum(1 for x in ws if x > lim), ' '.join(hist)))
@@ -1809,9 +1859,9 @@ def main(argv=None):
     for i in checker.issues:
         by_check[i.sev][i.check] += 1
     labels_seen = checker.label_infos
-    cls_count = Counter((li.cls if li.box else ('unreferenced' if li.desc == 'unreferenced' else 'unclassified'))
+    cls_count = Counter((li.cls if li.cls else ('unreferenced' if li.desc == 'unreferenced' else 'unclassified'))
                         for li in labels_seen.values())
-    unclassified = sorted(l for l, li in labels_seen.items() if not li.box)
+    unclassified = sorted(l for l, li in labels_seen.items() if not li.cls)
     summary = {
         'files': checker.stats['files'],
         'string_lines': checker.stats['string_lines'],

@@ -8,7 +8,8 @@ Sub-commands:
   info   PATCH [--verbose]            header, CRC32s, metadata, command stats
   apply  PATCH SOURCE OUT [--ignore-checksum]
   verify PATCH SOURCE TARGET          apply in memory and compare with TARGET
-  hash   FILE...                      size, CRC32, MD5, SHA-1 (+ GBA header)
+  hash   FILE... [--basename]         size, CRC32, MD5, SHA-1 (+ GBA header)
+  check  ROM                          warn about GBA header problems in a hack ROM
 
 Exit status: 0 ok, 1 verification/patch error, 2 usage error.
 Run as: python3 -I tools/bps/bps.py ...
@@ -16,6 +17,7 @@ Run as: python3 -I tools/bps/bps.py ...
 
 import argparse
 import hashlib
+import os
 import struct
 import sys
 import zlib
@@ -172,14 +174,51 @@ def gba_header(data):
 def cmd_hash(args):
     for p in args.files:
         d = read(p)
-        print("%s\n  size   %d bytes (%.2f MiB)\n  crc32  %08X\n  md5    %s\n  sha1   %s"
-              % (p, len(d), len(d) / 1048576, crc32(d), hashlib.md5(d).hexdigest(),
-                 hashlib.sha1(d).hexdigest()))
+        name = os.path.basename(p) if args.basename else p
+        crc_note = ""
+        if d[:4] == MAGIC and len(d) >= 16 and crc32(d[:-4]) == struct.unpack("<I", d[-4:])[0]:
+            # A file that ends with the CRC32 of everything before it always has
+            # the same whole-file CRC32 (0x2144DF1C, the CRC-32 residue), so the
+            # file CRC32 cannot tell two BPS patches apart: compare SHA-1/MD5.
+            crc_note = "  (same for every valid BPS file: compare sha1/md5 instead)"
+        print("%s\n  size   %d bytes (%.2f MiB)\n  crc32  %08X%s\n  md5    %s\n  sha1   %s"
+              % (name, len(d), len(d) / 1048576, crc32(d), crc_note,
+                 hashlib.md5(d).hexdigest(), hashlib.sha1(d).hexdigest()))
         h = gba_header(d)
         if h:
             print("  gba    title=%r code=%s maker=%s rev=%d header-checksum=%s"
                   % (h[0], h[1], h[2], h[3], "ok" if h[4] else "BAD"))
+        if crc_note:
+            src_crc, tgt_crc = struct.unpack("<II", d[-12:-4])
+            print("  bps    source crc32 %08X, target crc32 %08X" % (src_crc, tgt_crc))
     return 0
+
+
+EMERALD_GAME_NAME = b"pokemon emerald version"
+
+
+def cmd_check(args):
+    """Sanity checks on the hack ROM header (warnings only)."""
+    d = read(args.rom)
+    problems = []
+    h = gba_header(d)
+    if h is None:
+        problems.append("not a GBA ROM (fixed header byte 0xB2 != 0x96)")
+    else:
+        if not h[4]:
+            problems.append("GBA header complement checksum (0xBD) is wrong: real hardware will not boot it (run gbafix)")
+        if h[1] != "BPEE":
+            problems.append("game code is %r, not 'BPEE': emulators may not enable Flash 128K + RTC" % h[1])
+    if d[0x108:0x108 + len(EMERALD_GAME_NAME)] != EMERALD_GAME_NAME:
+        problems.append("%r missing at 0x108 (.gameName in src/rom_header_gf.c): mGBA/OpenEmu"
+                        " use it to detect Emerald hacks (Flash 128K + RTC)" % EMERALD_GAME_NAME.decode())
+    if len(d) > 32 * 1024 * 1024:
+        problems.append("larger than 32 MiB (%d bytes)" % len(d))
+    for msg in problems:
+        print("WARNING: %s: %s" % (args.rom, msg))
+    if not problems:
+        print("OK: %s header: title=%r code=%s, gameName ok, header checksum ok" % (args.rom, h[0], h[1]))
+    return 1 if problems else 0
 
 
 def cmd_info(args):
@@ -252,7 +291,11 @@ def main(argv=None):
     p.set_defaults(func=cmd_verify)
     p = sub.add_parser("hash", help="print size/CRC32/MD5/SHA-1 (and GBA header)")
     p.add_argument("files", nargs="+")
+    p.add_argument("--basename", action="store_true", help="print file names without directories")
     p.set_defaults(func=cmd_hash)
+    p = sub.add_parser("check", help="warn about GBA header problems (code, .gameName, checksum)")
+    p.add_argument("rom")
+    p.set_defaults(func=cmd_check)
     args = ap.parse_args(argv)
     try:
         return args.func(args)

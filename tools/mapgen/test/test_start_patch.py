@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """TEST-ONLY patch for a work tree: a new game skips the truck and starts in
 Littleroot Town below May's house door (the door that compile_map's PoC
-re-targets to Test Town), with a lv 12 Mudkip, running shoes and 5 Poke Balls.
+re-targets to Test Town), with a lv 10 Mudkip (first move Surf), running shoes and 5 Poke Balls.
 
     test_start_patch.py apply  [--root TREE] [--x 14 --y 9 --map MAP_LITTLEROOT_TOWN]
     test_start_patch.py revert [--root TREE]
@@ -23,7 +23,8 @@ def apply(root, mapid, x, y):
                 '    VarSet(VAR_LITTLEROOT_INTRO_STATE, 7);\n'
                 '    FlagSet(FLAG_SYS_POKEMON_GET);\n'
                 '    FlagSet(FLAG_SYS_B_DASH);\n'
-                '    ScriptGiveMon(SPECIES_MUDKIP, 30, ITEM_NONE);\n'
+                '    ScriptGiveMon(SPECIES_MUDKIP, 10, ITEM_NONE);\n'
+                '    SetMonMoveSlot(&gParties[B_TRAINER_PLAYER][0], MOVE_SURF, 0); // A,A in battle = Surf\n'
                 '    AddBagItem(ITEM_POKE_BALL, 5);\n'
                 '    SetWarpDestination(MAP_GROUP(%s), MAP_NUM(%s), WARP_ID_NONE, %d, %d);\n'
                 '    WarpIntoMap();\n'
