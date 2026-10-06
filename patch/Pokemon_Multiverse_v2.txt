@@ -1,0 +1,44 @@
+Pokémon Multiverse v2 - Atto 1: Hoenn + Atto 2: Kanto
+======================================================
+
+Novità rispetto alla v1:
+- Atto 2: Kanto (253 mappe FRLG nel motore di Smeraldo), raggiungibile da Campione di Hoenn
+  con il traghetto di Porto Alghepoli (approdo ad Aranciopoli; ritorno dal marinaio del porto).
+- Trama di Kanto in italiano (31 scene), 8 Palestre con Medaglie e MT, Superquattro e Campione
+  all'Altopiano Blu, 343 allenatori con squadre nuove (Lv 53-72), selvatici ribilanciati,
+  leggendari (Zapdos, Articuno, Mewtwo), Snorlax e Poké Flauto.
+- Livello massimo legato alle Medaglie di Kanto (55 -> 72), nessun limite dopo la Lega.
+- Volo Taxi nei Centri Pokémon di Kanto (al posto di Volo).
+- Semplificazioni: porte della Silph aperte, ascensori con menu dei piani, Zona Safari con lotte
+  normali, correnti delle Spumarine calme, bici non obbligatoria. Isole Sette escluse.
+
+IMPORTANTE: i salvataggi della v1 NON sono compatibili con la v2 (SaveBlock1 ampliato).
+La patch v1 (Pokemon_Multiverse_v1.bps) resta disponibile per chi vuole finire la partita v1.
+
+ROM risultante: 32 MiB, contenuto 28 341 776 byte (84,47% di 32 MiB).
+SHA-1 ROM v2: 3de830384ba12e52e9d1917512ac779fe8c1073c
+SHA-1 patch:  08e5d0243c694811bb815cfeec145c6f499fecb7
+
+------------------------------------------------------------------
+BPS patch: Pokemon_Multiverse_v2.bps (17806550 bytes)
+Required original ROM: Pokemon - Emerald Version (USA, Europe)  (16777216 bytes, crc32 1F1C08FB, sha1 f3ae088181bf583e55daf962a92bb46f4f1d07b7)
+Created 2026-10-06T17:17:32Z with Floating IPS v6 --bps-delta
+
+vanilla_emerald.gba
+  size   16777216 bytes (16.00 MiB)
+  crc32  1F1C08FB
+  md5    605b89b67018abcea91e693a4dd25be3
+  sha1   f3ae088181bf583e55daf962a92bb46f4f1d07b7
+  gba    title='POKEMON EMER' code=BPEE maker=01 rev=0 header-checksum=ok
+pokeemerald-release.gba
+  size   33554432 bytes (32.00 MiB)
+  crc32  B1E22FC6
+  md5    c0bdea03cf0b1f2cb93603451996bb15
+  sha1   3de830384ba12e52e9d1917512ac779fe8c1073c
+  gba    title='PKMULTIVERSE' code=BPEE maker=01 rev=0 header-checksum=ok
+Pokemon_Multiverse_v2.bps
+  size   17806550 bytes (16.98 MiB)
+  crc32  2144DF1C  (same for every valid BPS file: compare sha1/md5 instead)
+  md5    701e12234f8bf00931c27c0b89d68a3b
+  sha1   08e5d0243c694811bb815cfeec145c6f499fecb7
+  bps    source crc32 1F1C08FB, target crc32 B1E22FC6

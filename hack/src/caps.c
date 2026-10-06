@@ -5,6 +5,34 @@
 #include "pokemon.h"
 
 
+// KANTO_V2: Act 2 caps (docs/storia/bibbia_kanto.md, section 7). Kanto badges can be won in any order,
+// so the cap follows the NUMBER of Kanto badges (story order: Surge 55, Misty 57, Brock 58, Erika 59,
+// Koga 61, Sabrina 63, Blaine 64, Giovanni 66), then the Elite Four (67, 68, 69, 71) and Blu (72).
+static u32 GetKantoLevelCap(void)
+{
+    static const u8 sKantoBadgeCaps[] = {55, 57, 58, 59, 61, 63, 64, 66};
+    u32 i, badges = 0;
+
+    for (i = 0; i < 8; i++)
+    {
+        if (FlagGet(FLAG_KANTO_BADGE01 + i))
+            badges++;
+    }
+    if (badges < 8)
+        return sKantoBadgeCaps[badges];
+    if (!FlagGet(FLAG_KANTO_DEFEATED_LORELEI))
+        return 67;
+    if (!FlagGet(FLAG_KANTO_DEFEATED_BRUNO))
+        return 68;
+    if (!FlagGet(FLAG_KANTO_DEFEATED_AGATHA))
+        return 69;
+    if (!FlagGet(FLAG_KANTO_DEFEATED_LANCE))
+        return 71;
+    if (!FlagGet(FLAG_KANTO_STORY_CHAMPION))
+        return 72;
+    return MAX_LEVEL;
+}
+
 u32 GetCurrentLevelCap(void)
 {
     static const u32 sLevelCapFlagMap[][2] =
@@ -29,6 +57,8 @@ u32 GetCurrentLevelCap(void)
             if (!FlagGet(sLevelCapFlagMap[i][0]))
                 return sLevelCapFlagMap[i][1];
         }
+        if (FlagGet(FLAG_KANTO_STORY_CROSSED)) // KANTO_V2
+            return GetKantoLevelCap();
     }
     else if (B_LEVEL_CAP_TYPE == LEVEL_CAP_VARIABLE)
     {

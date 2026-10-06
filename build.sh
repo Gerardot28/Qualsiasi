@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pokémon Multiverse v1 (Atto 1: Hoenn) - compila la ROM dai sorgenti.
+# Pokémon Multiverse v2 (Atto 1: Hoenn + Atto 2: Kanto) - compila la ROM dai sorgenti.
 #
 #   ./build.sh [CARTELLA_DI_LAVORO]      (default: ./build)
 #
@@ -7,7 +7,7 @@
 #   1. clona rh-hideout/pokeemerald-expansion al tag expansion/1.17.1
 #   2. copia sopra i file modificati della hack (cartella hack/)
 #   3. esegue `make release` (build ottimizzata, senza menu di debug)
-#   4. copia la ROM in out/Pokemon_Multiverse_v1.gba
+#   4. copia la ROM in out/Pokemon_Multiverse_v2.gba
 #
 # Funziona su macOS e Linux. Requisiti: git, make, un compilatore C (Xcode CLT
 # su macOS, build-essential su Linux), libpng + pkg-config e la toolchain ARM
@@ -72,11 +72,11 @@ make -C "$SRC" release -j"$JOBS"
 
 # ---- 4. risultato ----------------------------------------------------------
 mkdir -p "$OUT"
-cp "$SRC/pokeemerald-release.gba" "$OUT/Pokemon_Multiverse_v1.gba"
-info "ROM pronta: $OUT/Pokemon_Multiverse_v1.gba"
+cp "$SRC/pokeemerald-release.gba" "$OUT/Pokemon_Multiverse_v2.gba"
+info "ROM pronta: $OUT/Pokemon_Multiverse_v2.gba"
 if command -v shasum >/dev/null; then
-    shasum -a 1 "$OUT/Pokemon_Multiverse_v1.gba"
+    shasum -a 1 "$OUT/Pokemon_Multiverse_v2.gba"
 elif command -v sha1sum >/dev/null; then
-    sha1sum "$OUT/Pokemon_Multiverse_v1.gba"
+    sha1sum "$OUT/Pokemon_Multiverse_v2.gba"
 fi
 echo "Nota: con un compilatore diverso lo SHA-1 può differire da quello della patch BPS; la ROM funziona lo stesso."

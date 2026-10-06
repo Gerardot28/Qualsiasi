@@ -152,8 +152,8 @@ Gli script di test sono in `tools/kanto/emu/`.
 ## Atto 2 (v2): infrastruttura di gioco
 
 Dalla v2 l'albero principale `/home/user/pex` contiene Kanto giocabile: allenatori, Palestre, Lega, trama
-(scene K01-K31 di `docs/storia/kanto_scene.json`), gating, selvatici, Volo Taxi. **Tutti i dialoghi sono
-segnaposto** per gli scrittori (vedi sotto). Fonte di trama: `docs/storia/bibbia_kanto.md`.
+(scene K01-K31 di `docs/storia/kanto_scene.json`), gating, selvatici, Volo Taxi. Nella v2 **tutti i dialoghi
+sono scritti** (nessun segnaposto rimasto, vedi sotto). Fonte di trama: `docs/storia/bibbia_kanto.md`.
 
 ### Come si rigenera (tutto idempotente)
 
@@ -184,8 +184,10 @@ generiche del port (`(testo Kanto da scrivere)`, NPC/cartelli/oggetti). Una etic
 - Scene di trama: etichette `…_Text_…` con prefisso della scena (`K02`…`K31`) nella descrizione.
 - Testi condivisi (taxi, ascensori, interruttori della Villa, voce della Lega): `data/scripts/kanto_story.inc`
   (file generato: per questi testi cambiare le descrizioni in `kanto_story.py`, oppure chiedere di spostarli).
-- I segnaposto si scrivono `[TESTO: …]` nel sorgente; nel gioco `[ ]` appaiono come `( )`
-  (`charmap.txt`: `'['` = 5C, `']'` = 5D, aggiunta KANTO_PORT).
+- I segnaposto si scrivono `[TESTO: …]` nel sorgente. **Stato v2: tutti scritti** (`grep -rl "TESTO:\|testo
+  Kanto da scrivere" data/` è vuoto); i testi condivisi di `kanto_story.inc` stanno in `SHARED_TEXTS` di
+  `kanto_story.py`. La mappatura temporanea di `[`/`]` in `charmap.txt` è stata tolta: per generare nuovi
+  segnaposto va rimessa (`'['` = 5C, `']'` = 5D) finché non sono scritti.
 
 ### Allenatori
 
@@ -326,10 +328,14 @@ e log in **`/home/user/work/kanto-v2-shots/`**. Tutto senza crash:
 - **Lega**: 8 Medaglie → limite 67, ingresso da Lorelei (porta d'ingresso chiusa), lotta, porta aperta
   (limite 68), stanza di Bruno, Campione Blu (limite 72), Sala d'Onore, scena finale, `STORY_CHAMPION`.
 - **ROM release** (`make release`): 28.291.228 B su 32 MB = **84,31%** (v1+port 83,45%); nuova partita OK.
+- **v2 con i testi scritti**: 28.341.776 B = **84,47%**; SaveBlock1 15.676/15.872 B (liberi 196). Ritest
+  completo (albero debug `/home/user/work/kanto-v2-dbg`, script `/home/user/work/v2-emu`, schermate
+  `/home/user/work/v2-shots/`): nave, quarantena, allenatore, Surge + Medaglia, taxi, Monte Luna, Snorlax,
+  cancello, Silph, Lega fino alla scena finale, nuova partita della ROM release fino ad Albanova.
 
 ### Lacune note
 
-- Testi: tutti segnaposto (vedi `testi_da_scrivere.md`). Nessun credito finale.
+- Testi: scritti (v2). Nessun credito finale.
 - Non provati a piedi: frecce di Smeraldopoli e del Rifugio, percorso completo della Villa e delle Spumarine.
 - Tessera Allenatore: non mostra le Medaglie di Kanto. Nessuna mappa/volo di Kanto (solo taxi).
 - M/N Anna, Isole Sette, Torre Allenatori, Zona Safari "vera": fuori dall'Atto 2.
