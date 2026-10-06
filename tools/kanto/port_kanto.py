@@ -437,7 +437,7 @@ def label_suffix(label, idx, kind):
 
 
 def text_for(name, suffix, kind):
-    disp = name[:-5] if name.endswith('_Frlg') else name
+    disp = (name[:-5] if name.endswith('_Frlg') else name).replace('_', ' ')
     return '%s\\n%s %s\\p(Kanto placeholder text)$' % (disp, kind, suffix)
 
 

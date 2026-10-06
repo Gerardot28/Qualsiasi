@@ -1283,12 +1283,19 @@ def main(argv=None):
     checks = sanity_checks(species, families, full_config)
     meta['sanityChecks'] = checks
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-    with open(args.out, 'w', encoding='utf-8') as f:
-        json.dump({'meta': meta, 'species': species}, f, ensure_ascii=False, indent=1)
-    with open(args.families, 'w', encoding='utf-8') as f:
-        json.dump({'meta': {'schemaVersion': SCHEMA_VERSION, 'source': os.path.abspath(args.out),
-                            'count': len(families)}, 'families': families}, f, ensure_ascii=False, indent=1)
+    def write_json(path, obj):
+        # write to a temp file and rename, so other tools reading the shared
+        # /home/user/work outputs never see a half-written file
+        path = os.path.abspath(path)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        tmp = path + '.tmp%d' % os.getpid()
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(obj, f, ensure_ascii=False, indent=1)
+        os.replace(tmp, path)
+
+    write_json(args.out, {'meta': meta, 'species': species})
+    write_json(args.families, {'meta': {'schemaVersion': SCHEMA_VERSION, 'source': os.path.abspath(args.out),
+                                        'count': len(families)}, 'families': families})
 
     if not args.quiet:
         log('wrote %s (%d species) and %s (%d families)' % (args.out, len(species), args.families, len(families)))

@@ -99,13 +99,15 @@ def apply_stamp(grid, st, x0, y0, flip=False):
 
 def build_frames(path, w, h, stamps=None):
     """Return list of (name, grid) for a sheet file. Supports directives:
-       @stamp NAME X Y [flip]   -- composite a stamp from the stamp library
+       @stamp NAME X Y [flip] [map=ab,cd]  -- composite a stamp from the stamp library
+                                (optionally mirrored and/or with letters remapped a->b, c->d)
        @copy N                  -- start from frame N of this sheet
        @from FILE N             -- start from frame N of another sheet file (relative to data/)
        Grid rows given after a @copy/@from overlay the copied frame; '?' keeps the copied pixel.
        @flip                    -- mirror the final frame horizontally
        @shift DX DY             -- move the composed frame
        @put X Y SEGMENT         -- paint a row segment after stamping ('?' keep, '_' transparent)
+       @outline LETTER          -- add an 8-neighbour outline of LETTER around the silhouette
     Directives are applied in file order after the grid.
     """
     frames = []
@@ -132,7 +134,13 @@ def build_frames(path, w, h, stamps=None):
         g = base
         for d in b['directives']:
             if d[0] == 'stamp':
-                g = apply_stamp(g, stamps[d[1]], int(d[2]), int(d[3]), len(d) > 4 and d[4] == 'flip')
+                st = stamps[d[1]]
+                opts = d[4:]
+                for o in opts:
+                    if o.startswith('map='):   # letter remap, e.g. map=sg,Sj (skin -> blue tones underwater)
+                        tr = dict((pair[0], pair[1]) for pair in o[4:].split(','))
+                        st = [''.join(tr.get(c, c) for c in row) for row in st]
+                g = apply_stamp(g, st, int(d[2]), int(d[3]), 'flip' in opts)
             elif d[0] == 'flip':
                 g = [r[::-1] for r in g]
             elif d[0] == 'shift':
@@ -144,6 +152,19 @@ def build_frames(path, w, h, stamps=None):
                         src = g[y - dy]
                         g2[y] = ''.join(src[x - dx] if 0 <= x - dx < w else TRANSPARENT for x in range(w))
                 g = g2
+            elif d[0] == 'outline':   # @outline LETTER : 8-neighbour outline around the silhouette
+                src = g
+                g = []
+                for y in range(h):
+                    row = ''
+                    for x in range(w):
+                        c = src[y][x]
+                        if c == TRANSPARENT and any(
+                                0 <= y + dy < h and 0 <= x + dx < w and src[y + dy][x + dx] != TRANSPARENT
+                                for dy in (-1, 0, 1) for dx in (-1, 0, 1)):
+                            c = d[1]
+                        row += c
+                    g.append(row)
             elif d[0] == 'put':       # @put X Y SEGMENT : paint a row segment on top ('?' keep, '_' clear)
                 x0, y0, seg = int(d[1]), int(d[2]), d[3]
                 row = list(g[y0])
@@ -235,7 +256,6 @@ SHEETS = [
     ('ow/watering.txt', 32, 32, 'ow', OW + 'watering.png', 'h'),
     ('ow/decorating.txt', 16, 32, 'ow', OW + 'decorating.png', 'h'),
     ('ow/underwater.txt', 32, 32, 'ow_underwater', OW + 'underwater.png', 'h'),
-    ('ow/dowsing.txt', 16, 32, 'ow', 'graphics/field_effects/pics/oras_dowsing_brendan.png', 'h'),
     ('trainer/front.txt', 64, 64, 'trainer', 'graphics/trainers/front_pics/brendan.png', 'v'),
     ('trainer/back.txt', 64, 64, 'trainer', 'graphics/trainers/back_pics/brendan.png', 'v'),
     ('intro/intro_bike.txt', 64, 64, 'intro', 'graphics/intro/scene_2/brendan.png', 'v'),

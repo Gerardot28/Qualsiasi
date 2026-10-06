@@ -83,6 +83,7 @@ static bool haveCounter;
 static uint32_t counterAddr;    /* u32 that must never decrease (reset detection) */
 static uint32_t lastCounter;
 static bool counterValid;
+static uint64_t counterQuietUntil;  /* no counter checks until this frame (after a soft reset) */
 
 /* event counters */
 static int nCrash, nReset, nStuck, nExpectFail, nUntilTimeout, nSavedata;
@@ -91,8 +92,49 @@ static bool stopRequested;
 /* stuck detection */
 static bool haltThisFrame;
 static uint64_t lastHaltFrame;
-static uint32_t pcMin = UINT32_MAX, pcMax;
 static bool stuckReported;
+static uint64_t maxNoHalt;      /* longest stretch without a VBlank wait (stat) */
+
+/* histogram of PC samples (16-byte buckets) since the last VBlank wait */
+#define HIST_SIZE 1024
+static struct { uint32_t key, count; } pcHist[HIST_SIZE];
+static uint32_t pcSamples;
+
+static void histReset(void) {
+	if (pcSamples) {
+		memset(pcHist, 0, sizeof(pcHist));
+		pcSamples = 0;
+	}
+}
+
+static void histAdd(uint32_t pc) {
+	uint32_t key = (pc >> 4) + 1;
+	unsigned h = (key * 2654435761u) & (HIST_SIZE - 1);
+	for (unsigned probe = 0; probe < 16; ++probe, h = (h + 1) & (HIST_SIZE - 1)) {
+		if (pcHist[h].key == key) {
+			++pcHist[h].count;
+			break;
+		}
+		if (!pcHist[h].key) {
+			pcHist[h].key = key;
+			pcHist[h].count = 1;
+			break;
+		}
+	}
+	++pcSamples;
+}
+
+static uint32_t histTop(uint32_t* count) {
+	uint32_t best = 0, bestCount = 0;
+	for (unsigned i = 0; i < HIST_SIZE; ++i) {
+		if (pcHist[i].count > bestCount) {
+			bestCount = pcHist[i].count;
+			best = (pcHist[i].key - 1) << 4;
+		}
+	}
+	*count = bestCount;
+	return best;
+}
 
 /* PC trace ring (for --trace-crash) */
 #define TRACE_LEN 64
@@ -131,9 +173,18 @@ static void out(const char* fmt, ...) {
 	fflush(stdout);
 }
 
+/* address of the instruction being executed (valid inside CPU callbacks:
+ * SWI / undefined-instruction hooks, memory error logs) */
 static uint32_t curPC(void) {
 	int len = cpu->executionMode == MODE_THUMB ? 2 : 4;
 	return (uint32_t) cpu->gprs[ARM_PC] - 2 * len;
+}
+
+/* address of the next instruction (valid between instructions, i.e. after
+ * runLoop() returned) */
+static uint32_t nextPC(void) {
+	int len = cpu->executionMode == MODE_THUMB ? 2 : 4;
+	return (uint32_t) cpu->gprs[ARM_PC] - len;
 }
 
 static void mkdirs(const char* path) {
@@ -395,7 +446,7 @@ static void dumpTrace(void) {
 
 static void traceAdd(int swi) {
 	traceRing[traceHead].frame = frame;
-	traceRing[traceHead].pc = curPC();
+	traceRing[traceHead].pc = swi >= 0 ? curPC() : nextPC();
 	traceRing[traceHead].mode = cpu->privilegeMode;
 	traceRing[traceHead].thumb = cpu->executionMode == MODE_THUMB;
 	traceRing[traceHead].swi = swi;
@@ -544,6 +595,10 @@ static void noteSwi(int imm) {
 	if (optTraceCrash) {
 		traceAdd(imm);
 	}
+	if (imm == 0x00 || imm == 0x26) {
+		/* the game re-initialises its counters while booting again */
+		counterQuietUntil = frame + 180;
+	}
 	if (imm == 0x00) {
 		event("reset", curPC(), "SoftReset SWI 0x00 (lr=0x%08X)", (uint32_t) cpu->gprs[ARM_LR]);
 		crashArtifacts("reset");
@@ -580,27 +635,20 @@ static void hookStub(struct ARMCore* c, uint32_t opcode) {
 static void cbSavedata(void* ctx) {
 	(void) ctx;
 	++nSavedata;
-	out("EVENT savedata frame=%" PRIu64 " pc=0x%08X msg=\"cartridge save memory written\"", frame, curPC());
+	out("EVENT savedata frame=%" PRIu64 " pc=0x%08X msg=\"cartridge save memory written\"", frame, nextPC());
 }
 
 /* ------------------------------------------------------------------ */
 /* frame stepping                                                      */
 
 static void sampleCpu(void) {
-	if (cpu->halted) {
-		haltThisFrame = true;
-		return;
-	}
+	/* note: cpu->halted is NOT treated as "waiting for VBlank": mGBA's idle
+	 * loop removal also halts the CPU inside a busy "b ." loop.  Real waits
+	 * are seen through the Halt/IntrWait/VBlankIntrWait SWI hooks. */
 	if (cpu->privilegeMode == MODE_IRQ) {
 		return;
 	}
-	uint32_t pc = curPC();
-	if (pc < pcMin) {
-		pcMin = pc;
-	}
-	if (pc > pcMax) {
-		pcMax = pc;
-	}
+	histAdd(nextPC());
 }
 
 static void runFrame(uint32_t keys) {
@@ -627,34 +675,37 @@ static void runFrame(uint32_t keys) {
 	blip_clear(core->getAudioChannel(core, 1));
 	++frame;
 
-	/* stuck detection: no Halt/IntrWait/VBlankIntrWait for a long time while
-	 * every non-IRQ PC sample stays inside a tiny window */
+	/* stuck detection: the game normally waits for VBlank (Halt/IntrWait/
+	 * VBlankIntrWait SWI) every frame; none for --stuck-frames frames means the
+	 * main loop is hung (infinite loop, deadlock, waiting on hardware...). */
 	if (haltThisFrame) {
 		lastHaltFrame = frame;
-		pcMin = UINT32_MAX;
-		pcMax = 0;
+		histReset();
 		stuckReported = false;
-	} else if (optStuckFrames > 0 && !stuckReported && frame - lastHaltFrame >= (uint64_t) optStuckFrames) {
-		if (pcMin != UINT32_MAX && pcMax - pcMin <= 0x100) {
+	} else {
+		if (frame - lastHaltFrame > maxNoHalt) {
+			maxNoHalt = frame - lastHaltFrame;
+		}
+		if (optStuckFrames > 0 && !stuckReported && frame - lastHaltFrame >= (uint64_t) optStuckFrames) {
+			uint32_t hot, hotCount;
+			hot = histTop(&hotCount);
 			stuckReported = true;
-			event("stuck", curPC(), "no VBlank wait for %d frames, CPU looping in 0x%08X-0x%08X",
-			      (int) (frame - lastHaltFrame), pcMin, pcMax);
+			event("stuck", nextPC(), "no VBlank wait for %d frames; hottest code 0x%08X-0x%08X (%u%% of %u samples)",
+			      (int) (frame - lastHaltFrame), hot, hot + 15, pcSamples ? (unsigned) (100ULL * hotCount / pcSamples) : 0,
+			      pcSamples);
 			crashArtifacts("stuck");
-		} else {
-			/* busy but moving: restart the window */
-			lastHaltFrame = frame;
-			pcMin = UINT32_MAX;
-			pcMax = 0;
 		}
 	}
 
 	/* the game legitimately zeroes its counter during boot, so only watch it
 	 * once the console has been on for 2 seconds (gba frame counter is part of
 	 * the savestate and restarts on reset) */
-	if (haveCounter && core->frameCounter(core) >= 120) {
+	if (haveCounter && (core->frameCounter(core) < 120 || frame < counterQuietUntil)) {
+		counterValid = false;
+	} else if (haveCounter) {
 		uint32_t v = readMem(counterAddr, 4);
 		if (counterValid && v < lastCounter && !(lastCounter > 0xFFFFFF00u && v < 0x100)) {
-			event("reset", curPC(), "watched counter 0x%08X went %u -> %u (game re-initialised)", counterAddr,
+			event("reset", nextPC(), "watched counter 0x%08X went %u -> %u (game re-initialised)", counterAddr,
 			      lastCounter, v);
 			crashArtifacts("reset");
 		}
@@ -751,8 +802,7 @@ static bool loadStateFrom(const char* path) {
 	vf->close(vf);
 	counterValid = false;
 	lastHaltFrame = frame;
-	pcMin = UINT32_MAX;
-	pcMax = 0;
+	histReset();
 	stuckReported = false;
 	return ok;
 }
@@ -762,7 +812,7 @@ static bool loadStateFrom(const char* path) {
 
 enum Op {
 	OP_WAIT, OP_PRESS, OP_HOLD, OP_KEYDOWN, OP_KEYUP, OP_RELEASE, OP_MASH, OP_SHOT, OP_SAVESTATE, OP_LOADSTATE,
-	OP_READ, OP_WRITE, OP_EXPECT, OP_UNTIL, OP_UNTILANY, OP_AUTOTAP, OP_WAITSTABLE, OP_LOOP, OP_ENDLOOP, OP_BREAKIF, OP_BREAKIFANY, OP_DUMP, OP_ECHO, OP_RESET, OP_QUIT, OP_REGS
+	OP_READ, OP_WRITE, OP_EXPECT, OP_UNTIL, OP_UNTILANY, OP_AUTOTAP, OP_WAITSTABLE, OP_WAITSAVEDATA, OP_LOOP, OP_ENDLOOP, OP_BREAKIF, OP_BREAKIFANY, OP_DUMP, OP_ECHO, OP_RESET, OP_QUIT, OP_REGS
 };
 
 struct Cmd {
@@ -1025,6 +1075,11 @@ static int parseScript(const char* path) {
 				if (nt >= 5) {
 					c.name = strdup(tok[4]);
 				}
+			}
+		} else if (!strcasecmp(verb, "waitsavedata")) {
+			c.op = OP_WAITSAVEDATA;
+			if (nt != 2 || !parseLong(tok[1], &c.n[0]) || c.n[0] < 0) {
+				err = "usage: waitsavedata MAX_FRAMES   (until the game has written its save memory)";
 			}
 		} else if (!strcasecmp(verb, "waitstable")) {
 			/* waitstable STABLE_FRAMES MAX_FRAMES [X Y W H] */
@@ -1391,6 +1446,20 @@ static void runScript(void) {
 			    waited, same, rx, ry, rw, rh);
 			break;
 		}
+		case OP_WAITSAVEDATA: {
+			int before = nSavedata;
+			long waited = 0;
+			while (nSavedata == before && waited < c->n[0] && !stopRequested) {
+				runFrame(0);
+				++waited;
+			}
+			bool ok = nSavedata != before;
+			if (!ok) {
+				++nUntilTimeout;
+			}
+			out("UNTIL %s frame=%" PRIu64 " waited=%ld label=waitsavedata", ok ? "ok" : "TIMEOUT", frame, waited);
+			break;
+		}
 		case OP_AUTOTAP:
 			tapKeys = c->keys;
 			tapPeriod = c->n[0];
@@ -1426,7 +1495,7 @@ static void runScript(void) {
 			break;
 		case OP_REGS:
 			keysToStr(heldKeys, kbuf, sizeof(kbuf));
-			out("REGS frame=%" PRIu64 " pc=0x%08X lr=0x%08X sp=0x%08X cpsr=0x%08X halted=%d held=%s", frame, curPC(),
+			out("REGS frame=%" PRIu64 " pc=0x%08X lr=0x%08X sp=0x%08X cpsr=0x%08X halted=%d held=%s", frame, nextPC(),
 			    (uint32_t) cpu->gprs[ARM_LR], (uint32_t) cpu->gprs[ARM_SP], (uint32_t) cpu->cpsr.packed, cpu->halted,
 			    kbuf[0] ? kbuf : "-");
 			break;
@@ -1719,9 +1788,9 @@ int main(int argc, char** argv) {
 	}
 	logSummary();
 	out("DONE frames=%" PRIu64 " gba_frame=%u seconds=%.2f fps=%.0f crashes=%d stuck=%d resets=%d expect_fail=%d "
-	    "until_timeout=%d savedata_writes=%d exit=%d",
+	    "until_timeout=%d savedata_writes=%d max_nohalt=%" PRIu64 " exit=%d",
 	    frame, core->frameCounter(core), secs, secs > 0 ? frame / secs : 0.0, nCrash, nStuck, nReset, nExpectFail,
-	    nUntilTimeout, nSavedata, exitCode);
+	    nUntilTimeout, nSavedata, maxNoHalt, exitCode);
 
 	/* flushes + closes the save file */
 	core->unloadROM(core);

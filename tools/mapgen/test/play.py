@@ -39,7 +39,9 @@ class Emu:
         self.out = out
         os.makedirs(out, exist_ok=True)
         self.state = None
-        self.n = 0
+        # continue numbering of an existing output dir (states are never overwritten)
+        nums = [int(m.group(1)) for f in os.listdir(out) for m in [re.match(r'state_(\d+)\.ss$', f)] if m]
+        self.n = max(nums) if nums else 0
         self.verbose = verbose
         self.P = pexmap.Project(tree)
         self.syms = os.path.join(out, 'syms.txt')
@@ -115,56 +117,24 @@ class Emu:
 
     # ------------------------------------------------------------------ game flow
     def boot_new_game(self):
-        """Power on -> NEW GAME -> Birch speech (robust, text-length independent) -> overworld."""
-        lines = []
-        src = open(os.path.join(EMU_SCRIPTS, 'new_game_intro_robust.txt')).read().splitlines()
-        # stop after the closing speech: our test start patch skips the truck
-        for l in src:
-            if l.strip().startswith('# ---- moving truck'):
-                break
-            lines.append(l)
-        lines = self._expand_includes(lines)
-        lines += ['wait 400']
-        self.run(self._python_only_filter(lines), 'boot', load=False)
+        """Power on -> NEW GAME -> Birch speech (tools/emu robust script) -> overworld.
+
+        Needs the test start patch (test_start_patch.py): the truck is skipped and
+        the player appears directly on the map chosen by the patch."""
+        script = os.path.join(HERE, 'boot_new_game.txt')
+        self.n += 1
+        state = os.path.join(self.out, 'state_%03d.ss' % self.n)
+        p = subprocess.run([sys.executable, '-I', os.path.join(os.path.dirname(EMU_SCRIPTS), 'run.py'),
+                            '--rom', self.rom, '--script', script, '--out', os.path.join(self.out, 'boot'),
+                            '--save-state-out', state, '--elf', os.path.join(self.tree, 'pokeemerald.elf')],
+                           capture_output=True, text=True)
+        with open(os.path.join(self.out, '%03d_boot.log' % self.n), 'w') as f:
+            f.write(p.stdout + p.stderr)
+        if p.returncode not in (0, 3):
+            raise EmuError('boot failed: ' + (p.stdout + p.stderr)[-3000:])
+        self.state = state
+        self.refresh()
         self.say('booted:', self.where())
-
-    def _expand_includes(self, lines):
-        out = []
-        for l in lines:
-            s = l.strip()
-            if s.startswith('include '):
-                out += self._expand_includes(open(os.path.join(EMU_SCRIPTS, s.split()[1])).read().splitlines())
-            else:
-                out.append(l)
-        return out
-
-    def _python_only_filter(self, lines):
-        """The robust script uses run.py-level commands (waittask, textbox, ...);
-        translate the ones we need into harness primitives."""
-        out = []
-        for l in lines:
-            s = l.split('#')[0].strip()
-            if not s:
-                continue
-            w = s.split()
-            if w[0] == 'waittask':
-                func = w[1]
-                mx = int(w[2]) if len(w) > 2 else 600
-                out.append('untilany32 gTasks 0x28 16 %s %d' % (func, mx))
-            elif w[0] == 'breakiftask':
-                for func in w[1:]:
-                    out.append('breakifany32 gTasks 0x28 16 %s' % func)
-            elif w[0] == 'waitcb2':
-                out.append('until32 gMain+4 %s %d' % (w[1], int(w[2]) if len(w) > 2 else 600))
-            elif w[0] == 'breakifcb2':
-                out.append('breakif32 gMain+4 %s' % w[1])
-            elif w[0] == 'textbox':
-                out.append('waitstable 8 240')
-            elif w[0] in ('mapinfo', 'expectmap', 'waitmap'):
-                continue
-            else:
-                out.append(s)
-        return out
 
     # ------------------------------------------------------------------ navigation
     def grid_for(self, mapname):

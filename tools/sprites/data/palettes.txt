@@ -36,10 +36,10 @@ m  74  90 131   # 6
 n  49  65 106   # 7
 J  24  41  82   # 8 dark body
 g 131 164 197   # 9 lightest blue
-h 189 115 131   # 10 hair highlight (muted)
-o  57  32  74   # 11 hair outline
-r 148  74 115   # 12 hair mid
-R 106  49  98   # 13 hair shadow
+h 214 115 115   # 10 hair highlight (muted)
+o  66  24  66   # 11 hair outline
+r 172  66  90   # 12 hair mid
+R 123  41  82   # 13 hair shadow
 w 255 255 255
 k   0   0   0
 

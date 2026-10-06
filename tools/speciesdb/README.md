@@ -13,6 +13,10 @@ python3 -I tools/speciesdb/sdb.py PIKACHU SPECIES_ROTOM_WASH      # quick lookup
 ```
 
 The script exits with code 1 if any built-in sanity check fails. It takes about 6 s.
+Each check line starts with `OK`, `FAIL`, `SKIP` (a species it needs is disabled
+in the config) or `INFO` (a count that only holds on the default all-enabled
+config, such as 1025 dex numbers or 27 starters, differs on a reduced config).
+So the tool also runs on a tree where some `P_FAMILY_*`/`P_GEN_*` flags are off.
 Requirements: python3, and `arm-none-eabi-cpp` (it falls back to `cpp` or `gcc -E`).
 `validate_rom.py` also needs `arm-none-eabi-gcc`, `objcopy` and `nm`.
 
@@ -106,7 +110,7 @@ Main record fields:
 | `stage` | Official stage: 0 = basic, 1, 2. **Babies and the basic they evolve into are both stage 0**: Pichu 0, Pikachu 0, Raichu 1. |
 | `isBaby` | One of the 19 baby Pokémon: Pichu, Cleffa, Igglybuff, Togepi, Tyrogue, Smoochum, Elekid, Magby, Azurill, Wynaut, Budew, Chingling, Bonsly, Mime Jr., Happiny, Munchlax, Riolu, Mantyke, Toxel. The list is checked against a heuristic (Undiscovered egg group, family root, evolves, not legendary). Gimmighoul is the only expected exception. |
 | `isStarter` | The family root is one of the 27 starters (Bulbasaur ... Quaxly), so Hisuian starter evolutions count too. |
-| `suggestedMinLevel` | **Heuristic.** Root = 1. A basic that evolves from a baby = 1. Level evolution = its level. Any other method = max(parent + 5, 20 for stage 1, 30 for stage 2). Alternate forms copy their base form. |
+| `suggestedMinLevel` | **Heuristic.** Root = 1. A basic that evolves from a baby = 1, unless the baby evolves at a level (Hitmonlee/chan/top 20, Wobbuffet 15, Jynx/Electabuzz/Magmar/Toxtricity 30). Level evolution = its level. Any other method = max(parent + 5, 20 for stage 1, 30 for stage 2). Alternate forms copy their base form. |
 | `levelUpLearnset` `[[level, MOVE_X], ...]`, `eggMoves` | From the learnset file the config selects (gen 9). Teachable (TM/tutor) learnsets are not included, because `teachable_learnsets.h` is generated at build time. |
 | `forms`, `baseForm`, `formOf`, `formIndex` | From `formSpeciesIdTable`. The first entry is the base form. |
 | `formChanges`, `formChangesInto` | The form change table, and the changes that lead into this form. |
@@ -156,7 +160,12 @@ normal gameplay. The first matching rule excludes a species:
    Keldeo-Resolute, Minior Meteor colours (Red is kept), Magearna-Original,
    Sinistea/Polteageist-Antique, all 62 extra Alcremie variants, Zarude-Dada,
    Dudunsparce three-segment, Maushold family of four, Squawkabilly Blue/White,
-   Tatsugiri Droopy/Stretchy, Poltchageist/Sinistcha variants and Pikachu-PhD.
+   Tatsugiri Droopy/Stretchy and Poltchageist/Sinistcha variants.
+   Note: Burmy Sandy/Trash are cosmetic duplicates of Burmy Plant (the spec
+   says "Burmy cloaks: keep base"), but Wormadam Sandy/Trash have their own
+   types and stay encounterable. Their `preEvolution` is therefore a
+   non-encounterable Burmy cloak, and `evolve_for_level` from Burmy Plant only
+   reaches Wormadam Plant/Mothim; pick Wormadam Sandy/Trash directly.
 6. Everything else is encounterable. That includes:
    * all 1025 base forms;
    * the 57 regional forms, Paldean Tauros breeds included;
@@ -247,6 +256,16 @@ lowest generation among the members):
   listed in `meta.counts.locationLockedEvolutions`.
 * `suggestedMinLevel` is a heuristic. The exact data is in `evolvesFromLevel`
   and `evolutions`.
+* A basic reached from a baby by friendship, an item or a move has
+  `suggestedMinLevel` 1: Pikachu, Clefairy, Jigglypuff, Togetic, Marill,
+  Chansey, Mr. Mime, Sudowoodo, Snorlax, Roselia, Chimecho, Lucario and Mantine.
+  Two consequences follow:
+  - `evolve_for_level` evolves those babies at any level, so a Lv 5 Riolu
+    becomes Lucario and a Lv 5 Munchlax becomes Snorlax.
+  - Strong basics such as Lucario and Snorlax pass any level filter based only
+    on `suggestedMinLevel`.
+
+  Trainer and wild generators should also gate by `bst`.
 
 ## `sdb.py` helper
 
@@ -257,7 +276,8 @@ db = sdb.load()                         # species.json + families.json from /hom
 db['SPECIES_CASTFORM']                  # aliases resolved
 db.encounterable(gen=[1, 2], legendaryish=False)
 db.family_of('SPECIES_RAICHU_ALOLA')['members']
-db.moves_at_level('SPECIES_PIKACHU', 20)    # last 4 level-up moves <= 20
+db.moves_at_level('SPECIES_PIKACHU', 20)    # default moveset at Lv 20, same rule as GiveBoxMonInitialMoveset
+                                        # (skips level-0 evolution moves and already-known moves)
 db.evolve_for_level('SPECIES_PICHU', 40, rng)  # follows evolutions using suggestedMinLevel
 ```
 

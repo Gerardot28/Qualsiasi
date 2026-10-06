@@ -1025,10 +1025,23 @@ class Compiler:
         txt = open(es).read()
         inc = '\t.include "%s"\n' % AGGREGATE_INC
         if inc not in txt:
-            anchor = re.findall(r'\t\.include "data/maps/[^"]+/scripts\.inc"\n', txt)[-1]
-            pos = txt.rindex(anchor) + len(anchor)
-            txt = txt[:pos] + inc + txt[pos:]
-            open(es, 'w').write(txt)
+            # after the last map include that is not inside an `.if IS_FRLG` block
+            lines = txt.splitlines(True)
+            depth, frlg, best = 0, [], None
+            for i, l in enumerate(lines):
+                st = l.strip()
+                if st.startswith('.if'):
+                    frlg.append('IS_FRLG' in st)
+                elif st.startswith('.endif') and frlg:
+                    frlg.pop()
+                elif st.startswith('.else') and frlg:
+                    frlg[-1] = not frlg[-1] if frlg[-1] else False
+                elif re.match(r'\.include "data/maps/[^"]+/scripts\.inc"', st) and not any(frlg):
+                    best = i
+            if best is None:
+                raise CompileError('cannot find where to include map scripts in %s' % EVENT_SCRIPTS)
+            lines.insert(best + 1, inc)
+            open(es, 'w').write(''.join(lines))
 
         # map groups
         mg_path = os.path.join(root, 'data/maps/map_groups.json')

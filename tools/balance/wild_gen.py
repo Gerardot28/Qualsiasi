@@ -117,6 +117,7 @@ def bst_cap(level, rare):
 
 
 WATER_EGG = {'EGG_GROUP_WATER_1', 'EGG_GROUP_WATER_2', 'EGG_GROUP_WATER_3'}
+FISH_EGG = {'EGG_GROUP_WATER_2', 'EGG_GROUP_WATER_3'}
 
 
 class Gen:
@@ -135,6 +136,7 @@ class Gen:
             if ms:
                 self.members[f['root']] = ms
         self.legend_used = set()
+        self.complex_used = {}    # (map complex, field) -> family roots used there
 
     def rng(self, *key):
         return random.Random('%d|%s' % (self.seed, '|'.join(map(str, key))))
@@ -145,9 +147,9 @@ class Gen:
         types = set(d['types'])
         eggs = set(d.get('eggGroups') or [])
         if field == 'water_mons':
-            return 'TYPE_WATER' in types or bool(eggs & WATER_EGG)
+            return 'TYPE_WATER' in types
         if field == 'fishing_mons':
-            return 'TYPE_WATER' in types and bool(eggs & WATER_EGG)
+            return 'TYPE_WATER' in types and bool(eggs & FISH_EGG)
         if field == 'rock_smash_mons':
             return bool(types & T('ROCK', 'GROUND'))
         return True
@@ -206,8 +208,13 @@ class Gen:
                 continue
             if ctx['early'] and db.is_strong_family(root) and ctx.get('strong_used'):
                 continue
+            if f['isStarter'] and ctx.get('starter_used'):
+                continue
+            if db.is_pseudo_family(root) and ctx.get('pseudo_used'):
+                continue
             uncovered = root in self.cov_set and not self.basic_cov.get(root) and ctx['reachable']
-            s = self.pick_member(root, field, letter, ctx, prefer_basic=uncovered)
+            s = self.pick_member(root, field, letter, ctx,
+                                 prefer_basic=uncovered and ctx['min_level'] < 35)
             if s is None:
                 continue
             types = set(db.sp[s]['types'])
@@ -215,11 +222,19 @@ class Gen:
             if habitat_letter and pref_types and not match:
                 continue
             score = r.random()
-            if uncovered and db.is_basic(s):
+            home = match and (kind == 'icecave' or 'TYPE_ICE' not in types)  # ice families -> Shoal Cave
+            if uncovered and db.is_basic(s) and kind != 'safari' and \
+                    (home or not self.has_home.get(root)):
+                # coverage bonus only where the family fits the habitat (if it has one);
+                # the Safari Zone keeps its rarer/stronger mix
                 score += 6.0
+            elif uncovered and db.is_basic(s) and kind != 'safari':
+                score += 1.0
             score -= 0.9 * self.usage.get(root, 0)
             if any(root in rs for rs in self.recent[-4:]):
                 score -= 3.0
+            if root in self.complex_used.get(ctx['complex'], ()):
+                score -= 2.0  # other floors/rooms of the same cave/tower/zone
             if match:
                 score += 1.0
             if field == 'fishing_mons':
@@ -228,6 +243,11 @@ class Gen:
                     score += 1.5
             if field == 'water_mons' and 'TYPE_WATER' in types:
                 score += 1.0
+            # level appropriateness: weak species look odd at high levels
+            want = min(250 + 6 * ctx['min_level'], 480) - 60
+            if field == 'fishing_mons' and letter in OLD_ROD:
+                want = 0
+            score -= 0.025 * max(0, want - db.sp[s]['bst'])
             if kind == 'safari':
                 score += 0.004 * (db.final_bst(root) - 400)  # rarer/stronger species
             if letter in ('A', 'B') and field == 'land_mons':
@@ -264,6 +284,8 @@ class Gen:
         else:
             pref = T('ROCK', 'GROUND')
             free = set(letters)
+        mid = enc['map'][4:]
+        cplx = (mid if mid.startswith('ROUTE') else '_'.join(mid.split('_')[:2]), field)
         used = set()
         chosen = {}
         strong_used = False
@@ -272,14 +294,17 @@ class Gen:
             idx = [i for i, x in enumerate(layout) if x == L]
             ctx = {
                 'key': key,
+                'complex': cplx,
                 'min_level': min(mons[i]['min_level'] for i in idx),
                 'max_level': max(mons[i]['max_level'] for i in idx),
-                'rare': all(rates[i] <= wc.LOW_RATE for i in idx),
+                'rare': sum(rates[i] for i in idx) <= wc.LOW_RATE,
                 'one_pct': all(rates[i] <= 1 for i in idx),
                 'reachable': reachable,
             }
             ctx['early'] = ctx['max_level'] <= wc.EARLY_LEVEL
             ctx['strong_used'] = strong_used
+            ctx['starter_used'] = any(db.fam(x)['isStarter'] for x in chosen.values())
+            ctx['pseudo_used'] = any(db.is_pseudo_family(db.root(x)) for x in chosen.values())
             best = self.choose(field, L, ctx, pref, used, L not in free, hab_kind)
             if best is None:
                 best = self.choose(field, L, ctx, set(), used, False, hab_kind)
@@ -295,11 +320,18 @@ class Gen:
                 self.basic_cov.setdefault(root, []).append((key, field, L))
         if legend:
             chosen['L'] = self.pick_legend(enc, pref)
+        # a strong family in an early table may only use ONE 1% slot: the other 1% slot
+        # gets the most common species of the table
+        if field == 'land_mons' and not legend and 'I' in chosen and \
+                db.is_strong_family(db.root(chosen['I'])) and mons[10]['max_level'] <= wc.EARLY_LEVEL:
+            layout = list(layout)
+            layout[10] = 'A'
         for i, L in enumerate(layout):
             mons[i]['species'] = chosen[L]
             if L == 'L':
                 mons[i]['min_level'], mons[i]['max_level'] = 60, 65
         self.recent.append(set(db.root(s) for s in chosen.values()))
+        self.complex_used.setdefault(cplx, set()).update(self.recent[-1])
         self.tables.append({'key': key, 'enc': enc, 'field': field, 'layout': layout,
                             'reachable': reachable, 'pref': pref, 'free': free, 'hab': hab_kind})
 
@@ -354,11 +386,15 @@ class Gen:
                         'key': t['key'],
                         'min_level': min(mons[i]['min_level'] for i in idx),
                         'max_level': max(mons[i]['max_level'] for i in idx),
-                        'rare': all(rates[i] <= wc.LOW_RATE for i in idx),
+                        'rare': sum(rates[i] for i in idx) <= wc.LOW_RATE,
                         'one_pct': all(rates[i] <= 1 for i in idx),
                         'reachable': True,
                     }
                     ctx['early'] = ctx['max_level'] <= wc.EARLY_LEVEL
+                    if db.fam_by_root[root]['isStarter'] and any(db.fam(m['species'])['isStarter'] for m in mons):
+                        continue
+                    if db.is_pseudo_family(root) and any(db.is_pseudo_family(db.root(m['species'])) for m in mons):
+                        continue
                     if ctx['early'] and db.is_strong_family(root):
                         if any(db.is_strong_family(db.root(mons[i]['species'])) and
                                mons[i]['max_level'] <= wc.EARLY_LEVEL for i in range(len(mons))):
@@ -391,6 +427,15 @@ class Gen:
     def run(self, wild):
         groups = wild['wild_encounter_groups']
         g = groups[0]
+        # families whose basic types match the preferred types of some reachable land table
+        prefs = [habitat(e['map'])[1] for e in g['encounters']
+                 if wc.is_hoenn_table(g, e) and 'land_mons' in e and e['base_label'] not in wc.UNREACHABLE_LABELS]
+        self.has_home = {}
+        for root in self.members:
+            bt = set()
+            for m in self.db.basic_members(root):
+                bt |= set(self.db.sp[m]['types'])
+            self.has_home[root] = any(bt & p for p in prefs if p)
         self.rates = {f['type']: f['encounter_rates'] for f in g['fields']}
         self.tables = []
         for enc in g['encounters']:
@@ -407,12 +452,18 @@ class Gen:
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[1])
     ap.add_argument('--root', required=True, help='source tree (reads src/data/wild_encounters.json)')
-    ap.add_argument('--input', help='input JSON (default: <root>/src/data/wild_encounters.json)')
+    ap.add_argument('--input', help='vanilla input JSON (default: the pristine tree '
+                    '/home/user/pex-orig if present, else <root>/src/data/wild_encounters.json). '
+                    'Always generate from the VANILLA file: the level curve is not idempotent.')
     ap.add_argument('--out', required=True)
     ap.add_argument('--data', default=wc.DATA_DIR, help='dir with species.json/families.json/movedb_species.json')
     ap.add_argument('--seed', type=int, default=SEED)
     a = ap.parse_args()
-    src = a.input or os.path.join(a.root, 'src/data/wild_encounters.json')
+    src = a.input
+    if not src:
+        pristine = '/home/user/pex-orig/src/data/wild_encounters.json'
+        src = pristine if os.path.exists(pristine) else os.path.join(a.root, 'src/data/wild_encounters.json')
+    print('wild_gen: input %s' % src)
     with open(src, encoding='utf-8') as f:
         wild = json.load(f)
     db = wc.DB(a.data)
