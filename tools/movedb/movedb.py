@@ -1037,13 +1037,9 @@ def build_all(args):
     pconsts, penums = parse_enums(ptext)
     pev = Evaluator(pconsts)
     species = extract_species(ptext, pconsts, pev)
-    lvl_file = re.findall(r'level_up_learnsets/(gen_\d+)\.h', lvl_chain)
-    used_lvl = None
-    lv_val = pconsts.get('GEN_LATEST')
-    # which gen file did the preprocessor pick?  (check the .i line markers)
-    raw_i = read(os.path.join(b.build, 'species_wrap.i'))
-    mm = re.search(r'level_up_learnsets/(gen_\d+)\.h', raw_i)
-    used_lvl = mm.group(1) if mm else (lvl_file[0] if lvl_file else None)
+    # which gen file did the preprocessor pick?  (from the .i line markers)
+    mm = re.search(r'level_up_learnsets/(gen_\d+)\.h', read(os.path.join(b.build, 'species_wrap.i')))
+    used_lvl = mm.group(1) if mm else None
 
     levelup_arrays = {}
     for name, lst in find_static_arrays(ptext, ('LevelUpLearnset',)):
@@ -1090,6 +1086,9 @@ def build_all(args):
             })
     if tutors is None:
         tutors = []
+    for t in tmhm_list:
+        if t['move'] in moves:
+            moves[t['move']]['tmhm'] = t['num']
 
     # ---- pre-evolutions (for inherited egg moves) ----
     prevo = {}

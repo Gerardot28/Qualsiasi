@@ -830,6 +830,22 @@ def derive(species, ex):
         rec['chain'] = list(reversed([c for i, c in enumerate(chain)
                                       if i == 0 or S[chain[i - 1]]['preEvolution'] == c]))
 
+    # ---- region / location locks on evolutions ----
+    for name, rec in S.items():
+        for e in rec['evolutions']:
+            reg = [c['args'][0] for c in e['conditions'] if c['condition'] == 'IF_REGION' and c['args']]
+            nreg = [c['args'][0] for c in e['conditions'] if c['condition'] == 'IF_NOT_REGION' and c['args']]
+            loc = [c['args'][0] for c in e['conditions'] if c['condition'] in ('IF_IN_MAP', 'IF_IN_MAPSEC') and c['args']]
+            e['requiresRegion'] = reg[0] if reg else None
+            e['forbiddenRegion'] = nreg[0] if nreg else None
+            e['requiresLocation'] = loc[0] if loc else None
+    for name, rec in S.items():
+        inc = [(p, e) for p, e in parents.get(name, [])]
+        regs = {e['requiresRegion'] for _, e in inc}
+        rec['evolutionRequiresRegion'] = regs.pop() if inc and len(regs) == 1 and None not in regs else None
+        locs = {e['requiresLocation'] for _, e in inc}
+        rec['evolutionRequiresLocation'] = locs.pop() if inc and len(locs) == 1 and None not in locs else None
+
     # ---- evolution summaries ----
     for name, rec in S.items():
         real = [e for e in rec['evolutions'] if e['category'] != 'breed' and e['targetDefined']]
@@ -1103,7 +1119,7 @@ def summarize(meta, S, families):
             ('entries', sum(1 for r in S.values() if r['generation'] == g)),
             ('encounterable', sum(1 for r in enc if r['generation'] == g)),
             ('natDex', len({r['natDexNum'] for r in S.values() if r['generation'] == g})),
-            ('families', sum(1 for f in families if S[f['root']]['generation'] == g)),
+            ('families', sum(1 for f in families if f['gens'] and min(f['gens']) == g)),
         ])
     c['perGeneration'] = per_gen
     for k in ('isLegendary', 'isRestrictedLegendary', 'isSubLegendary', 'isMythical', 'isUltraBeast', 'isParadox',
@@ -1115,6 +1131,9 @@ def summarize(meta, S, families):
         ])
     c['formKinds'] = collections.OrderedDict(sorted(collections.Counter(r['formKind'] for r in S.values()).items()))
     c['familiesLegendaryish'] = sum(1 for f in families if f['isLegendaryish'])
+    c['regionLockedEvolutions'] = sorted(n for n, r in S.items() if r['evolutionRequiresRegion'])
+    c['locationLockedEvolutions'] = sorted('%s->%s@%s' % (n, e['target'], e['requiresLocation'])
+                                           for n, r in S.items() for e in r['evolutions'] if e['requiresLocation'])
     return c
 
 

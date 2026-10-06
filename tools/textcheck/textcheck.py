@@ -75,6 +75,24 @@ CALIBRATED_PH = (PH_STR1, PH_STR2, PH_STR3)   # per-label calibration from vanil
 
 KMAX_STRING_LENGTH = 1024     # tools/preproc/preproc.h
 
+# RAM buffers the text is expanded into (no bounds check in the game!)
+#   gStringVar4[0x3E8]          src/string_util.c  (ShowFieldMessage, match call, lose text)
+#   gDisplayedStringBattle[425] src/battle_main.c  (+2 bytes {PAUSE_UNTIL_PRESS} added
+#                               after B_TRAINER1_LOSE_TEXT / WIN_TEXT, + EOS)
+BUF_STRINGVAR4 = 0x3E8
+BUF_BATTLE = 425 - 2
+# bytes a placeholder can expand to (PLAYER_NAME_LENGTH; STR_VAR: ITEM_NAME_LENGTH)
+PH_EXPAND_LEN = {PH_PLAYER: 7, PH_STR1: 20, PH_STR2: 20, PH_STR3: 20}
+
+# brace tokens whose content is supplied by the script right before the message
+SCRIPT_FILLED_PH = ('STR_VAR_1', 'STR_VAR_2', 'STR_VAR_3')
+# control codes with a side effect (sound, music, colours, timing, speaker box)
+FUNCTIONAL_CODES = ('COLOR', 'HIGHLIGHT', 'SHADOW', 'COLOR_HIGHLIGHT_SHADOW', 'PALETTE', 'FONT',
+                    'RESET_FONT', 'PAUSE', 'PAUSE_UNTIL_PRESS', 'WAIT_SE', 'PLAY_BGM', 'PLAY_SE',
+                    'PAUSE_MUSIC', 'RESUME_MUSIC', 'SPEAKER', 'ACCENT', 'BACKGROUND', 'TEXT_COLORS',
+                    'FILL_WINDOW', 'CLEAR', 'SKIP', 'CLEAR_TO', 'SHIFT_RIGHT', 'SHIFT_DOWN',
+                    'MIN_LETTER_SPACING', 'JPN', 'ENG')
+
 # Characters that are NOT in the charmap and what to use instead.
 SUGGEST = {
     '"': '“ or ” (a raw " ends the string)',
@@ -187,42 +205,21 @@ class Charmap:
 # ==========================================================================
 # preproc-compatible comment removal (asm_file.cpp AsmFile::RemoveComments)
 # ==========================================================================
+_ASM_TOKEN_RE = re.compile(r'"(?:\\"|[^"])*"?' + r"|'(?:\\'|[^'])*'?" + r'|(?<!\\)@[^\n]*|/\*.*?(?:\*/|\Z)', re.S)
+
+
+def _blank_comment(m):
+    t = m.group(0)
+    if t[0] in '"\'':
+        return t
+    return re.sub(r'[^\n]', ' ', t)
+
+
 def remove_asm_comments(text):
-    """Blank out comments exactly like preproc does; newlines are kept so line
-    numbers stay valid."""
-    out = list(text)
-    n = len(text)
-    pos = 0
-    string_char = None
-    while pos < n:
-        c = text[pos]
-        if string_char is not None:
-            if c == '\\' and pos + 1 < n and text[pos + 1] == string_char:
-                pos += 2
-                continue
-            if c == string_char:
-                string_char = None
-            pos += 1
-        elif c == '@' and (pos == 0 or text[pos - 1] != '\\'):
-            while pos < n and text[pos] != '\n':
-                out[pos] = ' '
-                pos += 1
-        elif c == '/' and pos + 1 < n and text[pos + 1] == '*':
-            out[pos] = out[pos + 1] = ' '
-            pos += 2
-            while pos < n:
-                if text[pos] == '*' and pos + 1 < n and text[pos + 1] == '/':
-                    out[pos] = out[pos + 1] = ' '
-                    pos += 2
-                    break
-                if text[pos] != '\n':
-                    out[pos] = ' '
-                pos += 1
-        else:
-            if c in '"\'':
-                string_char = c
-            pos += 1
-    return ''.join(out)
+    """Blank out comments exactly like preproc (asm_file.cpp RemoveComments):
+    @ to end of line and /* */ outside "..." / '...' literals.  Newlines are
+    kept so line numbers stay valid."""
+    return _ASM_TOKEN_RE.sub(_blank_comment, text)
 
 
 # ==========================================================================
@@ -658,6 +655,8 @@ class Line:
 
 def _normalize_struct(s):
     """Collapse whitespace outside quotes."""
+    if '"' not in s and "'" not in s:
+        return ' '.join(s.split())
     out = []
     q = None
     prev_space = False
@@ -751,12 +750,16 @@ class Block:
 
 
 class AsmTextFile:
-    def __init__(self, path, charmap, relname=None):
+    def __init__(self, path, charmap, relname=None, data=None):
         self.path = path
         self.relname = relname or path
-        with open(path, 'rb') as f:
-            raw = f.read()
-        text = raw.decode('utf-8', errors='surrogateescape')
+        if data is None:
+            with open(path, 'rb') as f:
+                data = f.read()
+        self.bom = data.startswith(b'\xef\xbb\xbf')
+        if self.bom:
+            data = data[3:]
+        text = data.decode('utf-8', errors='surrogateescape')
         self.crlf = '\r\n' in text
         clean = remove_asm_comments(text)
         raw_lines = text.split('\n')
@@ -960,32 +963,31 @@ class UsageIndex:
             rel = os.path.relpath(path, self.root)
             with open(path, encoding='utf-8', errors='replace') as f:
                 text = _strip_c_comments(f.read())
-            if not any(lbl in text for lbl in ('gText', 'Text_', '_Text')):
-                pass
-            for no, line in enumerate(text.split('\n'), 1):
-                for m in IDENT_RE.finditer(line):
-                    lbl = m.group(0)
-                    if lbl not in self.text_labels:
-                        continue
-                    pre = line[:m.start()]
-                    call = None
-                    depth = 0
-                    for j in range(len(pre) - 1, -1, -1):
-                        ch = pre[j]
-                        if ch == ')':
-                            depth += 1
-                        elif ch == '(':
-                            if depth == 0:
-                                cm = re.search(r'(\w+)\s*$', pre[:j])
-                                call = cm.group(1) if cm else None
-                                break
-                            depth -= 1
-                    cls = set()
-                    if call in C_FIELD_CALLS:
-                        cls.add('field')
-                    elif rel in C_FILE_CLASSES:
-                        cls.add(C_FILE_CLASSES[rel])
-                    self.refs[lbl].append(('C:' + (call or '-'), -1, frozenset(cls), rel, no))
+            for m in IDENT_RE.finditer(text):
+                lbl = m.group(0)
+                if lbl not in self.text_labels:
+                    continue
+                ls = text.rfind('\n', 0, m.start()) + 1
+                no = text.count('\n', 0, ls) + 1
+                pre = text[ls:m.start()]
+                call = None
+                depth = 0
+                for j in range(len(pre) - 1, -1, -1):
+                    ch = pre[j]
+                    if ch == ')':
+                        depth += 1
+                    elif ch == '(':
+                        if depth == 0:
+                            cm = re.search(r'(\w+)\s*$', pre[:j])
+                            call = cm.group(1) if cm else None
+                            break
+                        depth -= 1
+                cls = set()
+                if call in C_FIELD_CALLS:
+                    cls.add('field')
+                elif rel in C_FILE_CLASSES:
+                    cls.add(C_FILE_CLASSES[rel])
+                self.refs[lbl].append(('C:' + (call or '-'), -1, frozenset(cls), rel, no))
 
     def classify(self, label):
         """Returns (classes:set, description:str)."""
@@ -1023,6 +1025,7 @@ class Issue:
         if self.width is not None:
             d['width'] = self.width
             d['limit'] = self.limit
+            d['unit'] = 'bytes' if self.check == 'LENGTH' else 'px'
         if self.text is not None:
             d['text'] = self.text
         if self.suggestion:
@@ -1035,7 +1038,8 @@ class Issue:
             s += ' %s:' % self.label
         s += ' ' + self.msg
         if self.width is not None:
-            s += ' (%dpx > %dpx)' % (self.width, self.limit)
+            unit = ' bytes' if self.check == 'LENGTH' else 'px'
+            s += ' (%d%s > %d%s)' % (self.width, unit, self.limit, unit)
         if self.text is not None:
             s += '\n    | ' + self.text
         if self.suggestion:
@@ -1071,27 +1075,43 @@ class Context:
         w = {PH_PLAYER: self.player_width, PH_STR1: self.strvar_width,
              PH_STR2: self.strvar_width, PH_STR3: self.strvar_width}
         self.ph_sources = {}
+        self.ph_len = dict(PH_EXPAND_LEN)
         for pid, names in PH_FIXED_STRINGS.items():
             best = 0
+            blen = 0
             for nm in names:
                 if nm in cstr:
                     ls = tmp.lines([(cstr[nm], 0, '')])
                     best = max([best] + [dl['width'] for dl in ls])
+                    blen = max(blen, len(cstr[nm]))
             w[pid] = best
+            self.ph_len[pid] = blen
             self.ph_sources[pid] = names
+        self.ph_len[PH_RIVAL] = max(self.ph_len.get(PH_RIVAL, 0), 7)
         w[PH_RIVAL] = max(w.get(PH_RIVAL, 0), self.player_width)
         return w
 
-    def build_index(self, text_labels):
-        self.index = UsageIndex(self.orig, text_labels)
+    def build_index(self, text_labels, index_root=None):
+        self.index = UsageIndex(index_root or self.orig, text_labels)
 
 
-def collect_text_labels(paths, charmap):
+def collect_text_labels(paths, charmap=None):
+    """Labels that own at least one .string line (fast scan, no string parsing)."""
     labels = set()
     for p in paths:
-        if os.path.exists(p):
-            af = AsmTextFile(p, charmap)
-            labels.update(b.label for b in af.blocks if b.label)
+        if not os.path.exists(p):
+            continue
+        with open(p, encoding='utf-8', errors='surrogateescape') as f:
+            text = remove_asm_comments(f.read())
+        owner = None
+        for line in text.split('\n'):
+            if STRING_RE.match(line):
+                if owner:
+                    labels.add(owner)
+                continue
+            m = LABEL_RE.match(line)
+            if m and (len(line) == m.end() or line[m.end()] in ' \t\r'):
+                owner = m.group(1)
     return labels
 
 
@@ -1101,6 +1121,44 @@ def _units(lines):
         for t in ln.toks or ():
             units.append((t.data, ln.no, t.src))
     return units
+
+
+def expanded_lengths(data, ph_len):
+    """Byte length of each '$'-terminated segment after StringExpandPlaceholders
+    (EOS included)."""
+    res = []
+    n = 0
+    i = 0
+    while i < len(data):
+        c = data[i]
+        if c == 0xFF:
+            res.append(n + 1)
+            n = 0
+            i += 1
+        elif c == 0xFD and i + 1 < len(data):
+            n += ph_len.get(data[i + 1], 8)
+            i += 2
+        else:
+            n += 1
+            i += 1
+    if n:
+        res.append(n + 1)
+    return res
+
+
+def max_row(dlines):
+    """Highest window row (0-based) on which text is drawn, simulating
+    \\n (next row), \\l (scroll, same row) and \\p (clear)."""
+    row, best = 0, -1
+    for dl in dlines:
+        if dl['glyphs']:
+            best = max(best, row)
+        t = dl['term']
+        if t == 'n':
+            row += 1
+        elif t in ('p', '$', ''):
+            row = 0
+    return best
 
 
 def _segments(dlines):
@@ -1129,9 +1187,9 @@ def box_violations(dlines):
         if t == 'n':
             row += 1
         elif t == 'l':
+            # \l scrolls the window up one row; printing continues on the same row
             if row == 0 and dl['glyphs']:
                 res.append(('scroll_first', dl))
-            row = max(row, 1)
         elif t in ('p', '$', ''):
             row = 0
     return res
@@ -1178,6 +1236,7 @@ class LabelInfo:
         self.vanilla_max = 0          # widest line not followed by \p/\l
         self.vanilla_max_arrow = 0    # widest line followed by \p/\l
         self.vanilla_box = Counter()
+        self.vanilla_max_row = -1
         for b in orig_blocks:
             for _, sl in b.variants():
                 dl2 = ctx.measurer.lines(_units(sl), self.ph_override)
@@ -1186,6 +1245,7 @@ class LabelInfo:
                         self.vanilla_max_arrow = max(self.vanilla_max_arrow, dl['width'])
                     else:
                         self.vanilla_max = max(self.vanilla_max, dl['width'])
+                self.vanilla_max_row = max(getattr(self, 'vanilla_max_row', -1), max_row(dl2))
                 for seg in _segments(dl2):
                     for kind, _ in box_violations(seg):
                         self.vanilla_box[kind] += 1
@@ -1221,7 +1281,8 @@ class Checker:
         return li
 
     # ------------------------------------------------------------------
-    def check_file(self, rel, new_path, orig_path):
+    def check_file(self, rel, new_path, orig_path, orig_data=None):
+        """orig_data: original file content (bytes) when it does not come from a path."""
         ctx = self.ctx
         self.stats['files'] += 1
         try:
@@ -1229,19 +1290,35 @@ class Checker:
         except OSError as e:
             self.add('error', 'IO', rel, 0, None, 'cannot read new file: %s' % e)
             return
+        if new.bom:
+            self.add('error', 'STRUCTURE', rel, 1, None, 'file starts with a UTF-8 BOM (the assembler rejects it)')
         orig = None
-        if orig_path and os.path.exists(orig_path):
+        if orig_data is not None:
+            orig = AsmTextFile(orig_path or rel, ctx.charmap, rel, data=orig_data)
+        elif orig_path and os.path.exists(orig_path):
             orig = AsmTextFile(orig_path, ctx.charmap, rel)
-        else:
-            self.add('warning', 'STRUCTURE', rel, 0, None, 'no original file to compare with (%s)' % orig_path)
 
         self._check_charmap(rel, new)
         if orig is None:
+            self.add('warning', 'STRUCTURE', rel, 0, None,
+                     'no original file to compare with: only charmap/width/box checks with standard limits')
+            self._check_new_only(rel, new)
             return
         if new.crlf and not orig.crlf:
             self.add('warning', 'STRUCTURE', rel, 0, None, 'file now uses CRLF line endings')
         struct_ok = self._check_structure(rel, new, orig)
         self._check_blocks(rel, new, orig, struct_ok)
+
+    def _check_new_only(self, rel, new):
+        for nb in new.blocks:
+            self.stats['blocks'] += 1
+            li = self.label_info(nb.label, None)
+            for vname, nsl in nb.variants():
+                data = b''.join(t.data for l in nsl for t in (l.toks or ()))
+                if not data.endswith(b'\xff'):
+                    self.add('warning', 'TERMINATION', rel, nsl[-1].no if nsl else nb.first_line, nb.label,
+                             'text block does not end with "$"')
+                self._check_display(rel, nb.label, li, nsl)
 
     # ------------------------------------------------------------------
     def _check_charmap(self, rel, af):
@@ -1308,12 +1385,41 @@ class Checker:
                 if osl is None:
                     osl = list(ov.values())[0]
                 self._check_termination(rel, label, vname, osl, nsl, nb)
+                self._check_tokens(rel, label, osl, nsl, nb)
                 self._check_display(rel, label, li, nsl)
         okeys = set(b.key for b in orig.blocks)
         for nb in new.blocks:
             if nb.key not in okeys:
                 self.add('error', 'TERMINATION', rel, nb.first_line, nb.label,
                          'text block not present in the original (label %s, block #%d)' % (nb.label, nb.ordinal + 1))
+
+    def _check_tokens(self, rel, label, osl, nsl, nb):
+        """Placeholders filled by the script and functional control codes
+        should survive the rewrite."""
+        def names(sl):
+            c = Counter()
+            for ln in sl:
+                for t in ln.toks or ():
+                    if t.kind == 'brace':
+                        m = re.match(r'\{\s*([A-Za-z_]\w*)', t.src)
+                        if m:
+                            c[m.group(1)] += 1
+            return c
+        on, nn = names(osl), names(nsl)
+        line = nsl[0].no if nsl else nb.first_line
+        for name in sorted(set(on) | set(nn)):
+            filled = name in SCRIPT_FILLED_PH or name.startswith('B_')
+            if filled and name in nn and name not in on:
+                self.add('warning', 'TOKENS', rel, line, label,
+                         '{%s} is not used in the original text: the script may not fill it '
+                         '(stale or garbage text would be shown)' % name)
+            elif filled and name in on and name not in nn:
+                self.add('warning', 'TOKENS', rel, line, label,
+                         '{%s} of the original text was dropped' % name)
+            elif (name in FUNCTIONAL_CODES or name.startswith(('MUS_', 'SE_', 'FONT_'))) and nn[name] < on[name]:
+                self.add('warning', 'TOKENS', rel, line, label,
+                         'control code {%s} appears %d time(s) in the original but %d time(s) now '
+                         '(music/sound/colour/pause behaviour changes)' % (name, on[name], nn[name]))
 
     def _check_termination(self, rel, label, vname, osl, nsl, nb):
         def info(sl):
@@ -1382,6 +1488,23 @@ class Checker:
                 chk = 'WIDTH'
             self.add(sev, chk, rel, dl['line'], label, msg + _ph_note(dl, li, ctx),
                      width=dl['width'], limit=lim, text=dl['text'])
+        # --- RAM buffer overflow (StringExpandPlaceholders has no bounds check)
+        data = b''.join(t.data for l in nsl for t in (l.toks or ()))
+        limits = []
+        if li.classes & {'field', 'pokenav', 'battle'}:
+            limits.append((BUF_STRINGVAR4, 'gStringVar4[%d]' % BUF_STRINGVAR4, 'error'))
+        if 'battle' in li.classes:
+            limits.append((BUF_BATTLE, 'gDisplayedStringBattle[425] (lose/win text)', 'error'))
+        if not li.box:
+            limits.append((BUF_STRINGVAR4, 'gStringVar4[%d] (if expanded there)' % BUF_STRINGVAR4, 'warning'))
+        for seg_len in expanded_lengths(data, ctx.ph_len):
+            for lim, name, sev in sorted(limits):
+                if seg_len > lim:
+                    self.add(sev, 'LENGTH', rel, nsl[0].no if nsl else 0, label,
+                             'text expands to %d bytes, more than the %s buffer: memory corruption / crash. '
+                             'Split it into several messages or shorten it' % (seg_len, name),
+                             width=seg_len, limit=lim)
+                    break
         if 'buffer' in li.classes:
             w = max([dl['width'] for dl in dlines] + [0])
             vw = max(li.vanilla_max, li.vanilla_max_arrow)
@@ -1390,6 +1513,21 @@ class Checker:
                          'text inserted via bufferstring is wider than the vanilla one (%dpx vs %dpx): '
                          'check the lines that print it through {STR_VAR_n}' % (w, vw))
         if not li.box:
+            # unknown window: only warn if the text uses more rows per box than vanilla did
+            allowed = max(li.vanilla_max_row, 1)
+            row = 0
+            for dl in dlines:
+                if dl['glyphs'] and row > allowed:
+                    self.add('warning', 'BOXLINES', rel, dl['line'], label,
+                             'unclassified text drawn on row %d of its box; the original never used more than '
+                             '%d row(s) per box (\\n adds a row, \\l scrolls, \\p clears)' % (row + 1, allowed + 1),
+                             text=dl['text'])
+                    break
+                t = dl['term']
+                if t == 'n':
+                    row += 1
+                elif t in ('p', '$', ''):
+                    row = 0
             return
         for seg in _segments(dlines):
             for kind, dl in box_violations(seg):
@@ -1448,6 +1586,15 @@ def resolve_files(args_files, root, orig):
             cands = [os.path.relpath(p, root if p.startswith(root) else orig) for p in g] or [f]
         rels.extend(cands)
     return rels
+
+
+def git_show(repo, rev, rel):
+    import subprocess
+    try:
+        return subprocess.run(['git', '-C', repo, 'show', '%s:%s' % (rev, rel)], check=True,
+                              stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout
+    except (subprocess.CalledProcessError, OSError):
+        return None
 
 
 # ==========================================================================
@@ -1562,6 +1709,9 @@ def main(argv=None):
                     'Default: ' + ' '.join(SCOPE_GLOBS))
     ap.add_argument('--root', default=DEFAULT_ROOT, help='modified tree (default %(default)s)')
     ap.add_argument('--orig', default=DEFAULT_ORIG, help='pristine tree (default %(default)s)')
+    ap.add_argument('--orig-rev', metavar='REV',
+                    help='read the original files from git revision REV of the --root repository '
+                         '(e.g. the commit before the text rewrite) instead of from --orig')
     ap.add_argument('--single', nargs=2, metavar=('NEW', 'ORIG'),
                     help='check one file given explicit paths (e.g. an agent\'s draft vs the original)')
     ap.add_argument('--charmap', help='charmap.txt to use (default: ROOT/charmap.txt, else ORIG/charmap.txt)')
@@ -1574,6 +1724,8 @@ def main(argv=None):
     ap.add_argument('--strict', action='store_true', help='exit 1 on warnings too')
     ap.add_argument('--list-unclassified', action='store_true', help='list labels whose display window is unknown')
     ap.add_argument('--max-issues', type=int, default=0, help='print at most N issues (0 = all)')
+    ap.add_argument('--changed-only', action='store_true',
+                    help='skip files that are byte-identical to the original (faster)')
     ap.add_argument('--calibrate', action='store_true', help='print calibration statistics of the ORIG tree and exit')
     args = ap.parse_args(argv)
 
@@ -1592,8 +1744,14 @@ def main(argv=None):
         return 2
 
     all_rels = scope_files(None, orig)
-    labels = collect_text_labels([os.path.join(orig, r) for r in all_rels], ctx.charmap)
-    ctx.build_index(labels)
+    labels = collect_text_labels([os.path.join(orig, r) for r in all_rels])
+    index_root = orig
+    if root and root != orig and os.path.isdir(os.path.join(root, 'data')) and \
+            os.path.isdir(os.path.join(root, 'asm', 'macros')):
+        # classify usages with the scripts of the modified tree (new labels, moved texts)
+        labels |= collect_text_labels([os.path.join(root, r) for r in scope_files(root, None)])
+        index_root = root
+    ctx.build_index(labels, index_root)
 
     if args.calibrate:
         out = []
@@ -1615,9 +1773,27 @@ def main(argv=None):
             if not os.path.exists(np_):
                 checker.add('error', 'STRUCTURE', rel, 0, None, 'file missing in --root')
                 continue
-            checker.check_file(rel, np_, os.path.join(orig, rel))
+            if args.changed_only:
+                with open(np_, 'rb') as f:
+                    nd = f.read()
+                od = git_show(root, args.orig_rev, rel) if args.orig_rev else None
+                if od is None and not args.orig_rev and os.path.exists(os.path.join(orig, rel)):
+                    with open(os.path.join(orig, rel), 'rb') as f:
+                        od = f.read()
+                if od == nd:
+                    checker.stats['files_unchanged'] += 1
+                    continue
+            if args.orig_rev:
+                data = git_show(root, args.orig_rev, rel)
+                checker.check_file(rel, np_, rel if data is not None else None, orig_data=data)
+            else:
+                checker.check_file(rel, np_, os.path.join(orig, rel))
         targets = rels
 
+    order = {}
+    for n, rel in enumerate(targets):
+        order.setdefault(rel, n)
+    checker.issues.sort(key=lambda i: (order.get(i.file, len(order)), i.file, i.line or 0))
     issues = checker.issues
     if args.no_warnings:
         issues = [i for i in issues if i.sev == 'error']
@@ -1665,8 +1841,9 @@ def main(argv=None):
         for l in unclassified:
             print('  %-60s %-30s limit=%d' % (l, labels_seen[l].desc, labels_seen[l].limit))
     print('\n== textcheck summary ==')
-    print('files: %d   .string lines: %d   text blocks: %d (changed: %d)   display lines: %d' % (
-        summary['files'], summary['string_lines'], summary['text_blocks'],
+    print('files: %d%s   .string lines: %d   text blocks: %d (changed: %d)   display lines: %d' % (
+        summary['files'], (' (+%d unchanged, skipped)' % checker.stats['files_unchanged'])
+        if checker.stats['files_unchanged'] else '', summary['string_lines'], summary['text_blocks'],
         summary['text_blocks_changed'], summary['display_lines']))
     print('labels by display class: %s' % ', '.join('%s=%d' % kv for kv in sorted(cls_count.items())))
     print('limits: field %dpx, battle %dpx, pokenav %dpx, unclassified max(vanilla, %dpx); '
