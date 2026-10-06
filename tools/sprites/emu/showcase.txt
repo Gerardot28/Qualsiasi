@@ -11,11 +11,14 @@ wait 120
 press A
 wait 120
 repeat 80 A 4 30
-repeat 15 A 4 20
+repeat 14 A 4 20
+wait 30
 shot 03_birch_boy.ppm
-repeat 45 A 4 30
-repeat 36 A 4 30
-repeat 4 B 4 30
+# rest of Birch's speech (name entry is auto-filled with A's and confirmed)
+repeat 82 A 4 30
+# truck ride: wait for the door to open, close any text, walk out
+wait 600
+repeat 6 B 4 20
 hold RIGHT 60
 wait 300
 shot 04_littleroot_arrive.ppm
