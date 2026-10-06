@@ -1,0 +1,83 @@
+# Palettes used by the new protagonist ("Brendan" replacement).
+# Each section: "== name", then 16 lines "<letter> R G B [# comment]" in slot order 0..15.
+# The letter is what the pixel grids in data/ use; slot 0 is always transparent.
+# Grids may only use letters defined in the palette they are rendered with.
+
+# Overworld player palette (graphics/object_events/palettes/brendan.pal, OBJ_EVENT_PAL_TAG_BRENDAN).
+# Slot layout keeps Brendan's skin slots (1-4) and black/white so shared bike/sprite parts still work.
+== ow
+. 115 197 164   # 0 transparent
+s 255 213 180   # 1 skin light
+S 255 197 148   # 2 skin
+d 222 148 115   # 3 skin shadow
+b 123  65  65   # 4 skin outline (warm brown)
+j 104 104 128   # 5 charcoal highlight (hood, jacket light side)
+m  70  70  92   # 6 charcoal mid
+n  26  26  36   # 7 charcoal deep (trouser shadow)
+J  44  44  60   # 8 jacket / trousers base, eyes
+g 198 206 216   # 9 light grey (zip, soles, metal)
+h 255 140  82   # 10 hair highlight
+o  99  16  33   # 11 hair outline (dark maroon)
+r 230  49  41   # 12 red (hair mid, jacket accents)
+R 164  24  41   # 13 dark red (hair shadow, accent shade)
+w 255 255 255   # 14 white
+k   0   0   0   # 15 black outline
+
+# Dedicated underwater palette (new OBJ_EVENT_PAL_TAG_BRENDAN_UNDERWATER); Brendan and May used to share
+# player_underwater.pal. Same murky blue ramp as the original plus muted hair tones.
+== ow_underwater
+. 115 197 164
+s 255 222 205
+S 222 164 148
+d 205 131 115
+b 123  90  82
+j  98 123 156   # 5 light blue (body highlight)
+m  74  90 131   # 6
+n  49  65 106   # 7
+J  24  41  82   # 8 dark body
+g 131 164 197   # 9 lightest blue
+h 189 115 131   # 10 hair highlight (muted)
+o  57  32  74   # 11 hair outline
+r 148  74 115   # 12 hair mid
+R 106  49  98   # 13 hair shadow
+w 255 255 255
+k   0   0   0
+
+# Trainer front + back pics share graphics/trainers/palettes/brendan.pal.
+== trainer
+. 115 197 164   # 0 transparent
+s 255 222 205   # 1 skin light
+S 239 180 156   # 2 skin
+d 205 131 115   # 3 skin shadow
+b 123  82  74   # 4 skin outline
+j 115 115 139   # 5 charcoal highlight
+m  74  74  98   # 6 charcoal mid
+J  44  44  62   # 7 jacket base
+n  22  22  32   # 8 deepest charcoal
+g 205 213 222   # 9 light grey
+h 255 148  90   # 10 hair highlight
+o 106  20  36   # 11 hair outline / deep red
+r 230  52  44   # 12 red
+R 164  28  44   # 13 dark red
+w 255 255 255   # 14 white
+k   0   0   0   # 15 black
+
+# Intro (bike) sprite: Brendan's frames used the shared intro player.pal (also used by May).
+# Slots used by the intro bicycle sprite (1-6, 8, 9, 15) keep their original colours.
+== intro
+.  74 189 172   # 0 transparent
+k  82  74  74   # 1 dark outline (shared with bicycle)
+g 139 139 123   # 2 grey (shared with bicycle)
+l 197 189 222   # 3 lavender grey (shared with bicycle)
+w 255 255 255   # 4 white
+x 230  49   0   # 5 bike orange-red (bicycle)
+y 246 148   0   # 6 bike orange (bicycle)
+R 164  24  41   # 7 hair shadow
+s 255 213 148   # 8 skin (shared with bicycle)
+d 222 164 139   # 9 skin shadow (shared with bicycle)
+r 230  49  41   # 10 hair red
+h 255 140  82   # 11 hair highlight
+J  49  49  66   # 12 jacket
+j  98  98 123   # 13 jacket highlight
+o  99  16  33   # 14 hair outline
+z 131 164  65   # 15 olive (bicycle)

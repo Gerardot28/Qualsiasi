@@ -101,7 +101,21 @@ def font_for_cap(name, cap):
 class TextRun:
     """A line of text rendered letter by letter on integer pixel positions."""
 
-    def __init__(self, text, font, tracking=0, kern=True, adjust=None):
+    def __init__(self, text, font, tracking=0, kern=True, adjust=None, custom_accents=False):
+        self.custom_accents = custom_accents
+        self.accents = {}
+        if custom_accents:
+            # draw accents ourselves (bolder than the font's at small sizes)
+            base = {"É": "E", "È": "E", "À": "A", "Ì": "I", "Ò": "O", "Ù": "U", "Á": "A", "Í": "I",
+                    "Ó": "O", "Ú": "U"}
+            plain = []
+            for i, ch in enumerate(text):
+                if ch in base:
+                    self.accents[i] = "acute" if ch in "ÉÁÍÓÚ" else "grave"
+                    plain.append(base[ch])
+                else:
+                    plain.append(ch)
+            text = "".join(plain)
         self.text = text
         self.font = font
         self.cap = cap_height(font)
@@ -122,6 +136,12 @@ class TextRun:
         for ch, x0 in zip(text, xs):
             bb = font.getbbox(ch, anchor="ls")
             boxes.append((x0 + bb[0], bb[1], x0 + bb[2], bb[3]))
+        self.cap = cap_height(font)
+        acc_h = max(4, int(round(self.cap * 0.36)))
+        self.acc_h = acc_h
+        for i in self.accents:
+            x0, y0, x1, y1 = boxes[i]
+            boxes[i] = (x0, -self.cap - acc_h - 1, x1, y1)
         self.ink = (min(b[0] for b in boxes), min(b[1] for b in boxes),
                     max(b[2] for b in boxes), max(b[3] for b in boxes))
         self.boxes = boxes
@@ -129,6 +149,23 @@ class TextRun:
     @property
     def width(self):
         return self.ink[2] - self.ink[0]
+
+    def _accent(self, W, H, i, dx, baseline):
+        """A slanted bar above letter i (supersampled polygon)."""
+        k = 8
+        x0, _, x1, _ = self.boxes[i]
+        cxl = (x0 + x1) / 2.0 + dx
+        top = baseline - self.cap - 1.0          # 1px gap above the cap height
+        h = self.acc_h
+        t = max(2.5, self.cap * 0.22)            # stroke thickness
+        lean = 1 if self.accents[i] == "acute" else -1
+        # parallelogram: bottom edge centred slightly left, top edge to the right
+        bx = cxl - lean * h * 0.35
+        tx = cxl + lean * h * 0.55
+        pts = [(bx - t / 2, top), (bx + t / 2, top), (tx + t / 2, top - h), (tx - t / 2, top - h)]
+        im = Image.new("L", (W * k, H * k), 0)
+        ImageDraw.Draw(im).polygon([(x * k, y * k) for x, y in pts], fill=255)
+        return np.asarray(im.resize((W, H), Image.BOX), dtype=np.float32) / 255.0
 
     def coverage(self, W, H, ox, baseline):
         """Return (union coverage float32 HxW, list of per-letter coverages).
@@ -141,7 +178,11 @@ class TextRun:
             d = ImageDraw.Draw(im)
             d.fontmode = "L"
             d.text((x0 + dx, baseline), ch, font=self.font, anchor="ls", fill=255)
-            letters.append(np.asarray(im, dtype=np.float32) / 255.0)
+            cov = np.asarray(im, dtype=np.float32) / 255.0
+            i = len(letters)
+            if i in self.accents:
+                cov = np.maximum(cov, self._accent(W, H, i, dx, baseline))
+            letters.append(cov)
         union = np.max(np.stack(letters), axis=0) if letters else np.zeros((H, W), np.float32)
         return union, letters
 
@@ -186,6 +227,31 @@ def distance_outside(mask, R):
     for d in range(-R, R + 1):
         np.minimum(h, _shift(g, d, 0, INF) + d * d, out=h)
     return np.sqrt(h)
+
+
+def fill_holes_hr(mask_hr, ss):
+    """Fill enclosed holes of a high-res mask (holes found at 1x)."""
+    Hh, Wh = mask_hr.shape
+    H, W = Hh // ss, Wh // ss
+    cov = mask_hr.reshape(H, ss, W, ss).mean(axis=(1, 3))
+    solid = cov >= 0.5
+    reach = np.zeros_like(solid)
+    reach[0, :] = ~solid[0, :]
+    reach[-1, :] = ~solid[-1, :]
+    reach[:, 0] |= ~solid[:, 0]
+    reach[:, -1] |= ~solid[:, -1]
+    while True:
+        grown = reach.copy()
+        grown[1:] |= reach[:-1]
+        grown[:-1] |= reach[1:]
+        grown[:, 1:] |= reach[:, :-1]
+        grown[:, :-1] |= reach[:, 1:]
+        grown &= ~solid
+        if (grown == reach).all():
+            break
+        reach = grown
+    holes = ~solid & ~reach
+    return mask_hr | np.kron(holes, np.ones((ss, ss), bool))
 
 
 def dilate(mask, r_px, ss):
@@ -256,6 +322,68 @@ def cleanup_alpha(dom, iterations=2):
     return dom
 
 
+def prune_blends(dom, sec):
+    """Only keep an AA blend with layer L if a 4-neighbour actually shows L."""
+    ok = np.zeros(dom.shape, bool)
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nb = _shift(dom, dy, dx, TRANSPARENT)
+        ok |= (nb == sec)
+    sec = np.where(ok, sec, -1)
+    return sec
+
+
+def components(mask):
+    """8-connected components of a 1x bool mask -> list of (ys, xs) arrays."""
+    H, W = mask.shape
+    seen = np.zeros_like(mask)
+    comps = []
+    for y0, x0 in zip(*np.nonzero(mask)):
+        if seen[y0, x0]:
+            continue
+        stack = [(y0, x0)]
+        seen[y0, x0] = True
+        ys, xs = [], []
+        while stack:
+            y, x = stack.pop()
+            ys.append(y)
+            xs.append(x)
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    yy, xx = y + dy, x + dx
+                    if 0 <= yy < H and 0 <= xx < W and mask[yy, xx] and not seen[yy, xx]:
+                        seen[yy, xx] = True
+                        stack.append((yy, xx))
+        comps.append((np.array(ys), np.array(xs)))
+    return comps
+
+
+def drop_specks(dom, sec, lid, into, min_size):
+    """Re-assign connected pieces of layer `lid` smaller than min_size pixels
+    to layer `into` (kills isolated rim specks inside counters)."""
+    for ys, xs in components(dom == lid):
+        if len(ys) < min_size:
+            dom[ys, xs] = into
+            sec[ys, xs] = -1
+
+
+def aa_blend(a, b):
+    """Anti-aliasing colour between two layer colours (N,3 arrays).
+
+    Plain RGB averaging of a bright and a dark colour gives muddy greys/olives
+    (gold + indigo -> olive).  Instead keep the hue and saturation (HSV) of
+    the brighter colour and average only the value, so an AA pixel looks like
+    a deeper shade of the bright colour - the way pixel artists pick them."""
+    out = (a + b) / 2.0
+    for i in range(len(a)):
+        ha, sa, va = colorsys.rgb_to_hsv(*(a[i] / 255.0))
+        hb, sb, vb = colorsys.rgb_to_hsv(*(b[i] / 255.0))
+        if abs(va - vb) < 0.3:
+            continue
+        h, s_ = (ha, sa) if va > vb else (hb, sb)
+        out[i] = np.array(colorsys.hsv_to_rgb(h, s_, (va + vb) / 2.0)) * 255.0
+    return out
+
+
 def paint(dom, sec, colour_fns, H, W):
     """colour_fns[lid](ys, xs) -> (N,3) colours.  Returns RGBA uint8 image."""
     out = np.zeros((H, W, 4), np.float32)
@@ -272,7 +400,7 @@ def paint(dom, sec, colour_fns, H, W):
             for lid2 in np.unique(sm[bl]):
                 k = bl & (sm == lid2)
                 c2[k] = np.asarray(colour_fns[lid2](ys[k], xs[k]), np.float32)
-            cols[bl] = (cols[bl] + c2[bl]) / 2.0
+            cols[bl] = aa_blend(cols[bl], c2[bl])
         out[ys, xs, :3] = cols
         out[ys, xs, 3] = 255
     return out

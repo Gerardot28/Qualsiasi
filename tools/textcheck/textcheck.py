@@ -1268,9 +1268,15 @@ class Checker:
         self.stats = Counter()
         self.label_infos = {}
         self.warn_arrow = warn_arrow
+        self._seen = set()
 
     def add(self, *a, **kw):
-        self.issues.append(Issue(*a, **kw))
+        it = Issue(*a, **kw)
+        key = (it.file, it.line, it.check, it.label, it.msg, it.text)
+        if key in self._seen:      # same finding from another #if variant
+            return
+        self._seen.add(key)
+        self.issues.append(it)
 
     def label_info(self, label, orig_af):
         li = self.label_infos.get(label)

@@ -1,0 +1,6 @@
+{
+  "_doc": "Terrain classes for gTileset_Petalburg secondary (ids local to the secondary: metatile id - 0x200). h = hedge.",
+  ".": ["006", "007", "070-072", "078", "079", "088", "089", "08C", "08E"],
+  "h": ["03C-03F", "044-046", "04C-04E", "052-056", "064-066"],
+  "#": ["07B", "08D"]
+}

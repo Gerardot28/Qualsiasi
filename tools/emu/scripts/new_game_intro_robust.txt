@@ -1,0 +1,60 @@
+# New game from power-on to Littleroot Town, independent of text length/speed.
+# Every message box of Professor Birch's speech is captured once fully printed
+# (rb_prof_NNN.png / rb_closing_NNN.png), so this script keeps working (and is
+# the one to use) when the dialogue is rewritten, e.g. in Italian.
+# Needs symbols: pokeemerald.elf next to the ROM, or --elf.
+include boot_to_title.txt
+# ---- main menu -> NEW GAME
+press START
+waittask Task_HandleMainMenuInput 600
+wait 10
+shot rb_00_main_menu
+press A
+# ---- Birch's speech up to "Are you a boy? Or are you a girl?"
+waittask Task_NewGameBirchSpeech_ThisIsAPokemon 2400
+loop 120
+  textbox rb_prof_{n}
+  breakiftask Task_NewGameBirchSpeech_WaitToShowGenderMenu Task_NewGameBirchSpeech_ChooseGender
+  press A
+endloop
+waittask Task_NewGameBirchSpeech_ChooseGender 600
+waitstable 10 120
+shot rb_10_gender_menu
+# BOY is preselected (press DOWN first for GIRL)
+press A
+waittask Task_NewGameBirchSpeech_WaitPressBeforeNameChoice 1200
+textbox rb_11_whats_your_name
+press A
+# ---- naming screen: keep the preset name (START = jump to OK)
+waitcb2 CB2_NamingScreen 600
+wait 60
+shot rb_12_naming_screen
+press START
+press A
+waittask Task_NewGameBirchSpeech_ProcessNameYesNoMenu 1200
+waitstable 10 120
+shot rb_13_so_its_name
+press A
+# ---- closing speech until the player shrinks away
+loop 60
+  breakiftask Task_NewGameBirchSpeech_WaitForPlayerShrink Task_NewGameBirchSpeech_FadePlayerToWhite Task_NewGameBirchSpeech_Cleanup
+  breakifcb2 CB2_Overworld
+  textbox rb_closing_{n}
+  press A
+endloop
+# ---- moving truck
+waitcb2 CB2_Overworld 2400
+waitmap MAP_INSIDE_OF_TRUCK 600
+mapinfo
+wait 300
+shot rb_20_truck
+# the truck stops and the door on the right opens (~f+650 after the overworld starts)
+wait 600
+shot rb_21_truck_door_open
+hold RIGHT 80
+waitmap MAP_LITTLEROOT_TOWN 600
+wait 100
+shot rb_22_littleroot
+mapinfo
+expectmap MAP_LITTLEROOT_TOWN
+textbox rb_23_littleroot_mom

@@ -62,6 +62,7 @@ SCHEMES = {
                H("#a957f5"), H("#d64ad8"), H("#ff5fae")],
         prism_hue_spread=40.0,     # degrees of hue drift across the word
         top_fill=[H("#fffbe0"), H("#ffe680"), H("#ffcc4d"), H("#f6a531"), H("#d9741e")],
+        top_rim=[H("#b9a6ff"), H("#8f74ff"), H("#6a4fe0")],
         sparkle={"#": H("#ffffff"), "+": H("#e9fbff"), "*": H("#9feaff"), ".": H("#7a8cff")},
         portal=[H("#ffffff"), H("#72f0ff"), H("#7c6dff"), H("#d64ad8"), H("#ff9a3c")],
         # background recolour (rayquaza_and_clouds.pal, 16 entries)
@@ -79,6 +80,7 @@ SCHEMES = {
                H("#e98226"), H("#d4641e"), H("#b84a1a")],
         prism_hue_spread=0.0,
         top_fill=[H("#f4ecff"), H("#d9c8ff"), H("#b79cff"), H("#9474f0"), H("#7050d0")],
+        top_rim=[H("#ffe680"), H("#f2a324")],
         sparkle={"#": H("#ffffff"), "+": H("#fff6d0"), "*": H("#ffd46a"), ".": H("#b07cff")},
         portal=[H("#ffffff"), H("#ffe680"), H("#ffb040"), H("#a957f5"), H("#4b2aa8")],
         sky=[H("#080512"), H("#100a26"), H("#190f3a"), H("#22134c"), H("#2c175c"),
@@ -142,7 +144,7 @@ class Canvas:
         if cleanup:
             dom = px.cleanup_alpha(dom)
             sec[dom == px.TRANSPARENT] = -1
-        return dom, sec
+        return dom, px.prune_blends(dom, sec)
 
     def render(self, dom, sec):
         return px.paint(dom, sec, self.fns, self.H, self.W)
@@ -166,16 +168,22 @@ def flat(c):
 
 
 class Word:
-    """One line of outlined, extruded, gradient-filled text on a Canvas."""
+    """One line of outlined, extruded, gradient-filled text on a Canvas.
 
-    def __init__(self, canvas, text, font, tracking, cx, top_y, rim_w, out_w, ext_d,
-                 adjust=None):
+    Bands, inside -> out:  fill | inner dark line (w_in, plus every gap
+    narrower than ~2*close px, so counters never flood with rim colour) |
+    rim (w_rim, follows the outer silhouette) | outer dark line (w_out) |
+    extrusion straight down (ext_d px) with its own dark edge."""
+
+    def __init__(self, canvas, text, font, tracking, cx, top_y, w_in, w_rim, w_out, ext_d,
+                 close=1.6, rim_close=0.0, adjust=None):
         self.cv = canvas
         ss = canvas.ss
-        self.run = px.TextRun(text, font, tracking=tracking, adjust=adjust)
+        self.run = px.TextRun(text, font, tracking=tracking, adjust=adjust, custom_accents=True)
         self.cap = self.run.cap
         ink_top = self.run.ink[1]           # negative (above baseline), includes accents
-        pad = rim_w + out_w
+        pad = w_in + w_rim + w_out
+        self.pad = pad
         self.baseline = top_y + pad - ink_top
         self.cap_top = self.baseline - self.cap
         ox = int(round(cx - self.run.width / 2.0))
@@ -184,52 +192,53 @@ class Word:
         self.cov = cov
         self.letters = letters
         self.owner = np.argmax(np.stack(letters), axis=0)
-        self.glyph = px.upsample_mask(cov, ss)
-        R = int(np.ceil((rim_w + out_w) * ss)) + 2
-        self.dist = px.distance_outside(self.glyph, R) / ss
-        self.rim_w, self.out_w, self.ext_d = rim_w, out_w, ext_d
-        self.sil = self.dist <= rim_w + out_w
-        # extrusion: silhouette swept straight down by ext_d pixels
+        G = px.upsample_mask(cov, ss)
+        self.glyph = G
+        R = int(np.ceil(max(w_in, close) * ss)) + 2
+        d = px.distance_outside(G, R) / ss
+        core = d <= w_in
+        if close > 0:
+            dil = d <= close
+            closed = ~(px.distance_outside(~dil, int(np.ceil(close * ss)) + 2) / ss <= close)
+            core |= closed
+        if rim_close > close:
+            # gaps narrower than ~2*rim_close (e.g. between letters) stay dark:
+            # the rim only follows the coarse outer silhouette
+            dil = px.distance_outside(G, int(np.ceil(rim_close * ss)) + 2) / ss <= rim_close
+            core |= ~(px.distance_outside(~dil, int(np.ceil(rim_close * ss)) + 2) / ss <= rim_close)
+        self.core = px.fill_holes_hr(core | G, ss)
+        R2 = int(np.ceil((w_rim + w_out) * ss)) + 2
+        dc = px.distance_outside(self.core, R2) / ss
+        self.rim = (dc <= w_rim) & ~self.core if w_rim > 0 else np.zeros_like(G)
+        self.sil = dc <= (w_rim + w_out)
+        self.outer = self.sil & ~self.core & ~self.rim
+        self.w_in, self.w_rim, self.w_out, self.ext_d = w_in, w_rim, w_out, ext_d
         ext = np.zeros_like(self.sil)
         for k in range(1, int(ext_d * ss) + 1):
             ext |= px.shift(self.sil, k, 0)
         self.ext = ext & ~self.sil
-        self.ext_out = px.dilate(self.ext | self.sil, out_w, ss) & ~(self.ext | self.sil)
-        self.bottom = self.baseline + rim_w + out_w + ext_d + out_w
-
-    def holes(self):
-        """Counters (enclosed transparent areas) of the glyphs, at 1x."""
-        op = self.cov >= 0.5
-        H, W = op.shape
-        seen = np.zeros_like(op)
-        stack = [(y, x) for y in range(H) for x in (0, W - 1)] + [(y, x) for x in range(W) for y in (0, H - 1)]
-        while stack:
-            y, x = stack.pop()
-            if seen[y, x] or op[y, x]:
-                continue
-            seen[y, x] = True
-            for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                yy, xx = y + dy, x + dx
-                if 0 <= yy < H and 0 <= xx < W and not seen[yy, xx] and not op[yy, xx]:
-                    stack.append((yy, xx))
-        return ~op & ~seen
+        self.ext_out = px.dilate(self.ext | self.sil, w_out, ss) & ~(self.ext | self.sil) \
+            if w_out > 0 else np.zeros_like(G)
+        self.bottom = self.baseline + pad + ext_d + w_out
+        self.top = top_y
 
 
-def layer_word(cv, w, fill_fn, rim_cols, scheme, extrude_cols, top_hi=None):
+def layer_word(cv, w, fill_fn, rim_cols, scheme, extrude_cols, inner=None):
     """Paint a Word's layers (back to front) and return the layer ids."""
     ids = {}
     ids["ext_out"] = cv.layer(flat(scheme["outline"]))
-    e_top = w.baseline
-    ids["ext"] = cv.layer(band_colour(extrude_cols, e_top, w.bottom))
+    ids["ext"] = cv.layer(band_colour(extrude_cols, w.baseline, w.bottom))
     ids["out"] = cv.layer(flat(scheme["outline"]))
-    if w.rim_w > 0:
-        ids["rim"] = cv.layer(band_colour(rim_cols, w.cap_top - w.rim_w - 1, w.baseline + w.rim_w))
+    if w.w_rim > 0:
+        ids["rim"] = cv.layer(band_colour(rim_cols, w.cap_top - w.pad, w.baseline + w.pad))
+    ids["in"] = cv.layer(flat(inner if inner is not None else scheme["outline"]))
     ids["fill"] = cv.layer(fill_fn)
     cv.paint(w.ext_out, ids["ext_out"])
     cv.paint(w.ext, ids["ext"])
-    cv.paint(w.sil & ~w.glyph, ids["out"])
-    if w.rim_w > 0:
-        cv.paint((w.dist <= w.rim_w) & ~w.glyph, ids["rim"])
+    cv.paint(w.outer, ids["out"])
+    if w.w_rim > 0:
+        cv.paint(w.rim, ids["rim"])
+    cv.paint(w.core & ~w.glyph, ids["in"])
     cv.paint(w.glyph, ids["fill"])
     return ids
 
@@ -256,8 +265,9 @@ def prism_fill(w, scheme):
     return fn
 
 
-def add_bevel(rgba, dom, fill_id, hi, lo=None, rim_id=None, rim_hi=None):
-    """Hand-style highlight pixels: light top edge on the fill (and rim)."""
+def add_bevel(rgba, dom, fill_id, hi, lo=None, rim_id=None, rim_hi=None, inner_ids=()):
+    """Hand-style highlight pixels: light top edge on the fill (and on the
+    rim where it faces outwards, i.e. the pixel above is outside the word)."""
     Hh, Ww = dom.shape
     up = np.full_like(dom, px.TRANSPARENT)
     up[1:] = dom[:-1]
@@ -269,7 +279,8 @@ def add_bevel(rgba, dom, fill_id, hi, lo=None, rim_id=None, rim_hi=None):
         m2 = (dom == fill_id) & (dn != fill_id) & ~m
         rgba[m2, :3] = lo
     if rim_id is not None and rim_hi is not None:
-        m3 = (dom == rim_id) & (up != rim_id) & (up != fill_id)
+        inside = np.isin(up, [rim_id, fill_id] + list(inner_ids))
+        m3 = (dom == rim_id) & ~inside
         rgba[m3, :3] = rim_hi
 
 
@@ -279,39 +290,47 @@ def add_bevel(rgba, dom, fill_id, hi, lo=None, rim_id=None, rim_hi=None):
 def fit_font(text, name, cap_max, max_w, extra_w, tracking):
     for cap in range(cap_max, 6, -1):
         f = px.font_for_cap(name, cap)
-        run = px.TextRun(text, f, tracking=tracking)
+        run = px.TextRun(text, f, tracking=tracking, custom_accents=True)
         if run.width + extra_w <= max_w:
             return f, cap
     raise SystemExit(f"cannot fit {text!r} in {max_w}px")
 
 
-def build_logo(args, scheme):
-    cv = Canvas(LOGO_W, LOGO_H, ss=6)
-    word = args.word.upper()
-    stacked = args.layout == "stacked"
-    # ---- POKeMON (top line)
-    top_rim, top_out, top_ext = 0, 2, 2
-    top_cap = args.top_cap or (15 if stacked else 26)
-    top_font, top_cap = fit_font(args.top, FONT_TOP, top_cap, LOGO_MAX_W - 2,
-                                 2 * (top_rim + top_out), -1)
-    top = Word(cv, args.top, top_font, -1, LOGO_CENTER_X, 1, top_rim, top_out, top_ext)
+def render_logo(word, top_text, scheme, W=LOGO_W, H=LOGO_H, cx=LOGO_CENTER_X, max_w=LOGO_MAX_W,
+                word_cap=23, top_cap=16, top_y=1, bottom=62, stacked=True, scale=1.0, overlap=9):
+    """Render the logo (RGBA uint8, GBA-snapped) on a W x H canvas.
+
+    stacked=True: top_text above word; False: top_text only.  scale
+    multiplies outline/extrusion widths (use ~1.5-2 for big renders)."""
+    def sc(v, lo=1):
+        return max(lo, int(round(v * scale)))
+    cv = Canvas(W, H, ss=6)
+    word = word.upper()
+    t_in, t_rim, t_out, t_ext = sc(1), sc(1), sc(1), sc(2)
+    top_font, top_cap = fit_font(top_text, FONT_TOP, top_cap, max_w - 2,
+                                 2 * (t_in + t_rim + t_out), -1)
+    top = Word(cv, top_text, top_font, -1, cx, top_y, t_in, t_rim, t_out, t_ext)
     top_ids = layer_word(cv, top, band_colour([px.gba(c) for c in scheme["top_fill"]],
                                               top.cap_top, top.baseline),
-                         [], scheme, [px.gba(c) for c in scheme["extrude"]])
+                         [px.gba(c) for c in scheme["top_rim"]], scheme,
+                         [px.gba(c) for c in scheme["extrude"]])
     words = [("top", top, top_ids)]
     if stacked:
-        rim_w, out_w, ext_d = 2, 1, 3
-        cap = args.word_cap or 23
-        f, cap = fit_font(word, FONT_WORD, cap, LOGO_MAX_W - 1, 2 * (rim_w + out_w), -1)
-        # place the word so that its bottom (incl. extrusion) ends at y 62
-        probe = Word(Canvas(LOGO_W, LOGO_H, 1), word, f, -1, LOGO_CENTER_X, 0, rim_w, out_w, ext_d)
-        y0 = 62 - probe.bottom
-        y0 = max(y0, top.bottom - 9)
-        w = Word(cv, word, f, -1, LOGO_CENTER_X, y0, rim_w, out_w, ext_d)
+        w_in, w_rim, w_out, ext_d = sc(1), sc(1), sc(1), sc(3)
+        f, cap = fit_font(word, FONT_WORD, word_cap, max_w - 1, 2 * (w_in + w_rim + w_out), -1)
+        # place the word so that its bottom (incl. extrusion) ends at `bottom`
+        probe = Word(Canvas(W, H, 1), word, f, -1, cx, 0, w_in, w_rim, w_out, ext_d)
+        y0 = bottom - probe.bottom
+        y0 = max(y0, top.bottom - int(round(overlap * scale)))
+        w = Word(cv, word, f, -1, cx, y0, w_in, w_rim, w_out, ext_d, close=1.6 * scale,
+                 rim_close=3.5 * scale)
         w_ids = layer_word(cv, w, prism_fill(w, scheme), [px.gba(c) for c in scheme["gold"]],
                            scheme, [px.gba(c) for c in scheme["extrude"]])
         words.append(("word", w, w_ids))
     dom, sec = cv.resolve()
+    for name, w, ids in words:
+        if "rim" in ids:
+            px.drop_specks(dom, sec, ids["rim"], ids["in"], int(16 * scale * scale))
     rgba = cv.render(dom, sec)
     # bevel highlights
     for name, w, ids in words:
@@ -319,10 +338,18 @@ def build_logo(args, scheme):
             add_bevel(rgba, dom, ids["fill"], px.gba(scheme["top_fill"][0]))
         else:
             add_bevel(rgba, dom, ids["fill"], px.gba(scheme["prism"][0]), None,
-                      ids.get("rim"), px.gba(scheme["gold"][0]))
+                      ids.get("rim"), px.gba(scheme["gold"][0]), inner_ids=[ids["in"]])
     rgba = px.snap_gba(rgba)
     info = dict(words=words, dom=dom)
+    sparkle_logo(rgba, info, scheme)
     return rgba, info
+
+
+def build_logo(args, scheme):
+    stacked = args.layout == "stacked"
+    return render_logo(args.word, args.top, scheme, stacked=stacked,
+                       word_cap=args.word_cap or 23,
+                       top_cap=args.top_cap or (16 if stacked else 26))
 
 
 def sparkle_logo(rgba, info, scheme):
@@ -339,12 +366,10 @@ def sparkle_logo(rgba, info, scheme):
             x1 = w.ox + bl[2] - w.run.ink[0] - 3
             stamp_at(rgba, "tiny", x1, w.baseline - 3, cols, op)
         else:
-            # glint on the accent
-            for i, ch in enumerate(w.run.text):
-                if ch in "ÉéÈè":
-                    b = w.run.boxes[i]
-                    xa = w.ox + (b[0] + b[2]) // 2 - w.run.ink[0] + 1
-                    stamp_at(rgba, "tiny", xa, w.baseline + b[1] + 2, cols, op)
+            # glint on the top-left corner of the first letter
+            b0 = w.run.boxes[0]
+            x0 = w.ox + b0[0] - w.run.ink[0] + 1
+            stamp_at(rgba, "tiny", x0, w.cap_top + 1, cols, op)
 
 
 def stamp_at(rgba, kind, x, y, cols, op):
@@ -355,42 +380,61 @@ def stamp_at(rgba, kind, x, y, cols, op):
 # banner sprite: rift flare (stacked layout) or the word (banner layout)
 # ---------------------------------------------------------------------------
 def build_rift_banner(scheme, word_bottom_screen):
-    """128x32, <=15 colours: a prismatic horizontal rift with a star."""
+    """128x32, <=15 colours: a tapered prismatic "rift" flare with a star.
+
+    Centred on the screen centre (banner x 54), just under the word."""
     W, Hh = BANNER_W, BANNER_H
     rgba = np.zeros((Hh, W, 4), np.float32)
     cx = SCREEN_W // 2 - BANNER_SCREEN_X          # banner x of the screen centre (54)
-    cy = max(4, min(Hh - 6, word_bottom_screen + 3 - BANNER_SCREEN_Y))
-    half = 52
-    core = px.gba((255, 255, 255))
-    cyan = px.gba(scheme["prism"][2])
-    blue = px.gba(scheme["prism"][4])
-    mag = px.gba(scheme["prism"][6])
-    gold = px.gba(scheme["gold"][2])
+    cy = max(9, min(Hh - 9, word_bottom_screen + 4 - BANNER_SCREEN_Y))
+    half = min(cx, W - 1 - cx)                    # 54: symmetric, fits the sprite
+    g = px.gba
+    white = g((255, 255, 255))
+    pale = g(scheme["prism"][1])
+    cyan = g(scheme["prism"][2])
+    blue = g(scheme["prism"][3])
+    peri = g(scheme["prism"][4])
+    violet = g(scheme["prism"][5])
+    mag = g(scheme["prism"][6])
+    deep = g(scheme["extrude"][0])
+    gold_l = g(scheme["gold"][0])
+    gold = g(scheme["gold"][2])
+
+    def put(x, y, c):
+        if 0 <= x < W and 0 <= y < Hh:
+            rgba[y, x, :3] = c
+            rgba[y, x, 3] = 255
+
+    # core line: colour by distance from the centre
+    core_ramp = [white] * 3 + [pale] * 3 + [cyan] * 3 + [blue] * 2 + [peri] * 2 + [violet, deep]
     for x in range(cx - half, cx + half + 1):
-        d = abs(x - cx) / half              # 0 centre .. 1 tips
-        if not (0 <= x < W):
-            continue
-        # core line (1px), brighter near the centre
-        c = core if d < 0.35 else (px.gba(scheme["prism"][1]) if d < 0.7 else cyan)
-        rgba[cy, x, :3] = c
-        rgba[cy, x, 3] = 255
-        # chromatic fringes: cyan above, magenta below, tapering
-        if d < 0.62:
-            rgba[cy - 1, x, :3] = cyan if d < 0.3 else blue
-            rgba[cy - 1, x, 3] = 255
-            rgba[cy + 1, x, :3] = mag if d < 0.3 else blue
-            rgba[cy + 1, x, 3] = 255
-        if d < 0.22:
-            rgba[cy - 2, x, :3] = blue
-            rgba[cy - 2, x, 3] = 255
-            rgba[cy + 2, x, :3] = px.gba(scheme["extrude"][0])
-            rgba[cy + 2, x, 3] = 255
-    cols = {"#": core, "+": px.gba(scheme["gold"][0]), "*": gold, ".": px.gba(scheme["gold"][3])}
-    px.stamp(rgba, "big", cx, cy, cols)
-    # two small sparkles on the line
-    small = {"#": core, "+": px.gba(scheme["prism"][1]), "*": cyan, ".": blue}
-    px.stamp(rgba, "cross", cx - 34, cy, small)
-    px.stamp(rgba, "cross", cx + 34, cy, small)
+        d = abs(x - cx) / half
+        put(x, cy, core_ramp[min(len(core_ramp) - 1, int(d * len(core_ramp)))])
+        # chromatic fringes (cyan above, magenta below), tapering
+        if d < 0.55:
+            put(x, cy - 1, cyan if d < 0.25 else (blue if d < 0.42 else peri))
+            put(x, cy + 1, mag if d < 0.25 else (violet if d < 0.42 else deep))
+        if d < 0.16:
+            put(x, cy - 2, peri)
+            put(x, cy + 2, deep)
+    # star: long vertical rays + short diagonal glints
+    ray = [white, white, pale, pale, cyan, blue, peri, violet]
+    for k, c in enumerate(ray, start=1):
+        put(cx, cy - k, c)
+        put(cx, cy + k, c if c not in (cyan, blue) else (mag if c == cyan else violet))
+    for k in (-1, 1):
+        put(cx + k, cy - 1, white)
+        put(cx + k, cy + 1, white)
+        put(cx + 2 * k, cy, white)
+    for dx, dy in ((2, 2), (-2, 2), (2, -2), (-2, -2)):
+        put(cx + dx, cy + dy, gold)
+    for dx, dy in ((3, 3), (-3, 3), (3, -3), (-3, -3)):
+        put(cx + dx, cy + dy, g(scheme["gold"][3]))
+    put(cx, cy, white)
+    # two small sparkles beside the line
+    small = {"#": white, "+": gold_l, ".": gold}
+    px.stamp(rgba, "tiny", cx - 31, cy - 5, small)
+    px.stamp(rgba, "tiny", cx + 37, cy + 4, {"#": white, "+": pale, ".": cyan})
     return px.snap_gba(rgba)
 
 
@@ -398,23 +442,24 @@ def build_word_banner(args, scheme):
     """Original-style banner: the word itself in 15 colours."""
     cv = Canvas(BANNER_W, BANNER_H, ss=6)
     word = args.word.upper()
-    rim_w, out_w, ext_d = 1, 1, 2
+    w_in, w_rim, w_out, ext_d = 1, 1, 1, 2
     cx = SCREEN_W // 2 - BANNER_SCREEN_X
     maxw = 2 * min(cx, BANNER_W - cx)
     cap = args.word_cap or 18
     try:
-        f, cap = fit_font(word, FONT_WORD, cap, maxw, 2 * (rim_w + out_w), -1)
+        f, cap = fit_font(word, FONT_WORD, cap, maxw, 2 * (w_in + w_rim + w_out), -1)
     except SystemExit:
         cx = BANNER_W // 2
-        f, cap = fit_font(word, FONT_WORD, cap, BANNER_W, 2 * (rim_w + out_w), -1)
-    probe = Word(Canvas(BANNER_W, BANNER_H, 1), word, f, -1, cx, 0, rim_w, out_w, ext_d)
+        f, cap = fit_font(word, FONT_WORD, cap, BANNER_W, 2 * (w_in + w_rim + w_out), -1)
+    probe = Word(Canvas(BANNER_W, BANNER_H, 1), word, f, -1, cx, 0, w_in, w_rim, w_out, ext_d)
     y0 = max(0, (BANNER_H - probe.bottom) // 2)
-    w = Word(cv, word, f, -1, cx, y0, rim_w, out_w, ext_d)
+    w = Word(cv, word, f, -1, cx, y0, w_in, w_rim, w_out, ext_d)
     nb = 5
     fill = band_colour([px.gba(c) for c in px.ramp(scheme["prism"][1:], nb)], w.cap_top, w.baseline)
     ids = layer_word(cv, w, fill, [px.gba(scheme["gold"][1]), px.gba(scheme["gold"][3])], scheme,
                      [px.gba(scheme["extrude"][0]), px.gba(scheme["extrude"][2])])
     dom, sec = cv.resolve()
+    px.drop_specks(dom, sec, ids["rim"], ids["in"], 8)
     rgba = cv.render(dom, sec)
     add_bevel(rgba, dom, ids["fill"], px.gba(scheme["prism"][0]))
     return px.snap_gba(rgba)
@@ -563,7 +608,6 @@ def main():
     os.makedirs(args.out, exist_ok=True)
 
     logo, info = build_logo(args, scheme)
-    sparkle_logo(logo, info, scheme)
 
     # ---- logo: indexed + palette
     assert logo[0:8, 0:8, 3].max() == 0, "tile 0 must stay transparent (used by the empty map cells)"

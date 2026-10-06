@@ -1,0 +1,179 @@
+# Proof of concept: an original town + route in a new "Johto" map group.
+# compile:  python3 tools/mapgen/compile_map.py tools/mapgen/examples/test_town.yaml
+region: REGION_JOHTO          # informational (map.json "mapgen_region"); build region stays HOENN
+maps:
+  # ------------------------------------------------------------------ Test Town
+  - name: TestTown
+    group: Johto
+    family: petalburg
+    map_type: town
+    music: MUS_LITTLEROOT
+    mapsec: MAPSEC_TEST_TOWN
+    mapsec_name: TEST TOWN
+    terrain: |
+      YYYYYYYYYYYYYY::::YYYYYYYYYYYYYY
+      YYYYYYYYYYYYYY::::YYYYYYYYYYYYYY
+      YY............::::............YY
+      YY..,,........::::........,,..YY
+      YY..,,........::::........,,..YY
+      YY............::::............YY
+      YY............::::............YY
+      YY............::::............YY
+      YY............::::..........ffYY
+      YY.....::::::::::::::::::.....YY
+      YY.....::::::::::::::::::.....YY
+      YY.ff.........::::.........ff.YY
+      YY............::::............YY
+      YY............::::............YY
+      YY............::::............YY
+      YY............::::............YY
+      YY............::::............YY
+      YY.....::::::::::::::::::.....YY
+      YY.....::::::::::::::::::.....YY
+      YY............................YY
+      YY..YY........................YY
+      YY..YY........................YY
+      YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+      YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+    stamps:
+      - {stamp: general/pokecenter_2, x: 6,  y: 5,  door: {to: TestTown_PokemonCenter_1F}}
+      - {stamp: general/mart_2,       x: 22, y: 5,  door: {to: TestTown_Mart}}
+      - {stamp: general/building_1,   x: 6,  y: 13, door: {to: TestTown_House1}}
+      - {stamp: petalburg/house_3,    x: 21, y: 12, door: {to: TestTown_House2}}
+      - {stamp: general/gym_1,        x: 13, y: 15, door: {to: TestTown_Gym}}
+      - {stamp: petalburg/house_4,    x: 25, y: 16, door: {to: MAP_LITTLEROOT_TOWN, warp: 0}}
+    npcs:
+      - {name: Boy, gfx: BOY_1, x: 11, y: 11, move: wander, range: [2, 1],
+         text: "Welcome to TEST TOWN! Everything here was drawn by a map compiler."}
+      - {name: Girl, gfx: GIRL_2, x: 20, y: 3, move: look_around,
+         text: "The road north leads to TEST ROUTE 1. Watch out for the tall grass!"}
+      - {name: OldMan, gfx: OLD_MAN, x: 22, y: 20, move: face_right,
+         text: "That little house over there?\nIt's a shortcut back to LITTLEROOT TOWN."}
+    signs:
+      - {name: TownSign, x: 12, y: 3, text: "TEST TOWN\nThe town that compiled itself."}
+    connections:
+      - {direction: up, map: TestRoute1, offset: 0}
+
+  # ------------------------------------------------------------------ Test Route 1
+  - name: TestRoute1
+    group: Johto
+    family: petalburg
+    map_type: route
+    music: MUS_ROUTE101
+    mapsec: MAPSEC_TEST_ROUTE_1
+    mapsec_name: TEST ROUTE 1
+    terrain: |
+      TTTTTTTTTTTTTT::::TTTTTTTTTTTTTT
+      TTTTTTTTTTTTTT::::TTTTTTTTTTTTTT
+      TT............::::............TT
+      TT..,,,,,,....::::....,,,,,,..TT
+      TT..,,,,,,....::::....,,,,,,..TT
+      TT..,,,,,,....::::....,,,,,,..TT
+      TT............::::............TT
+      TT...TTTT.....::::.....TTTT...TT
+      TT...TTTT.....::::.....TTTT...TT
+      TT............::::............TT
+      TT==========..::::..==========TT
+      TT............::::............TT
+      TT.,,,,,,,,...::::...,,,,,,,,.TT
+      TT.,,,,,,,,...::::...,,,,,,,,.TT
+      TT.,,,,,,,,...::::...,,,,,,,,.TT
+      TT............::::............TT
+      TT....~~~~~~..::::............TT
+      TT....~~~~~~..::::..ff....ff..TT
+      TT....~~~~~~..::::..ff....ff..TT
+      TT............::::............TT
+      TT..,,,,......::::......,,,,..TT
+      TT..,,,,......::::......,,,,..TT
+      TT............::::............TT
+      TTTTTTTTTTTTTT::::TTTTTTTTTTTTTT
+    trainers:
+      - {name: Youngster, trainer: TRAINER_TEST_ROUTE_JOEY, gfx: YOUNGSTER, x: 13, y: 13, move: face_right, sight: 4,
+         intro: "Hey! You just came from TEST TOWN? Let's battle!",
+         defeat: "Whoa, you're tough!",
+         after: "I should train in the tall grass more."}
+    npcs:
+      - {name: Hiker, gfx: HIKER, x: 19, y: 6, move: face_down,
+         text: "Jumping down a ledge is a one-way trip. Plan your route!"}
+    signs:
+      - {name: RouteSign, x: 18, y: 21, text: "TEST ROUTE 1\nNorth: ??? / South: TEST TOWN"}
+    connections:
+      - {direction: down, map: TestTown, offset: 0}
+    wild:
+      land:
+        rate: 25
+        mons:
+          - [SPECIES_SENTRET, 2, 3]
+          - [SPECIES_PIDGEY, 2, 3]
+          - [SPECIES_HOOTHOOT, 2, 3]
+          - [SPECIES_RATTATA, 2, 3]
+          - [SPECIES_SENTRET, 3, 4]
+          - [SPECIES_PIDGEY, 3, 4]
+          - [SPECIES_HOOTHOOT, 3, 4]
+          - [SPECIES_RATTATA, 3, 4]
+          - [SPECIES_LEDYBA, 3, 3]
+          - [SPECIES_SPINARAK, 3, 3]
+          - [SPECIES_HOPPIP, 4, 4]
+          - [SPECIES_MAREEP, 4, 4]
+    new_trainers:
+      - id: TRAINER_TEST_ROUTE_JOEY
+        name: JOEY
+        class: Youngster
+        pic: Youngster
+        gender: Male
+        party:
+          - {species: Rattata, level: 4}
+          - {species: Sentret, level: 3}
+
+  # ------------------------------------------------------------------ interiors (re-used layouts)
+  - name: TestTown_PokemonCenter_1F
+    group: JohtoIndoor
+    template: pokecenter_1f
+    exit_to: TestTown
+    upstairs: TestTown_PokemonCenter_2F
+    heal_location: HEAL_LOCATION_TEST_TOWN
+    npcs:
+      - {name: Gentleman, gfx: GENTLEMAN, x: 4, y: 4, move: face_down,
+         text: "The nurse heals your POKéMON for free. Nice, right?"}
+
+  - name: TestTown_PokemonCenter_2F
+    group: JohtoIndoor
+    template: pokecenter_2f
+    exit_to: TestTown_PokemonCenter_1F
+
+  - name: TestTown_Mart
+    group: JohtoIndoor
+    template: mart
+    exit_to: TestTown
+    mart_items: [ITEM_POKE_BALL, ITEM_POTION, ITEM_ANTIDOTE, ITEM_PARALYZE_HEAL, ITEM_REPEL]
+    npcs:
+      - {name: Shopper, gfx: WOMAN_5, x: 5, y: 5, move: wander, text: "POTIONS are a must on a long trip."}
+
+  - name: TestTown_House1
+    group: JohtoIndoor
+    template: house1
+    exit_to: TestTown
+    npcs:
+      - {name: Woman, gfx: WOMAN_2, x: 6, y: 4, move: face_down, text: "My house was stamped out of a bigger city map!"}
+
+  - name: TestTown_House2
+    group: JohtoIndoor
+    template: house2
+    exit_to: TestTown
+    npcs:
+      - {name: Kid, gfx: SCHOOL_KID_M, x: 7, y: 4, move: wander, text: "Did you see the gym? There's nobody to beat yet."}
+
+  - name: TestTown_Gym
+    group: JohtoIndoor
+    template: gym_rustboro
+    exit_to: TestTown
+    npcs:
+      - {name: Leader, gfx: ROXANNE, x: 5, y: 2, move: face_down,
+         text: 'I''m the TEST TOWN GYM LEADER.\pThe gym is still under construction, come back later!'}
+      - {name: Guide, gfx: MAN_2, x: 3, y: 18, move: face_down,
+         text: "Yo, challenger! This gym re-uses the RUSTBORO layout."}
+
+  # ------------------------------------------------------------------ link from Littleroot (this tree only)
+  - patch_map: LittlerootTown
+    set_warps:
+      - {index: 0, to: TestTown}     # May's house door -> the small house in Test Town
