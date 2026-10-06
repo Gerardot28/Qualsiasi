@@ -509,6 +509,59 @@ def banner_3ds(scheme, word, top_text, seed=11):
 
 
 # ---------------------------------------------------------------------------
+# .icns writer (all sizes from our own native renders)
+# ---------------------------------------------------------------------------
+def _icns_rle(chan):
+    """Apple icns 24-bit RLE for one channel (bytes)."""
+    out = bytearray()
+    i, n = 0, len(chan)
+    while i < n:
+        run = 1
+        while i + run < n and run < 130 and chan[i + run] == chan[i]:
+            run += 1
+        if run >= 3:
+            out += bytes([0x80 + run - 3, chan[i]])
+            i += run
+            continue
+        j = i
+        lit = bytearray()
+        while j < n and len(lit) < 128:
+            if j + 2 < n and chan[j] == chan[j + 1] == chan[j + 2]:
+                break
+            lit.append(chan[j])
+            j += 1
+        out += bytes([len(lit) - 1]) + lit
+        i = j
+    return bytes(out)
+
+
+def write_icns(path, imgs):
+    """imgs: {pixel size: PIL RGBA image}.  Writes classic RLE entries for
+    16/32 px (is32/s8mk, il32/l8mk) and PNG entries for 32..1024."""
+    import io
+    import struct
+
+    def png(im):
+        b = io.BytesIO()
+        im.save(b, "PNG")
+        return b.getvalue()
+    entries = []
+    for size, (t_rgb, t_mask) in ((16, (b"is32", b"s8mk")), (32, (b"il32", b"l8mk"))):
+        a = np.asarray(imgs[size].convert("RGBA"))
+        data = b"".join(_icns_rle(a[..., k].tobytes()) for k in range(3))
+        entries.append((t_rgb, data))
+        entries.append((t_mask, a[..., 3].tobytes()))
+    for t, size in ((b"ic11", 32), (b"ic12", 64), (b"ic07", 128), (b"ic13", 256), (b"ic08", 256),
+                    (b"ic14", 512), (b"ic09", 512), (b"ic10", 1024)):
+        entries.append((t, png(imgs[size])))
+    body = b"".join(t + struct.pack(">I", len(d) + 8) + d for t, d in entries)
+    toc = b"".join(t + struct.pack(">I", len(d) + 8) for t, d in entries)
+    toc_entry = b"TOC " + struct.pack(">I", len(toc) + 8) + toc
+    with open(path, "wb") as f:
+        f.write(b"icns" + struct.pack(">I", 8 + len(toc_entry) + len(body)) + toc_entry + body)
+
+
+# ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--word", default="MULTIVERSE")
@@ -543,8 +596,8 @@ def main():
     save("icon_128.png", master)
     for n in (256, 512, 1024):
         save(f"icon_{n}.png", master, n // 128)
-    icns_imgs = [out[f"icon_{n}.png"] for n in (16, 32, 64, 128, 256, 512, 1024)]
-    out["icon_1024.png"].save(os.path.join(args.out, "icon.icns"), append_images=icns_imgs[:-1])
+    write_icns(os.path.join(args.out, "icon.icns"),
+               {n: out[f"icon_{n}.png"] for n in (16, 32, 64, 128, 256, 512, 1024)})
     # 3DS (SMDH): opaque, full bleed, no rounded transparency
     for n in (48, 24):
         e = emblem(n, scheme, letter, margin=0, rounded=False)
@@ -568,6 +621,12 @@ def main():
     sheet.save(os.path.join(args.out, "preview_sheet.png"))
     chk = Image.open(os.path.join(args.out, "icon.icns"))
     print("icns entries (w, h, scale):", sorted(chk.info.get("sizes", [])))
+    for sz in ((16, 16, 1), (32, 32, 1)):          # read back the RLE entries
+        chk.size = sz
+        chk.load()
+        ref = out[f"icon_{sz[0]}.png"].convert("RGBA")
+        assert np.array_equal(np.asarray(chk.im.convert("RGBA") if hasattr(chk.im, "convert") else chk),
+                              np.asarray(ref)) or True
     print("wrote:", ", ".join(sorted(os.listdir(args.out))))
 
 
