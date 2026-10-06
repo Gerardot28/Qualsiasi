@@ -1,0 +1,29 @@
+loadstate /home/user/work/kanto-out/emu/base/base.state
+wait 30
+press A
+textbox t01_vermilion_sailor_ask 300
+press A 6 30
+textbox t02_vermilion_sailor_aboard 300
+press A
+waitmap MAP_LILYCOVE_CITY_HARBOR 600
+wait 120
+mapinfo
+shot t03_lilycove_arrival
+press UP 2 20
+press A
+textbox t04_lilycove_offer 300
+press A 6 30
+textbox t05_board 300
+press A
+wait 90
+shot t06_boarding
+press A
+wait 200
+shot t06b_ferry_depart
+mash A 300
+waitmap MAP_VERMILION_CITY 1200
+wait 150
+mapinfo
+shot t07_vermilion_arrival
+# init flags ran: FLAG_KANTO_FLAGS_INITIALIZED is index 0 of the Kanto block
+read8 [gSaveBlock1Ptr]+0x1270+300 kanto_flag_byte0

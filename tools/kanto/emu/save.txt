@@ -1,0 +1,18 @@
+loadstate /home/user/work/kanto-out/emu/base/base.state
+wait 30
+press START
+wait 30
+shot sv_00_menu
+press DOWN
+press DOWN
+press DOWN
+wait 10
+shot sv_01_menu_save
+press A
+textbox sv_02_prompt 900
+press A
+waitsavedata 1800
+textbox sv_03_saved 900
+press A
+wait 60
+mapinfo

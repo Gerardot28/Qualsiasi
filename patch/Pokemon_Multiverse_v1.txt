@@ -1,0 +1,22 @@
+BPS patch: Pokemon_Multiverse_v1.bps (17249491 bytes)
+Required original ROM: Pokemon - Emerald Version (USA, Europe)  (16777216 bytes, crc32 1F1C08FB, sha1 f3ae088181bf583e55daf962a92bb46f4f1d07b7)
+Created 2026-10-06T15:00:34Z with Floating IPS v6 --bps-delta
+
+vanilla_emerald.gba
+  size   16777216 bytes (16.00 MiB)
+  crc32  1F1C08FB
+  md5    605b89b67018abcea91e693a4dd25be3
+  sha1   f3ae088181bf583e55daf962a92bb46f4f1d07b7
+  gba    title='POKEMON EMER' code=BPEE maker=01 rev=0 header-checksum=ok
+pokeemerald-release.gba
+  size   33554432 bytes (32.00 MiB)
+  crc32  C14F611D
+  md5    dc27f484667ad977dbdcb669f9d386aa
+  sha1   b376b93ef26741b86ad5e24cea7583e9ca84c2c5
+  gba    title='PKMULTIVERSE' code=BPEE maker=01 rev=0 header-checksum=ok
+Pokemon_Multiverse_v1.bps
+  size   17249491 bytes (16.45 MiB)
+  crc32  2144DF1C  (same for every valid BPS file: compare sha1/md5 instead)
+  md5    8624cd0fcd1f171200a9dddf62d8813e
+  sha1   312b33653f5b4a06bc6ff9ed714ab71fac2d1665
+  bps    source crc32 1F1C08FB, target crc32 C14F611D

@@ -45,11 +45,14 @@ import sys
 
 MARK = 'KANTO_PORT'
 KEEP_SCRIPTS = {
-    # shared Emerald scripts that work as-is on Kanto maps
+    # shared Emerald scripts that work as-is on Kanto maps (the link attendants of the PokeCenter 2F are
+    # stubbed instead: their link rooms are FRLG maps that are not built)
     'EventScript_RockSmash', 'EventScript_StrengthBoulder', 'EventScript_CutTree',
-    'Common_EventScript_UnionRoomAttendant', 'Common_EventScript_WirelessClubAttendant',
-    'Common_EventScript_DirectCornerAttendant',
 }
+# map scripts of the original FRLG maps that are kept in the stubs (shared, built in Emerald too).
+# CableClub_OnResume initialises the union room state the Emerald nurse script reads: without it the nurse
+# copies an unterminated name into gStringVar1 and corrupts memory (blank text after healing).
+KEEP_MAP_SCRIPTS = {'CableClub_OnResume'}
 NO_SCRIPT = {'0x0', '0', '', 'NULL'}
 NURSE_GFX = {'OBJ_EVENT_GFX_NURSE_FRLG', 'OBJ_EVENT_GFX_NURSE'}
 LINK_GROUP = 'gMapGroup_Link_Frlg'
@@ -707,6 +710,9 @@ def write_stubs(tree, name, force=False):
     out.append('%s_MapScripts::' % name)
     if respawn or var_inits:
         out.append('\tmap_script MAP_SCRIPT_ON_TRANSITION, %s_OnTransition' % name)
+    for typ, lab in re.findall(r'^\s*map_script\s+(MAP_SCRIPT_\w+)\s*,\s*(\w+)', orig_text, re.M):
+        if lab in KEEP_MAP_SCRIPTS:
+            out.append('\tmap_script %s, %s' % (typ, lab))
     out += ['\t.byte 0', '']
     if respawn or var_inits:
         out.append('%s_OnTransition:' % name)
@@ -1146,7 +1152,6 @@ def main():
                              if any(not tree.is_ported(m) for m in tree.groups[tree.group_of[n]])})
     summary = {
         'ported_maps': ported,
-        'newly_ported': new,
         'layouts_flagged': sorted(used_layouts),
         'partially_built_groups': groups_partial,
         'dangling_references': dangling,
