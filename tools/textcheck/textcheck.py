@@ -483,103 +483,132 @@ class Measurer:
         self.ph_widths = dict(ph_widths)   # FD id -> px
 
     def lines(self, units, ph_override=None, font=FONT_NORMAL):
-        """units: list of (bytes, srcline).  Returns list of dicts:
-        {width, fixed, ph: Counter, term: 'n'|'l'|'p'|'$'|'', line: srcline,
-         glyphs: bool}"""
-        phw = self.ph_widths if not ph_override else dict(self.ph_widths, **ph_override)
+        """units: list of (bytes, srcline, srctext) - normally one per token.
+        Returns a list of display lines (dicts):
+          width  : pixel width (placeholders at their assumed width)
+          fixed  : width without placeholders
+          ph     : Counter of placeholder ids on the line
+          term   : what ended the line: 'n' '\\n', 'l' '\\l', 'p' '\\p', '$' EOS, '' end of data
+          line   : source line number where the display line starts
+          glyphs : True if anything visible is drawn
+          text   : source text of the display line (for reports)
+        """
+        phw = dict(self.ph_widths)
+        if ph_override:
+            phw.update(ph_override)
+        flat = []          # (byte, unit index)
+        for ui, u in enumerate(units):
+            for byte in u[0]:
+                flat.append((byte, ui))
         out = []
-        cur = None
-        min_spacing = 0
-        japanese = False
+        st = {'cur': None, 'min_spacing': 0, 'japanese': False, 'font': font, 'last_unit': -1}
 
-        def new_line(srcline):
-            return {'width': 0, 'fixed': 0, 'ph': Counter(), 'term': '', 'line': srcline,
-                    'glyphs': False, 'text': []}
+        def start(ui):
+            st['cur'] = {'width': 0, 'fixed': 0, 'ph': Counter(), 'term': '', 'line': units[ui][1],
+                         'glyphs': False, 'text': [], 'units': []}
+            st['last_unit'] = -1
 
-        def add(w, fixed=True):
-            if min_spacing and w < min_spacing:
-                w = min_spacing
+        def note_unit(ui):
+            cur = st['cur']
+            if ui != st['last_unit']:
+                st['last_unit'] = ui
+                cur['units'].append(ui)
+                cur['text'].append(units[ui][2])
+
+        def finish(term):
+            cur = st['cur']
+            cur['term'] = term
+            out.append(cur)
+            st['cur'] = None
+
+        def add(w):
+            if st['min_spacing'] and w < st['min_spacing']:
+                w = st['min_spacing']
+            cur = st['cur']
             cur['width'] += w
-            if fixed:
-                cur['fixed'] += w
+            cur['fixed'] += w
             cur['glyphs'] = True
 
-        for data, srcline in units:
-            i = 0
-            n = len(data)
-            while i < n:
-                if cur is None:
-                    cur = new_line(srcline)
-                c = data[i]
+        n = len(flat)
+        i = 0
+
+        def arg(k):
+            return flat[k][0] if k < n else 0
+
+        while i < n:
+            c, ui = flat[i]
+            if st['cur'] is None:
+                start(ui)
+            note_unit(ui)
+            cur = st['cur']
+            i += 1
+            if c == 0xFF:
+                finish('$')
+                continue
+            if c in (0xFE, 0xFA, 0xFB):
+                finish({0xFE: 'n', 0xFA: 'l', 0xFB: 'p'}[c])
+                continue
+            if c == 0xFD:
+                pid = arg(i)
+                if i < n:
+                    note_unit(flat[i][1])
                 i += 1
-                if c == 0xFF:
-                    cur['term'] = '$'
-                    out.append(cur)
-                    cur = None
-                    continue
-                if c in (0xFE, 0xFA, 0xFB):
-                    cur['term'] = {0xFE: 'n', 0xFA: 'l', 0xFB: 'p'}[c]
-                    out.append(cur)
-                    cur = None
-                    continue
-                if c == 0xFD:
-                    pid = data[i] if i < n else 0
-                    i += 1
-                    w = phw.get(pid, 0)
-                    cur['ph'][pid] += 1
-                    cur['width'] += w
-                    cur['glyphs'] = True
-                    continue
-                if c == 0xF7:      # CHAR_DYNAMIC, filled by C code
-                    i += 1
-                    continue
-                if c == 0xF8:
-                    kid = data[i] if i < n else 0
-                    i += 1
-                    add(KEYPAD_WIDTHS.get(kid, 8))
-                    continue
-                if c == 0xF9:
-                    gid = (data[i] if i < n else 0) | 0x100
-                    i += 1
-                    add(8 if japanese else self.fonts.glyph(font, gid))
-                    continue
-                if c == 0xFC:
-                    code = data[i] if i < n else 0
-                    i += 1
-                    nargs = EXT_CTRL_ARGS.get(code, 0)
-                    args = data[i:i + nargs]
-                    i += nargs
-                    if code == 0x06 and args:
-                        font = args[0]
-                    elif code == 0x0C and args:            # ESCAPE -> glyph 0x1xx
-                        add(self.fonts.glyph(font, 0x100 | args[0]))
-                    elif code == 0x0D and args:            # SHIFT_RIGHT
-                        cur['width'] = cur['fixed'] = args[0]
-                    elif code == 0x11 and args:            # CLEAR
-                        cur['width'] += args[0]
-                        cur['fixed'] += args[0]
-                    elif code == 0x12 and args:            # SKIP
-                        cur['width'] = cur['fixed'] = args[0]
-                    elif code == 0x13 and args:            # CLEAR_TO
-                        if args[0] > cur['width']:
-                            cur['fixed'] += args[0] - cur['width']
-                            cur['width'] = args[0]
-                    elif code == 0x14 and args:
-                        min_spacing = args[0]
-                    elif code == 0x15:
-                        japanese = True
-                    elif code == 0x16:
-                        japanese = False
-                    elif code == 0x0F:                     # FILL_WINDOW
-                        cur['term'] = 'p'
-                        out.append(cur)
-                        cur = None
-                    continue
-                if c == 0x3A:          # ZWS: zero width
-                    continue
-                add(8 if japanese else self.fonts.glyph(font, c))
-        if cur is not None:
-            out.append(cur)
+                cur['ph'][pid] += 1
+                cur['width'] += phw.get(pid, 0)
+                cur['glyphs'] = True
+                continue
+            if c == 0xF7:          # CHAR_DYNAMIC, filled in by C code
+                i += 1
+                continue
+            if c == 0xF8:          # keypad icon
+                add(KEYPAD_WIDTHS.get(arg(i), 8))
+                i += 1
+                continue
+            if c == 0xF9:          # extra symbol: glyph 0x100 | id
+                gid = arg(i) | 0x100
+                i += 1
+                add(8 if st['japanese'] else self.fonts.glyph(st['font'], gid))
+                continue
+            if c == 0xFC:
+                code = arg(i)
+                i += 1
+                nargs = EXT_CTRL_ARGS.get(code, 0)
+                args = [arg(k) for k in range(i, i + nargs)]
+                for k in range(i, min(i + nargs, n)):
+                    note_unit(flat[k][1])
+                i += nargs
+                if code == 0x06 and args:
+                    st['font'] = args[0]
+                elif code == 0x07:
+                    st['font'] = font
+                elif code == 0x0C and args:            # ESCAPE -> glyph 0x1xx
+                    add(self.fonts.glyph(st['font'], 0x100 | args[0]))
+                elif code in (0x0D, 0x12) and args:    # SHIFT_RIGHT / SKIP: absolute x
+                    cur['width'] = cur['fixed'] = args[0]
+                elif code == 0x11 and args:            # CLEAR: advance
+                    cur['width'] += args[0]
+                    cur['fixed'] += args[0]
+                elif code == 0x13 and args:            # CLEAR_TO
+                    if args[0] > cur['width']:
+                        cur['fixed'] += args[0] - cur['width']
+                        cur['width'] = args[0]
+                elif code == 0x14 and args:
+                    st['min_spacing'] = args[0]
+                elif code == 0x15:
+                    st['japanese'] = True
+                elif code == 0x16:
+                    st['japanese'] = False
+                elif code == 0x0F:                     # FILL_WINDOW: like a new box
+                    finish('p')
+                continue
+            if c == 0x3A:          # ZWS: zero width
+                continue
+            add(8 if st['japanese'] else self.fonts.glyph(st['font'], c))
+        if st['cur'] is not None:
+            finish('')
+        for dl in out:
+            dl['text'] = ''.join(dl['text'])
+            del dl['units']
         return out
 
 
@@ -587,7 +616,10 @@ class Measurer:
 # File model
 # ==========================================================================
 LABEL_RE = re.compile(r'^[ \t]*([A-Za-z_][A-Za-z0-9_]*)(::?)')
-PREPROC_RE = re.compile(r'^[ \t]*#[ \t]*(if|ifdef|ifndef|elif|else|endif)\b')
+# C preprocessor and GNU as conditionals: both may wrap alternative .string lines
+PREPROC_RE = re.compile(r'^[ \t]*(?:#[ \t]*(if|ifdef|ifndef|elif|else|endif)|\.(if\w*|else|elseif|endif))\b')
+COND_OPEN = ('if', 'ifdef', 'ifndef')
+COND_ELSE = ('elif', 'else', 'elseif')
 STRING_RE = re.compile(r'^[ \t]*\.string')
 
 
@@ -612,7 +644,10 @@ class Line:
             m = PREPROC_RE.match(clean)
             if m:
                 self.kind = 'pp'
-                self.norm = '#' + m.group(1) + ' ' + ' '.join(s[1:].split()[1:]) if len(s[1:].split()) > 1 else '#' + m.group(1)
+                d = m.group(1) or m.group(2)
+                self.label = ('open' if (d in COND_OPEN or (m.group(2) and d.startswith('if')))
+                              else 'else' if d in COND_ELSE else 'close')
+                self.norm = _normalize_struct(s)
                 return
             self.kind = 'struct'
             m = LABEL_RE.match(clean)
@@ -681,15 +716,15 @@ class Block:
         line_path = []
         for ln in self.lines:
             if ln.kind == 'pp':
-                d = ln.norm.split()[0][1:]
-                if d in ('if', 'ifdef', 'ifndef'):
+                d = ln.label        # 'open' / 'else' / 'close'
+                if d == 'open':
                     groups.append(1)
                     stack.append([len(groups) - 1, 0])
-                elif d in ('elif', 'else'):
+                elif d == 'else':
                     if stack:
                         stack[-1][1] += 1
                         groups[stack[-1][0]] += 1
-                elif d == 'endif':
+                elif d == 'close':
                     if stack:
                         stack.pop()
                 line_path.append(None)
@@ -778,3 +813,840 @@ class AsmTextFile:
             self.blocks.append(cur)
         self.gaps.append(gap_count)
         self.block_by_key = {b.key: b for b in self.blocks}
+
+
+# ==========================================================================
+# Usage index: how is each text label displayed?
+# ==========================================================================
+# Primitive script commands (or macros treated as primitives) -> (arg index -> class)
+BASE_USAGE = {
+    'message': {0: 'field'},
+    'messageautoscroll': {0: 'field'},
+    'messageinstant': {0: 'field'},
+    'vmessage': {0: 'field'},
+    'pokenavcall': {0: 'pokenav'},
+    'bufferstring': {1: 'buffer'},
+    'vbufferstring': {1: 'buffer'},
+    'vbuffermessage': {0: 'buffer'},
+    'dynmultipush': {0: 'menu'},
+    # scripts/trainer_battle.inc + battle_setup.c: intro/cannot-battle texts are
+    # shown with ShowFieldMessage, defeat/victory texts inside the battle box.
+    'trainerbattle': {2: 'field', 3: 'battle', 7: 'field', 8: 'battle', 10: 'battle', 11: 'field'},
+    '.4byte': {},
+}
+# `loadword 0, Text` + callstd -> standard message box (msgbox macro)
+LOADWORD_MSG = ('loadword', 1)
+# C usage patterns that clearly show a field message box
+C_FIELD_CALLS = ('ShowFieldMessage', 'ShowFieldAutoScrollMessage', 'DisplayItemMessageOnField',
+                 'ShowFieldMessageFromBuffer')
+# C files whose text tables are displayed in a known window (see --calibrate)
+# (verified in the C sources: tv.c / battle_pyramid.c / birch_pc.c call ShowFieldMessage,
+#  apprentice texts are expanded into gStringVar4 and shown with `message`,
+#  match_call.c prints in sMatchCallTextWindow at x=32, pokenav_match_call_gfx.c
+#  prints call messages in sCallMsgBoxWindowTemplate (28 tiles) at x=32)
+C_FILE_CLASSES = {
+    'src/tv.c': 'field',
+    'src/battle_pyramid.c': 'field',
+    'src/birch_pc.c': 'field',
+    'src/data/battle_frontier/apprentice.h': 'field',
+    'src/match_call.c': 'pokenav',
+    'src/pokenav_match_call_data.c': 'pokenav',
+}
+
+IDENT_RE = re.compile(r'[A-Za-z_]\w*')
+
+
+def _split_args(rest):
+    rest = rest.strip()
+    if not rest:
+        return []
+    return [a.strip() for a in rest.split(',')]
+
+
+class UsageIndex:
+    def __init__(self, root, text_labels):
+        self.root = root
+        self.text_labels = text_labels
+        self.macro_usage = {}     # (macro, argidx) -> set(classes)
+        self.refs = defaultdict(list)    # label -> [(cmd, argidx, classes, file, line)]
+        self._load_macros()
+        self._scan_scripts()
+        self._scan_c()
+
+    def _load_macros(self):
+        macros = {}
+        for path in sorted(glob.glob(os.path.join(self.root, 'asm', 'macros', '**', '*.inc'), recursive=True)) + \
+                [os.path.join(self.root, 'asm', 'macros', 'event.inc')]:
+            if not os.path.exists(path):
+                continue
+            with open(path, encoding='utf-8', errors='replace') as f:
+                text = remove_asm_comments(f.read())
+            cur = None
+            for line in text.split('\n'):
+                s = line.strip()
+                m = re.match(r'^\.macro\s+(\w+)\s*(.*)$', s)
+                if m:
+                    ps = re.sub(r':\s*req', ':req', m.group(2))
+                    ps = re.sub(r'\s*=\s*', '=', ps)
+                    params = [p.split(':')[0].split('=')[0] for p in re.split(r'[\s,]+', ps) if p]
+                    cur = (m.group(1), params, [])
+                    macros[m.group(1)] = cur
+                    continue
+                if s.startswith('.endm'):
+                    cur = None
+                    continue
+                if cur is not None and s:
+                    cur[2].append(s)
+        usage = defaultdict(set)
+        for cmd, d in BASE_USAGE.items():
+            for idx, cls in d.items():
+                usage[(cmd, idx)].add(cls)
+        changed = True
+        while changed:
+            changed = False
+            for name, params, body in macros.values():
+                if name in BASE_USAGE:
+                    continue
+                for s in body:
+                    m = re.match(r'^([.\w]+)\s*(.*)$', s)
+                    if not m:
+                        continue
+                    cmd, args = m.group(1), _split_args(m.group(2))
+                    for i, a in enumerate(args):
+                        for pm in re.finditer(r'\\(\w+)', a):
+                            if pm.group(1) not in params:
+                                continue
+                            pidx = params.index(pm.group(1))
+                            cls = set(usage.get((cmd, i), ()))
+                            if (cmd, i) == LOADWORD_MSG and args and args[0] == '0':
+                                cls.add('field')
+                            if cls - usage[(name, pidx)]:
+                                usage[(name, pidx)] |= cls
+                                changed = True
+        self.macro_usage = {k: v for k, v in usage.items() if v}
+        self.macros = macros
+
+    def _scan_scripts(self):
+        files = glob.glob(os.path.join(self.root, 'data', '**', '*.inc'), recursive=True) + \
+            glob.glob(os.path.join(self.root, 'data', '*.s'))
+        for path in sorted(files):
+            rel = os.path.relpath(path, self.root)
+            with open(path, encoding='utf-8', errors='replace') as f:
+                text = remove_asm_comments(f.read())
+            for no, line in enumerate(text.split('\n'), 1):
+                s = line.strip()
+                if not s or s.startswith('.string') or s.startswith('.braille'):
+                    continue
+                m = re.match(r'^([.\w]+)\s*(.*)$', s)
+                if not m or s.startswith('#'):
+                    continue
+                cmd = m.group(1)
+                if m.group(2).startswith(':'):
+                    continue
+                args = _split_args(m.group(2))
+                for i, a in enumerate(args):
+                    if a in self.text_labels:
+                        cls = set(self.macro_usage.get((cmd, i), ()))
+                        if (cmd, i) == LOADWORD_MSG and args[0] == '0':
+                            cls.add('field')
+                        self.refs[a].append((cmd, i, frozenset(cls), rel, no))
+
+    def _scan_c(self):
+        files = glob.glob(os.path.join(self.root, 'src', '**', '*.c'), recursive=True) + \
+            glob.glob(os.path.join(self.root, 'src', '**', '*.h'), recursive=True)
+        for path in sorted(files):
+            rel = os.path.relpath(path, self.root)
+            with open(path, encoding='utf-8', errors='replace') as f:
+                text = _strip_c_comments(f.read())
+            if not any(lbl in text for lbl in ('gText', 'Text_', '_Text')):
+                pass
+            for no, line in enumerate(text.split('\n'), 1):
+                for m in IDENT_RE.finditer(line):
+                    lbl = m.group(0)
+                    if lbl not in self.text_labels:
+                        continue
+                    pre = line[:m.start()]
+                    call = None
+                    depth = 0
+                    for j in range(len(pre) - 1, -1, -1):
+                        ch = pre[j]
+                        if ch == ')':
+                            depth += 1
+                        elif ch == '(':
+                            if depth == 0:
+                                cm = re.search(r'(\w+)\s*$', pre[:j])
+                                call = cm.group(1) if cm else None
+                                break
+                            depth -= 1
+                    cls = set()
+                    if call in C_FIELD_CALLS:
+                        cls.add('field')
+                    elif rel in C_FILE_CLASSES:
+                        cls.add(C_FILE_CLASSES[rel])
+                    self.refs[lbl].append(('C:' + (call or '-'), -1, frozenset(cls), rel, no))
+
+    def classify(self, label):
+        """Returns (classes:set, description:str)."""
+        refs = self.refs.get(label, [])
+        classes = set()
+        for r in refs:
+            classes |= r[2]
+        if not refs:
+            return set(), 'unreferenced'
+        if classes:
+            return classes, ','.join(sorted(classes))
+        kinds = sorted(set(r[0] for r in refs))
+        return set(), 'unclassified(' + ','.join(kinds[:4]) + ')'
+
+
+# ==========================================================================
+# Issues
+# ==========================================================================
+class Issue:
+    def __init__(self, sev, check, file, line, label, msg, width=None, limit=None, text=None, suggestion=None):
+        self.sev = sev
+        self.check = check
+        self.file = file
+        self.line = line
+        self.label = label
+        self.msg = msg
+        self.width = width
+        self.limit = limit
+        self.text = text
+        self.suggestion = suggestion
+
+    def to_dict(self):
+        d = {'severity': self.sev, 'check': self.check, 'file': self.file, 'line': self.line,
+             'label': self.label, 'message': self.msg}
+        if self.width is not None:
+            d['width'] = self.width
+            d['limit'] = self.limit
+        if self.text is not None:
+            d['text'] = self.text
+        if self.suggestion:
+            d['suggestion'] = self.suggestion
+        return d
+
+    def format(self):
+        s = '%s:%s: %s [%s]' % (self.file, self.line, self.sev, self.check)
+        if self.label:
+            s += ' %s:' % self.label
+        s += ' ' + self.msg
+        if self.width is not None:
+            s += ' (%dpx > %dpx)' % (self.width, self.limit)
+        if self.text is not None:
+            s += '\n    | ' + self.text
+        if self.suggestion:
+            s += '\n    -> suggestion: ' + self.suggestion
+        return s
+
+
+# ==========================================================================
+# Checker
+# ==========================================================================
+class Context:
+    def __init__(self, root, orig, charmap_path=None, player_width=42, strvar_width=60,
+                 arrow_check=True):
+        self.root = root
+        self.orig = orig
+        cm_path = charmap_path or (os.path.join(root, 'charmap.txt') if root and os.path.exists(os.path.join(root, 'charmap.txt'))
+                                   else os.path.join(orig, 'charmap.txt'))
+        self.charmap = Charmap(cm_path)
+        fonts_c = os.path.join(root, 'src', 'fonts.c') if root and os.path.exists(os.path.join(root or '', 'src', 'fonts.c')) \
+            else os.path.join(orig, 'src', 'fonts.c')
+        self.fonts = Fonts(fonts_c)
+        self.player_width = player_width
+        self.strvar_width = strvar_width
+        self.arrow_check = arrow_check
+        self.ph_widths = self._placeholder_widths()
+        self.measurer = Measurer(self.fonts, self.ph_widths)
+        self.index = None
+
+    def _placeholder_widths(self):
+        strings_c = os.path.join(self.root, 'src', 'strings.c')
+        if not os.path.exists(strings_c):
+            strings_c = os.path.join(self.orig, 'src', 'strings.c')
+        cstr = load_c_strings(strings_c, self.charmap)
+        tmp = Measurer(self.fonts, {})
+        w = {PH_PLAYER: self.player_width, PH_STR1: self.strvar_width,
+             PH_STR2: self.strvar_width, PH_STR3: self.strvar_width}
+        self.ph_sources = {}
+        for pid, names in PH_FIXED_STRINGS.items():
+            best = 0
+            for nm in names:
+                if nm in cstr:
+                    ls = tmp.lines([(cstr[nm], 0, '')])
+                    best = max([best] + [dl['width'] for dl in ls])
+            w[pid] = best
+            self.ph_sources[pid] = names
+        w[PH_RIVAL] = max(w.get(PH_RIVAL, 0), self.player_width)
+        return w
+
+    def build_index(self, text_labels):
+        self.index = UsageIndex(self.orig, text_labels)
+
+
+def collect_text_labels(paths, charmap):
+    labels = set()
+    for p in paths:
+        if os.path.exists(p):
+            af = AsmTextFile(p, charmap)
+            labels.update(b.label for b in af.blocks if b.label)
+    return labels
+
+
+def _units(lines):
+    units = []
+    for ln in lines:
+        for t in ln.toks or ():
+            units.append((t.data, ln.no, t.src))
+    return units
+
+
+def _segments(dlines):
+    """split display lines at '$' into segments"""
+    segs, cur = [], []
+    for dl in dlines:
+        cur.append(dl)
+        if dl['term'] == '$':
+            segs.append(cur)
+            cur = []
+    if cur:
+        segs.append(cur)
+    return segs
+
+
+def box_violations(dlines):
+    """Simulate the 2-line message box.  Returns list of (kind, dline):
+       'third_line'  : text drawn on a 3rd row (\\n used where \\l was needed)
+       'scroll_first': \\l used as the first break of a paragraph"""
+    res = []
+    row = 0
+    for dl in dlines:
+        if dl['glyphs'] and row >= 2:
+            res.append(('third_line', dl))
+        t = dl['term']
+        if t == 'n':
+            row += 1
+        elif t == 'l':
+            if row == 0 and dl['glyphs']:
+                res.append(('scroll_first', dl))
+            row = max(row, 1)
+        elif t in ('p', '$', ''):
+            row = 0
+    return res
+
+
+class LabelInfo:
+    """Per-label limits calibrated on the vanilla text."""
+
+    def __init__(self, ctx, label, orig_blocks):
+        self.label = label
+        classes, desc = ctx.index.classify(label) if ctx.index else (set(), 'unclassified')
+        self.classes = classes
+        self.desc = desc
+        box = [c for c in classes if c in CLASS_LIMITS]
+        self.box = bool(box)
+        self.cls = min(box, key=lambda c: CLASS_LIMITS[c]) if box else None
+        base = CLASS_LIMITS[self.cls] if box else LIMIT_FIELD
+        self.base_limit = base
+        # --- calibrate STR_VAR widths on vanilla lines
+        dlines = []
+        for b in orig_blocks:
+            for _, sl in b.variants():
+                dlines.extend(ctx.measurer.lines(_units(sl)))
+        dflt = ctx.ph_widths
+        scale = {}
+        for dl in dlines:
+            cal = [p for p in dl['ph'] if p in CALIBRATED_PH]
+            if not cal:
+                continue
+            other = dl['fixed'] + sum(dflt.get(p, 0) * k for p, k in dl['ph'].items() if p not in CALIBRATED_PH)
+            tok = sum(dflt[p] * dl['ph'][p] for p in cal)
+            if tok <= 0:
+                continue
+            s = (base - other) / tok
+            for p in cal:
+                scale[p] = min(scale.get(p, 1.0), s)
+        self.ph_override = {p: max(0, int(dflt[p] * s)) for p, s in scale.items() if s < 1.0}
+        # --- vanilla maxima under the calibrated model
+        self.vanilla_max = 0
+        self.vanilla_box = Counter()
+        self.vanilla_arrow = 0
+        for b in orig_blocks:
+            for _, sl in b.variants():
+                dl2 = ctx.measurer.lines(_units(sl), self.ph_override)
+                for dl in dl2:
+                    self.vanilla_max = max(self.vanilla_max, dl['width'])
+                    if dl['term'] in ('p', 'l') and dl['width'] + DOWN_ARROW_W > base:
+                        self.vanilla_arrow += 1
+                for seg in _segments(dl2):
+                    for kind, _ in box_violations(seg):
+                        self.vanilla_box[kind] += 1
+        self.limit = max(base, self.vanilla_max)
+        self.preexisting_overflow = self.vanilla_max > base
+
+
+class Checker:
+    def __init__(self, ctx, warn_arrow=True):
+        self.ctx = ctx
+        self.issues = []
+        self.stats = Counter()
+        self.label_infos = {}
+        self.warn_arrow = warn_arrow
+
+    def add(self, *a, **kw):
+        self.issues.append(Issue(*a, **kw))
+
+    def label_info(self, label, orig_af):
+        li = self.label_infos.get(label)
+        if li is None:
+            blocks = [b for b in orig_af.blocks if b.label == label] if orig_af else []
+            li = LabelInfo(self.ctx, label, blocks)
+            self.label_infos[label] = li
+        return li
+
+    # ------------------------------------------------------------------
+    def check_file(self, rel, new_path, orig_path):
+        ctx = self.ctx
+        self.stats['files'] += 1
+        try:
+            new = AsmTextFile(new_path, ctx.charmap, rel)
+        except OSError as e:
+            self.add('error', 'IO', rel, 0, None, 'cannot read new file: %s' % e)
+            return
+        orig = None
+        if orig_path and os.path.exists(orig_path):
+            orig = AsmTextFile(orig_path, ctx.charmap, rel)
+        else:
+            self.add('warning', 'STRUCTURE', rel, 0, None, 'no original file to compare with (%s)' % orig_path)
+
+        self._check_charmap(rel, new)
+        if orig is None:
+            return
+        if new.crlf and not orig.crlf:
+            self.add('warning', 'STRUCTURE', rel, 0, None, 'file now uses CRLF line endings')
+        struct_ok = self._check_structure(rel, new, orig)
+        self._check_blocks(rel, new, orig, struct_ok)
+
+    # ------------------------------------------------------------------
+    def _check_charmap(self, rel, af):
+        for ln in af.lines:
+            if ln.kind != 'string':
+                continue
+            self.stats['string_lines'] += 1
+            for col, msg, sug in ln.errs:
+                self.add('error', 'CHARMAP', rel, ln.no, None, '%s (col %d)' % (msg, col + 1),
+                         text=ln.raw.strip(), suggestion=sug)
+            toks = ln.toks or []
+            for i, t in enumerate(toks):
+                if t.src == '‘' and i > 0 and toks[i - 1].src.isalpha() and \
+                        i + 1 < len(toks) and toks[i + 1].src.isalpha():
+                    self.add('warning', 'STYLE', rel, ln.no, None,
+                             "‘ (opening quote) used as apostrophe (col %d)" % (t.col + 1),
+                             text=ln.raw.strip(), suggestion="use ' or ’")
+
+    def _check_structure(self, rel, new, orig):
+        a = [ln.norm for ln in orig.struct]
+        b = [ln.norm for ln in new.struct]
+        if a != b:
+            n = min(len(a), len(b))
+            i = 0
+            while i < n and a[i] == b[i]:
+                i += 1
+            import difflib
+            ndiff = sum(max(i2 - i1, j2 - j1) for tag, i1, i2, j1, j2 in
+                        difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes() if tag != 'equal')
+            nl = new.struct[i].no if i < len(b) else (new.lines[-1].no if new.lines else 0)
+            exp = a[i] if i < len(a) else '<end of file>'
+            got = b[i] if i < len(b) else '<end of file>'
+            self.add('error', 'STRUCTURE', rel, nl, None,
+                     'non-.string line differs from original (orig line %s): expected %r, found %r; %d differing line(s) in total'
+                     % (orig.struct[i].no if i < len(a) else '-', exp, got, ndiff))
+            return False
+        for i, (ga, gb) in enumerate(zip(orig.gaps, new.gaps)):
+            if (ga > 0) != (gb > 0):
+                where = new.struct[i - 1].no if i > 0 else 1
+                if ga == 0:
+                    msg = '.string line(s) inserted where the original has none (after line %d) - would inject bytes into the script' % where
+                else:
+                    msg = 'all .string lines removed after line %d' % where
+                self.add('error', 'STRUCTURE', rel, where, None, msg)
+        return True
+
+    # ------------------------------------------------------------------
+    def _check_blocks(self, rel, new, orig, struct_ok):
+        ctx = self.ctx
+        for ob in orig.blocks:
+            nb = new.block_by_key.get(ob.key)
+            label = ob.label
+            if nb is None:
+                self.add('error', 'TERMINATION', rel, ob.first_line, label,
+                         'text block missing in new file (orig line %d)' % ob.first_line)
+                continue
+            self.stats['blocks'] += 1
+            if [l.raw for l in ob.lines] != [l.raw for l in nb.lines]:
+                self.stats['blocks_changed'] += 1
+            li = self.label_info(label, orig)
+            ov = dict(ob.variants())
+            for vname, nsl in nb.variants():
+                osl = ov.get(vname)
+                if osl is None:
+                    osl = list(ov.values())[0]
+                self._check_termination(rel, label, vname, osl, nsl, nb)
+                self._check_display(rel, label, li, nsl)
+        okeys = set(b.key for b in orig.blocks)
+        for nb in new.blocks:
+            if nb.key not in okeys:
+                self.add('error', 'TERMINATION', rel, nb.first_line, nb.label,
+                         'text block not present in the original (label %s, block #%d)' % (nb.label, nb.ordinal + 1))
+
+    def _check_termination(self, rel, label, vname, osl, nsl, nb):
+        def info(sl):
+            data = b''.join(t.data for l in sl for t in (l.toks or ()))
+            return data, data.count(b'\xff'), data.endswith(b'\xff')
+        od, ok_, oend = info(osl)
+        nd, nk, nend = info(nsl)
+        vtag = (' [%s #if branch]' % vname) if vname else ''
+        last = nsl[-1].no if nsl else nb.first_line
+        # "$" must be the last thing on its .string line
+        for ln in nsl:
+            toks = [t for t in (ln.toks or ()) if t.data]
+            for i, t in enumerate(toks):
+                if b'\xff' in t.data and i != len(toks) - 1:
+                    self.add('error', 'TERMINATION', rel, ln.no, label,
+                             'text after "$" on the same line is never displayed' + vtag, text=ln.raw.strip())
+        if oend and not nend:
+            self.add('error', 'TERMINATION', rel, last, label,
+                     'block must end with "$" (original does); the text would run into the next label' + vtag,
+                     text=nsl[-1].raw.strip() if nsl else None)
+        elif nend and not oend:
+            self.add('error', 'TERMINATION', rel, last, label,
+                     'block ends with "$" but the original does not (it continues into the next label)' + vtag)
+        if nk > ok_:
+            # find the first premature terminator
+            seen = 0
+            for ln in nsl:
+                cnt = sum(t.data.count(b'\xff') for t in (ln.toks or ()))
+                seen += cnt
+                if cnt and seen <= nk - (1 if nend else 0) and ln is not nsl[-1]:
+                    self.add('error', 'TERMINATION', rel, ln.no, label,
+                             '"$" in the middle of the block: the text after it is cut off' + vtag,
+                             text=ln.raw.strip())
+                    break
+            else:
+                self.add('error', 'TERMINATION', rel, last, label,
+                         'more "$" terminators (%d) than the original (%d)%s' % (nk, ok_, vtag))
+        elif nk < ok_ and not (oend and not nend):
+            self.add('error', 'TERMINATION', rel, last, label,
+                     'fewer "$" terminators (%d) than the original (%d)%s' % (nk, ok_, vtag))
+
+    def _check_display(self, rel, label, li, nsl):
+        ctx = self.ctx
+        dlines = ctx.measurer.lines(_units(nsl), li.ph_override)
+        for dl in dlines:
+            self.stats['display_lines'] += 1
+            if dl['width'] > li.limit:
+                if li.box:
+                    what = '%s box' % li.cls
+                    lim_desc = '' if not li.preexisting_overflow else ' (vanilla already %dpx)' % li.vanilla_max
+                else:
+                    what = 'unclassified text'
+                    lim_desc = ' (limit = max(vanilla %dpx, %dpx))' % (li.vanilla_max, LIMIT_FIELD)
+                self.add('error', 'WIDTH', rel, dl['line'], label,
+                         'line too wide for %s%s%s' % (what, lim_desc, _ph_note(dl, li, ctx)),
+                         width=dl['width'], limit=li.limit, text=dl['text'])
+            elif (self.warn_arrow and li.box and dl['term'] in ('p', 'l')
+                  and dl['width'] + DOWN_ARROW_W > li.base_limit and li.vanilla_arrow == 0):
+                self.add('warning', 'WIDTH', rel, dl['line'], label,
+                         'the "more text" arrow after this line is clipped (needs %dpx more)' % DOWN_ARROW_W,
+                         width=dl['width'] + DOWN_ARROW_W, limit=li.base_limit, text=dl['text'])
+        if not li.box:
+            return
+        for seg in _segments(dlines):
+            for kind, dl in box_violations(seg):
+                if kind == 'third_line':
+                    sev = 'error' if li.vanilla_box['third_line'] == 0 else 'warning'
+                    self.add(sev, 'BOXLINES', rel, dl['line'], label,
+                             'text on a 3rd line of the 2-line %s box: use \\l instead of \\n for the 2nd break '
+                             'of a paragraph, or start a new box with \\p%s'
+                             % (li.cls, '' if sev == 'error' else ' (also in vanilla)'), text=dl['text'])
+                elif kind == 'scroll_first':
+                    if li.vanilla_box['scroll_first'] == 0:
+                        self.add('warning', 'BOXLINES', rel, dl['line'], label,
+                                 'first break of the paragraph is \\l (scrolls a single line away); use \\n',
+                                 text=dl['text'])
+
+
+def _ph_note(dl, li, ctx):
+    if not dl['ph']:
+        return ''
+    parts = []
+    for p in sorted(dl['ph']):
+        w = li.ph_override.get(p, ctx.ph_widths.get(p, 0))
+        parts.append('{%s}=%dpx' % (PH_NAMES.get(p, 'FD %02X' % p), w))
+    return '; assuming ' + ', '.join(parts)
+
+
+# ==========================================================================
+# File selection
+# ==========================================================================
+def scope_files(root, orig):
+    rels = set()
+    for base in (orig, root):
+        if not base:
+            continue
+        for g in SCOPE_GLOBS:
+            for p in glob.glob(os.path.join(base, g)):
+                rels.add(os.path.relpath(p, base))
+    return sorted(rels)
+
+
+def resolve_files(args_files, root, orig):
+    rels = []
+    for f in args_files:
+        cands = []
+        if os.path.isabs(f):
+            for base in (root, orig):
+                if base and os.path.abspath(f).startswith(os.path.abspath(base) + os.sep):
+                    cands = [os.path.relpath(os.path.abspath(f), base)]
+                    break
+            else:
+                cands = [f]
+        else:
+            g = sorted(glob.glob(os.path.join(root, f))) or sorted(glob.glob(os.path.join(orig, f)))
+            cands = [os.path.relpath(p, root if p.startswith(root) else orig) for p in g] or [f]
+        rels.extend(cands)
+    return rels
+
+
+# ==========================================================================
+# Calibration report
+# ==========================================================================
+def calibrate(ctx, rels, out):
+    ctx_lines = defaultdict(list)    # class -> [(width, file, line, label, text, term)]
+    raw_over = Counter()
+    player_lines = []
+    cal_labels = 0
+    box_v = defaultdict(Counter)
+    arrow = Counter()
+    preexist = []
+    unclassified = Counter()
+    c_groups = defaultdict(list)
+    for rel in rels:
+        p = os.path.join(ctx.orig, rel)
+        if not os.path.exists(p):
+            continue
+        af = AsmTextFile(p, ctx.charmap, rel)
+        seen = set()
+        for b in af.blocks:
+            if b.label in seen:
+                continue
+            seen.add(b.label)
+            li = LabelInfo(ctx, b.label, [x for x in af.blocks if x.label == b.label])
+            cls = li.cls if li.box else ('unclassified' if li.desc != 'unreferenced' else 'unreferenced')
+            if li.ph_override:
+                cal_labels += 1
+            if li.preexisting_overflow:
+                preexist.append((li.vanilla_max, li.base_limit, rel, b.label, cls))
+            if not li.box:
+                unclassified[li.desc.split('(')[0]] += 1
+                for r in ctx.index.refs.get(b.label, []):
+                    if r[0].startswith('C'):
+                        c_groups[r[3]].append(li.vanilla_max)
+                        break
+            for bb in [x for x in af.blocks if x.label == b.label]:
+                for _, sl in bb.variants():
+                    d0 = ctx.measurer.lines(_units(sl))
+                    for dl in d0:
+                        if dl['width'] > li.base_limit:
+                            raw_over[cls] += 1
+                        if PH_PLAYER in dl['ph']:
+                            player_lines.append((dl['fixed'], dl['ph'][PH_PLAYER], rel, dl['line'], dl['text'], cls))
+                    d1 = ctx.measurer.lines(_units(sl), li.ph_override)
+                    for dl in d1:
+                        ctx_lines[cls].append((dl['width'], rel, dl['line'], b.label, dl['text'], dl['term']))
+                        if not dl['ph']:
+                            ctx_lines[cls + ' (no placeholders)'].append(
+                                (dl['width'], rel, dl['line'], b.label, dl['text'], dl['term']))
+                        if dl['term'] in ('p', 'l') and not dl['ph']:
+                            ctx_lines[cls + ' (no placeholders, before \\p/\\l)'].append(
+                                (dl['width'], rel, dl['line'], b.label, dl['text'], dl['term']))
+                        if li.box and dl['term'] in ('p', 'l') and dl['width'] + DOWN_ARROW_W > li.base_limit:
+                            arrow[cls] += 1
+                    if li.box:
+                        for seg in _segments(d1):
+                            for kind, dl in box_violations(seg):
+                                box_v[cls][kind] += 1
+                                if box_v[cls][kind] <= 3:
+                                    box_v[cls]['ex_' + kind + '_%d' % box_v[cls][kind]] = 0
+                                    out.append('    vanilla %s %s: %s:%d %s | %s' % (cls, kind, rel, dl['line'], b.label, dl['text']))
+    w = out.append
+    w('')
+    w('== Placeholder widths (px) ==')
+    for pid in sorted(ctx.ph_widths):
+        w('  {%s} = %d' % (PH_NAMES.get(pid, pid), ctx.ph_widths[pid]))
+    w('== Display line width distribution per usage class (calibrated placeholders) ==')
+    buckets = [0, 160, 176, 192, 200, 208, 216, 224, 1000]
+    for cls in sorted(ctx_lines):
+        L = ctx_lines[cls]
+        ws = sorted(x[0] for x in L)
+        hist = []
+        for lo, hi in zip(buckets, buckets[1:]):
+            hist.append('%d-%d:%d' % (lo, hi - 1, sum(1 for x in ws if lo <= x < hi)))
+        lim = CLASS_LIMITS.get(cls.split()[0], LIMIT_FIELD)
+        w('  %-13s lines=%6d max=%3d p99=%3d p999=%3d  >%d: %d   %s' % (
+            cls, len(ws), ws[-1] if ws else 0, ws[int(len(ws) * .99)] if ws else 0,
+            ws[int(len(ws) * .999)] if ws else 0, lim, sum(1 for x in ws if x > lim), ' '.join(hist)))
+        for item in sorted(L, reverse=True)[:5]:
+            w('      %3dpx %s:%d %s | %s' % (item[0], item[1], item[2], item[3], item[4]))
+    w('== Lines over the class limit with UNcalibrated STR_VAR=%dpx: %s' % (ctx.strvar_width, dict(raw_over)))
+    w('== Labels whose STR_VAR width was lowered by vanilla calibration: %d' % cal_labels)
+    w('== {PLAYER} lines: %d; widest fixed part + %dpx per {PLAYER}:' % (len(player_lines), ctx.player_width))
+    pl = sorted(player_lines, key=lambda x: -(x[0] + x[1] * ctx.player_width))[:5]
+    for fx, k, rel, ln, txt, cls in pl:
+        w('      %3dpx (%s) %s:%d | %s' % (fx + k * ctx.player_width, cls, rel, ln, txt))
+    for pw in (42, 48, 54, 60):
+        over = sum(1 for fx, k, rel, ln, txt, cls in player_lines
+                   if fx + k * pw > CLASS_LIMITS.get(cls, LIMIT_FIELD))
+        w('      PLAYER=%dpx -> %d vanilla lines over their limit' % (pw, over))
+    w('== Pre-existing vanilla overflows (label limit raised to vanilla width): %d' % len(preexist))
+    for item in sorted(preexist, reverse=True)[:25]:
+        w('      %3dpx > %3d  %s %s (%s)' % item)
+    w('== Box rule in vanilla (field/battle/pokenav): %s' % {k: {kk: vv for kk, vv in v.items() if not kk.startswith('ex_')} for k, v in box_v.items()})
+    w('== Lines before \\p/\\l whose down arrow (+%dpx) would be clipped: %s' % (DOWN_ARROW_W, dict(arrow)))
+    w('== Unclassified labels: %s' % dict(unclassified))
+    w('== Unclassified labels referenced from C, by file (count, max vanilla width):')
+    for f, ws in sorted(c_groups.items(), key=lambda x: -len(x[1])):
+        w('      %-55s %4d  max=%d' % (f, len(ws), max(ws)))
+
+
+# ==========================================================================
+# main
+# ==========================================================================
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        description='Validate rewritten .string text against the original pokeemerald-expansion tree.',
+        epilog='Exit status: 0 = no errors, 1 = errors found, 2 = usage problem.')
+    ap.add_argument('files', nargs='*', help='files to check, relative to --root (globs allowed). '
+                    'Default: ' + ' '.join(SCOPE_GLOBS))
+    ap.add_argument('--root', default=DEFAULT_ROOT, help='modified tree (default %(default)s)')
+    ap.add_argument('--orig', default=DEFAULT_ORIG, help='pristine tree (default %(default)s)')
+    ap.add_argument('--single', nargs=2, metavar=('NEW', 'ORIG'),
+                    help='check one file given explicit paths (e.g. an agent\'s draft vs the original)')
+    ap.add_argument('--charmap', help='charmap.txt to use (default: ROOT/charmap.txt, else ORIG/charmap.txt)')
+    ap.add_argument('--json', action='store_true', help='machine-readable output on stdout')
+    ap.add_argument('--player-width', type=int, default=42, help='px assumed for {PLAYER} (default 42 = 7 x 6px)')
+    ap.add_argument('--strvar-width', type=int, default=60, help='px assumed for {STR_VAR_n} (default 60 = 10 x 6px)')
+    ap.add_argument('--no-arrow', action='store_true', help='do not warn about a clipped "more text" arrow')
+    ap.add_argument('--no-warnings', action='store_true', help='only print errors')
+    ap.add_argument('--strict', action='store_true', help='exit 1 on warnings too')
+    ap.add_argument('--list-unclassified', action='store_true', help='list labels whose display window is unknown')
+    ap.add_argument('--max-issues', type=int, default=0, help='print at most N issues (0 = all)')
+    ap.add_argument('--calibrate', action='store_true', help='print calibration statistics of the ORIG tree and exit')
+    args = ap.parse_args(argv)
+
+    root = os.path.abspath(args.root) if args.root else None
+    orig = os.path.abspath(args.orig)
+    if not os.path.isdir(orig):
+        print('error: --orig %s is not a directory' % orig, file=sys.stderr)
+        return 2
+    if root and not os.path.isdir(root):
+        print('error: --root %s is not a directory' % root, file=sys.stderr)
+        return 2
+    try:
+        ctx = Context(root or orig, orig, args.charmap, args.player_width, args.strvar_width)
+    except (OSError, CharmapError, RuntimeError) as e:
+        print('error: %s' % e, file=sys.stderr)
+        return 2
+
+    all_rels = scope_files(None, orig)
+    labels = collect_text_labels([os.path.join(orig, r) for r in all_rels], ctx.charmap)
+    ctx.build_index(labels)
+
+    if args.calibrate:
+        out = []
+        calibrate(ctx, all_rels, out)
+        print('\n'.join(out))
+        return 0
+
+    checker = Checker(ctx, warn_arrow=not args.no_arrow)
+    if args.single:
+        new_path, orig_path = args.single
+        ap_orig = os.path.abspath(orig_path)
+        rel = os.path.relpath(ap_orig, orig) if ap_orig.startswith(orig + os.sep) else orig_path
+        checker.check_file(new_path if not args.json else new_path, new_path, orig_path)
+        targets = [new_path]
+    else:
+        rels = resolve_files(args.files, root, orig) if args.files else scope_files(root, orig)
+        for rel in rels:
+            np_ = os.path.join(root, rel)
+            if not os.path.exists(np_):
+                checker.add('error', 'STRUCTURE', rel, 0, None, 'file missing in --root')
+                continue
+            checker.check_file(rel, np_, os.path.join(orig, rel))
+        targets = rels
+
+    issues = checker.issues
+    if args.no_warnings:
+        issues = [i for i in issues if i.sev == 'error']
+    errors = [i for i in checker.issues if i.sev == 'error']
+    warnings = [i for i in checker.issues if i.sev == 'warning']
+    by_check = defaultdict(Counter)
+    for i in checker.issues:
+        by_check[i.sev][i.check] += 1
+    labels_seen = checker.label_infos
+    cls_count = Counter((li.cls if li.box else ('unreferenced' if li.desc == 'unreferenced' else 'unclassified'))
+                        for li in labels_seen.values())
+    unclassified = sorted(l for l, li in labels_seen.items() if not li.box)
+    summary = {
+        'files': checker.stats['files'],
+        'string_lines': checker.stats['string_lines'],
+        'text_blocks': checker.stats['blocks'],
+        'text_blocks_changed': checker.stats['blocks_changed'],
+        'display_lines': checker.stats['display_lines'],
+        'errors': len(errors),
+        'warnings': len(warnings),
+        'errors_by_check': dict(by_check['error']),
+        'warnings_by_check': dict(by_check['warning']),
+        'labels_by_class': dict(cls_count),
+        'preexisting_vanilla_overflows': sum(1 for li in labels_seen.values() if li.preexisting_overflow),
+        'limits_px': {'field': LIMIT_FIELD, 'battle': LIMIT_BATTLE, 'pokenav': LIMIT_POKENAV,
+                      'unclassified': 'max(vanilla, %d)' % LIMIT_FIELD},
+        'placeholder_px': {PH_NAMES.get(k, str(k)): v for k, v in sorted(ctx.ph_widths.items())},
+    }
+    rc = 1 if errors or (args.strict and warnings) else 0
+    if args.json:
+        res = {'summary': summary, 'issues': [i.to_dict() for i in issues]}
+        if args.list_unclassified:
+            res['unclassified'] = [{'label': l, 'usage': labels_seen[l].desc,
+                                    'limit': labels_seen[l].limit} for l in unclassified]
+        json.dump(res, sys.stdout, ensure_ascii=False, indent=1)
+        print()
+        return rc
+    shown = issues if not args.max_issues else issues[:args.max_issues]
+    for i in shown:
+        print(i.format())
+    if args.max_issues and len(issues) > args.max_issues:
+        print('... %d more issue(s) not shown' % (len(issues) - args.max_issues))
+    if args.list_unclassified:
+        print('\nUnclassified labels (limit = max(vanilla, %dpx), no box-line rule):' % LIMIT_FIELD)
+        for l in unclassified:
+            print('  %-60s %-30s limit=%d' % (l, labels_seen[l].desc, labels_seen[l].limit))
+    print('\n== textcheck summary ==')
+    print('files: %d   .string lines: %d   text blocks: %d (changed: %d)   display lines: %d' % (
+        summary['files'], summary['string_lines'], summary['text_blocks'],
+        summary['text_blocks_changed'], summary['display_lines']))
+    print('labels by display class: %s' % ', '.join('%s=%d' % kv for kv in sorted(cls_count.items())))
+    print('limits: field %dpx, battle %dpx, pokenav %dpx, unclassified max(vanilla, %dpx); '
+          'placeholders: PLAYER %d, RIVAL %d, STR_VAR %d (calibrated per label)' % (
+              LIMIT_FIELD, LIMIT_BATTLE, LIMIT_POKENAV, LIMIT_FIELD,
+              ctx.ph_widths[PH_PLAYER], ctx.ph_widths[PH_RIVAL], ctx.ph_widths[PH_STR1]))
+    print('errors: %d %s' % (len(errors), dict(by_check['error']) if errors else ''))
+    print('warnings: %d %s' % (len(warnings), dict(by_check['warning']) if warnings else ''))
+    print('RESULT: %s' % ('FAIL' if rc else 'OK'))
+    return rc
+
+
+if __name__ == '__main__':
+    sys.exit(main())
