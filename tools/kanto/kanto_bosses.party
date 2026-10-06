@@ -1,0 +1,579 @@
+=== TRAINER_KANTO_LEADER_BROCK ===
+Name: Brock
+Class: Leader Frlg
+Pic: Leader Brock Frlg
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Golem @ Sitrus Berry
+Level: 55
+
+Omastar @ Focus Sash
+Level: 55
+
+Kabutops @ Life Orb
+Level: 56
+
+Lycanroc @ Choice Band
+Level: 56
+
+Tyranitar @ Chople Berry
+Level: 57
+Nature: Adamant
+
+=== TRAINER_KANTO_LEADER_MISTY ===
+Name: Misty
+Class: Leader Frlg
+Pic: Leader Misty Frlg
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Golduck @ Sitrus Berry
+Level: 56
+
+Lapras @ Leftovers
+Level: 56
+
+Vaporeon @ Leftovers
+Level: 57
+
+Primarina @ Mystic Water
+Level: 57
+
+Starmie @ Life Orb
+Level: 58
+Nature: Timid
+
+=== TRAINER_KANTO_LEADER_LT_SURGE ===
+Name: Lt. Surge
+Class: Leader Frlg
+Pic: Leader Lt Surge Frlg
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Electrode @ Focus Sash
+Level: 57
+
+Magnezone @ Sitrus Berry
+Level: 57
+
+Jolteon @ Magnet
+Level: 58
+
+Electivire @ Expert Belt
+Level: 58
+
+Raichu @ Life Orb
+Level: 59
+Nature: Timid
+
+=== TRAINER_KANTO_LEADER_ERIKA ===
+Name: Erika
+Class: Leader Frlg
+Pic: Leader Erika Frlg
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Tangrowth @ Rocky Helmet
+Level: 58
+
+Victreebel @ Life Orb
+Level: 58
+
+Bellossom @ Sitrus Berry
+Level: 59
+
+Roserade @ Miracle Seed
+Level: 59
+
+Vileplume @ Black Sludge
+Level: 60
+Nature: Calm
+
+=== TRAINER_KANTO_LEADER_KOGA ===
+Name: Koga
+Class: Leader Frlg
+Pic: Leader Koga Frlg
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Venomoth @ Focus Sash
+Level: 60
+
+Muk @ Black Sludge
+Level: 60
+
+Toxapex @ Rocky Helmet
+Level: 61
+
+Drapion @ Sitrus Berry
+Level: 61
+
+Crobat @ Poison Barb
+Level: 61
+
+Weezing @ Black Sludge
+Level: 62
+Nature: Bold
+
+=== TRAINER_KANTO_LEADER_SABRINA ===
+Name: Sabrina
+Class: Leader Frlg
+Pic: Leader Sabrina Frlg
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Mr. Mime @ Light Clay
+Level: 61
+
+Slowbro @ Leftovers
+Level: 61
+
+Espeon @ Twisted Spoon
+Level: 62
+
+Hatterene @ Sitrus Berry
+Level: 62
+
+Gardevoir @ Expert Belt
+Level: 62
+
+Alakazam @ Life Orb
+Level: 63
+Nature: Timid
+
+=== TRAINER_KANTO_LEADER_BLAINE ===
+Name: Blaine
+Class: Leader Frlg
+Pic: Leader Blaine Frlg
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Rapidash @ Sitrus Berry
+Level: 62
+
+Ninetales @ Heat Rock
+Level: 62
+
+Houndoom @ Focus Sash
+Level: 63
+
+Magmortar @ Expert Belt
+Level: 63
+
+Volcarona @ Charcoal
+Level: 63
+
+Arcanine @ Life Orb
+Level: 64
+Nature: Adamant
+
+=== TRAINER_KANTO_LEADER_GIOVANNI ===
+Name: Giovanni
+Class: Leader Frlg
+Pic: Leader Giovanni Frlg
+Gender: Male
+Music: Aqua
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Dugtrio @ Focus Sash
+Level: 64
+
+Nidoqueen @ Sitrus Berry
+Level: 64
+
+Hippowdon @ Leftovers
+Level: 65
+
+Nidoking @ Life Orb
+Level: 65
+
+Garchomp @ Soft Sand
+Level: 65
+
+Rhyperior @ Weakness Policy
+Level: 66
+Nature: Adamant
+
+=== TRAINER_KANTO_BOSS_GIOVANNI ===
+Name: Giovanni
+Class: Boss Frlg
+Pic: Leader Giovanni Frlg
+Gender: Male
+Music: Aqua
+Items: Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Persian @ Sitrus Berry
+Level: 58
+
+Kangaskhan
+Level: 58
+
+Nidoking
+Level: 59
+
+Rhydon @ Eviolite
+Level: 60
+
+=== TRAINER_KANTO_BOSS_GIOVANNI_2 ===
+Name: Giovanni
+Class: Boss Frlg
+Pic: Leader Giovanni Frlg
+Gender: Male
+Music: Aqua
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Persian @ Sitrus Berry
+Level: 61
+
+Krookodile
+Level: 61
+
+Nidoqueen
+Level: 62
+
+Nidoking
+Level: 62
+
+Rhyperior @ Life Orb
+Level: 63
+
+=== TRAINER_KANTO_ELITE_FOUR_LORELEI ===
+Name: Lorelei
+Class: Elite Four Frlg
+Pic: Elite Four Lorelei Frlg
+Gender: Female
+Music: Elite Four
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Dewgong @ Leftovers
+Level: 67
+
+Cloyster @ Focus Sash
+Level: 67
+
+Jynx @ Never-Melt Ice
+Level: 67
+
+Mamoswine @ Life Orb
+Level: 68
+
+Glaceon @ Sitrus Berry
+Level: 68
+
+Lapras @ Leftovers
+Level: 68
+Nature: Modest
+
+=== TRAINER_KANTO_ELITE_FOUR_BRUNO ===
+Name: Bruno
+Class: Elite Four Frlg
+Pic: Elite Four Bruno Frlg
+Gender: Male
+Music: Elite Four
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Steelix @ Sitrus Berry
+Level: 67
+
+Hitmonlee @ Focus Sash
+Level: 68
+
+Hitmonchan @ Expert Belt
+Level: 68
+
+Conkeldurr @ Flame Orb
+Level: 68
+
+Lucario @ Life Orb
+Level: 69
+
+Machamp @ Black Belt
+Level: 69
+Nature: Adamant
+
+=== TRAINER_KANTO_ELITE_FOUR_AGATHA ===
+Name: Agatha
+Class: Elite Four Frlg
+Pic: Elite Four Agatha Frlg
+Gender: Female
+Music: Elite Four
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Arbok @ Black Sludge
+Level: 68
+
+Mismagius @ Sitrus Berry
+Level: 69
+
+Dusknoir @ Leftovers
+Level: 69
+
+Chandelure @ Choice Specs
+Level: 69
+
+Trevenant @ Sitrus Berry
+Level: 69
+
+Gengar @ Life Orb
+Level: 70
+Nature: Timid
+
+=== TRAINER_KANTO_ELITE_FOUR_LANCE ===
+Name: Lance
+Class: Elite Four Frlg
+Pic: Elite Four Lance Frlg
+Gender: Male
+Music: Elite Four
+Items: Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Aerodactyl @ Focus Sash
+Level: 69
+
+Kingdra @ Sitrus Berry
+Level: 70
+
+Haxorus @ Life Orb
+Level: 70
+
+Dragapult @ Choice Specs
+Level: 70
+
+Salamence @ Dragon Fang
+Level: 70
+
+Dragonite @ Lum Berry
+Level: 71
+Nature: Adamant
+
+=== TRAINER_KANTO_CHAMPION_BLU ===
+Name: Blu
+Class: Champion Frlg
+Pic: Champion Rival Frlg
+Gender: Male
+Music: Male
+Items: Full Restore / Full Restore / Full Restore
+AI: Smart Trainer
+Double Battle: No
+
+Pidgeot @ Sharp Beak
+Level: 70
+
+Exeggutor @ Sitrus Berry
+Level: 70
+
+Alakazam @ Focus Sash
+Level: 71
+
+Gyarados @ Leftovers
+Level: 71
+
+Garchomp @ Life Orb
+Level: 71
+
+Charizard @ Charcoal
+Level: 72
+Nature: Timid
+
+=== TRAINER_KANTO_ARIANNA_MTMOON_TREECKO ===
+Name: Arianna
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Corviknight
+Level: 56
+
+Lucario
+Level: 56
+
+Hatterene
+Level: 55
+
+Drednaw
+Level: 56
+
+Tsareena
+Level: 56
+
+Skeledirge @ Sitrus Berry
+Level: 57
+
+=== TRAINER_KANTO_ARIANNA_MTMOON_TORCHIC ===
+Name: Arianna
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Corviknight
+Level: 56
+
+Lucario
+Level: 56
+
+Hatterene
+Level: 55
+
+Houndoom
+Level: 56
+
+Tsareena
+Level: 56
+
+Greninja @ Sitrus Berry
+Level: 57
+
+=== TRAINER_KANTO_ARIANNA_MTMOON_MUDKIP ===
+Name: Arianna
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Hyper Potion / Hyper Potion
+AI: Basic Trainer / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Corviknight
+Level: 56
+
+Lucario
+Level: 56
+
+Hatterene
+Level: 55
+
+Houndoom
+Level: 56
+
+Drednaw
+Level: 56
+
+Torterra @ Sitrus Berry
+Level: 57
+
+=== TRAINER_KANTO_ARIANNA_SILPH_TREECKO ===
+Name: Arianna
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Corviknight @ Leftovers
+Level: 61
+
+Lucario
+Level: 61
+
+Hatterene
+Level: 60
+
+Drednaw
+Level: 61
+
+Tsareena
+Level: 61
+
+Skeledirge @ Sitrus Berry
+Level: 62
+
+=== TRAINER_KANTO_ARIANNA_SILPH_TORCHIC ===
+Name: Arianna
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Corviknight @ Leftovers
+Level: 61
+
+Lucario
+Level: 61
+
+Hatterene
+Level: 60
+
+Houndoom
+Level: 61
+
+Tsareena
+Level: 61
+
+Greninja @ Sitrus Berry
+Level: 62
+
+=== TRAINER_KANTO_ARIANNA_SILPH_MUDKIP ===
+Name: Arianna
+Class: Rival
+Pic: May
+Gender: Female
+Music: Female
+Items: Full Restore / Full Restore
+AI: Basic Trainer / Smart Switching / Smart Mon Choices / HP Aware / Ace Pokemon
+Double Battle: No
+
+Corviknight @ Leftovers
+Level: 61
+
+Lucario
+Level: 61
+
+Hatterene
+Level: 60
+
+Houndoom
+Level: 61
+
+Drednaw
+Level: 61
+
+Torterra @ Sitrus Berry
+Level: 62
