@@ -26,26 +26,30 @@ MARK_OPP_BEGIN = '// KANTO_TRAINERS begin (tools/kanto/kanto_trainers.py)'
 MARK_OPP_END = '// KANTO_TRAINERS end'
 
 # ------------------------------------------------------------------ level curve (Kanto, Act 2)
-# segment -> base level of regular trainers (party ace); canonical FRLG order
-SEG_LEVEL = [55, 56, 57, 58, 60, 61, 63, 65]
+# Phases of docs/storia/bibbia_kanto.md (section 7): (min, max) level of regular trainers.
+# Story order: Vermilion (Surge) -> Cerulean (Misty) -> Pewter (Brock) -> Celadon/Lavender (Erika)
+# -> Routes 12-18/Fuchsia (Koga) -> Saffron/Silph (Sabrina) -> Cinnabar (Blaine) -> Viridian (Giovanni)
+# -> Victory Road -> League.
+SEG_RANGE = [(52, 54), (54, 56), (55, 57), (56, 59), (58, 61), (60, 62), (61, 63), (63, 65), (64, 67)]
 SEG_OF_MAPSEC = {
-    'PALLET_TOWN': 0, 'ROUTE_1': 0, 'VIRIDIAN_CITY': 0, 'ROUTE_2': 0, 'ROUTE_22': 0, 'VIRIDIAN_FOREST': 0,
-    'PEWTER_CITY': 0,
-    'ROUTE_3': 1, 'MT_MOON': 1, 'ROUTE_4': 1, 'CERULEAN_CITY': 1, 'ROUTE_24': 1, 'ROUTE_25': 1,
-    'ROUTE_5': 2, 'ROUTE_6': 2, 'UNDERGROUND_PATH': 2, 'UNDERGROUND_PATH_2': 2, 'VERMILION_CITY': 2,
-    'S_S_ANNE': 2, 'ROUTE_11': 2, 'DIGLETTS_CAVE': 2,
-    'ROUTE_9': 3, 'ROUTE_10': 3, 'ROCK_TUNNEL': 3, 'POWER_PLANT': 3, 'LAVENDER_TOWN': 3, 'ROUTE_8': 3,
-    'ROUTE_7': 3, 'CELADON_CITY': 3, 'ROCKET_HIDEOUT': 3,
-    'POKEMON_TOWER': 4, 'ROUTE_12': 4, 'ROUTE_13': 4, 'ROUTE_14': 4, 'ROUTE_15': 4, 'ROUTE_16': 4,
-    'ROUTE_17': 4, 'ROUTE_18': 4, 'FUCHSIA_CITY': 4, 'KANTO_SAFARI_ZONE': 4,
+    'VERMILION_CITY': 0, 'ROUTE_6': 0, 'ROUTE_11': 0, 'S_S_ANNE': 0,
+    'CERULEAN_CITY': 1, 'ROUTE_4': 1, 'ROUTE_24': 1, 'ROUTE_25': 1, 'MT_MOON': 1, 'ROUTE_5': 1,
+    'UNDERGROUND_PATH': 1,
+    'PEWTER_CITY': 2, 'DIGLETTS_CAVE': 2, 'ROUTE_2': 2, 'ROUTE_3': 2, 'VIRIDIAN_FOREST': 2, 'ROUTE_1': 2,
+    'ROUTE_22': 2, 'PALLET_TOWN': 2, 'VIRIDIAN_CITY': 2,
+    'CELADON_CITY': 3, 'LAVENDER_TOWN': 3, 'ROCK_TUNNEL': 3, 'ROUTE_7': 3, 'ROUTE_8': 3, 'ROUTE_9': 3,
+    'ROUTE_10': 3, 'ROCKET_HIDEOUT': 3, 'POKEMON_TOWER': 3, 'POWER_PLANT': 3, 'UNDERGROUND_PATH_2': 3,
+    'ROUTE_12': 4, 'ROUTE_13': 4, 'ROUTE_14': 4, 'ROUTE_15': 4, 'ROUTE_16': 4, 'ROUTE_17': 4,
+    'ROUTE_18': 4, 'FUCHSIA_CITY': 4, 'KANTO_SAFARI_ZONE': 4,
     'SAFFRON_CITY': 5, 'SILPH_CO': 5,
     'ROUTE_19': 6, 'ROUTE_20': 6, 'ROUTE_21': 6, 'SEAFOAM_ISLANDS': 6, 'CINNABAR_ISLAND': 6,
     'POKEMON_MANSION': 6,
-    'ROUTE_23': 7, 'KANTO_VICTORY_ROAD': 7, 'INDIGO_PLATEAU': 7, 'POKEMON_LEAGUE': 7, 'CERULEAN_CAVE': 7,
+    'CERULEAN_CAVE': 7,
+    'ROUTE_23': 8, 'KANTO_VICTORY_ROAD': 8, 'INDIGO_PLATEAU': 8, 'POKEMON_LEAGUE': 8,
 }
-# gym map -> ace level of the leader (gym trainers: ace - 3)
-GYM_ACE = {'PewterCity_Gym_Frlg': 57, 'CeruleanCity_Gym_Frlg': 58, 'VermilionCity_Gym_Frlg': 59,
-           'CeladonCity_Gym_Frlg': 60, 'FuchsiaCity_Gym_Frlg': 62, 'SaffronCity_Gym_Frlg': 63,
+# gym map -> ace level of the leader (gym trainers: ace - 3 .. ace - 2)
+GYM_ACE = {'VermilionCity_Gym_Frlg': 55, 'CeruleanCity_Gym_Frlg': 57, 'PewterCity_Gym_Frlg': 58,
+           'CeladonCity_Gym_Frlg': 59, 'FuchsiaCity_Gym_Frlg': 61, 'SaffronCity_Gym_Frlg': 63,
            'CinnabarIsland_Gym_Frlg': 64, 'ViridianCity_Gym_Frlg': 66}
 
 T = tg.T
@@ -147,7 +151,7 @@ def regular_entry(tid, hdr, nmons, base_level, double):
     n = max(2 if not strong else 3, min(4, nmons))
     if double:
         n = max(n, 2)
-    levels = [base_level - ((n - 1 - i) + 1) // 2 for i in range(n)]
+    levels = [base_level - ((n - 1 - i) + 1) // 2 for i in range(n)]  # ace last, others 1 lower
     species = pick_species(tid, cls, levels, strong)
     seed0 = zlib.crc32(tid.encode())
     header = tg.header_set(list(hdr), 'AI', 'Basic Trainer')
@@ -196,10 +200,12 @@ def main(argv=None):
             continue
         e = frlg[t]
         m0 = trainers[t]['objs'][0][0]
+        h = zlib.crc32(kid.encode())
         if m0['map'] in GYM_ACE:
-            lvl = GYM_ACE[m0['map']] - 3
+            lvl = GYM_ACE[m0['map']] - 3 + h % 2
         else:
-            lvl = SEG_LEVEL[SEG_OF_MAPSEC[m0['mapsec'][len('MAPSEC_'):]]]
+            lo, hi = SEG_RANGE[SEG_OF_MAPSEC[m0['mapsec'][len('MAPSEC_'):]]]
+            lvl = hi - 1 + h % 2
         hdr = [ln for ln in e['header'] if ln.split(':')[0] in ('Name', 'Class', 'Pic', 'Gender', 'Music', 'Double Battle')]
         hdr = tg.header_set(hdr, 'Name', title_name(tg.header_get(hdr, 'Name')))
         entries.append(regular_entry(kid, hdr, len(e['mons']), lvl, tg.is_double(e['header'])))

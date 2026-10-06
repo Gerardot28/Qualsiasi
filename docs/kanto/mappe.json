@@ -17,13 +17,13 @@
    "department_store": 7,
    "gate": 17
   },
-  "objects": 993,
+  "objects": 1020,
   "item_balls": 129,
   "hidden_items": 124,
   "signs": 430,
-  "coord_events": 159,
+  "coord_events": 183,
   "trainers": 344,
-  "kanto_flags_used": 333,
+  "kanto_flags_used": 397,
   "kanto_flags_total": 512
  },
  "maps": [
@@ -836,6 +836,32 @@
      "orig_trainer_type": "TRAINER_TYPE_NORMAL",
      "orig_trainer_sight": "4",
      "orig_trainer": "TRAINER_TEAM_ROCKET_GRUNT_2"
+    },
+    {
+     "index": 12,
+     "local_id": "LOCALID_KANTO_MTMOON_MORGANA",
+     "gfx": "OBJ_EVENT_GFX_MAGMA_MEMBER_F",
+     "x": 13,
+     "y": 9,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "MtMoon_B2F_Frlg_EventScript_Morgana",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_MTMOON_SCENE",
+     "orig_flag": null
+    },
+    {
+     "index": 13,
+     "local_id": "LOCALID_KANTO_MTMOON_ARIANNA",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
+     "x": 14,
+     "y": 9,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_LEFT",
+     "script": "MtMoon_B2F_Frlg_EventScript_Arianna",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_MTMOON_SCENE",
+     "orig_flag": null
     }
    ],
    "item_balls": [
@@ -6468,12 +6494,12 @@
     {
      "index": 1,
      "local_id": "LOCALID_SILPH_CO_RIVAL",
-     "gfx": "OBJ_EVENT_GFX_BLUE",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
      "x": 2,
      "y": 6,
      "elevation": 3,
      "movement": "MOVEMENT_TYPE_FACE_UP",
-     "script": "0x0",
+     "script": "SilphCo_7F_Frlg_EventScript_Arianna",
      "orig_script": "0x0",
      "flag": "FLAG_KANTO_HIDE_SILPH_RIVAL",
      "orig_flag": "FLAG_HIDE_SILPH_RIVAL"
@@ -7525,7 +7551,7 @@
      "y": 11,
      "elevation": 3,
      "movement": "MOVEMENT_TYPE_FACE_RIGHT",
-     "script": "0x0",
+     "script": "SilphCo_11F_Frlg_EventScript_Giovanni",
      "orig_script": "0x0",
      "flag": "FLAG_KANTO_HIDE_SILPH_ROCKETS",
      "orig_flag": "FLAG_HIDE_SILPH_ROCKETS"
@@ -9624,6 +9650,58 @@
      "orig_script": "EventScript_RockSmash",
      "flag": "FLAG_TEMP_17",
      "orig_flag": "FLAG_TEMP_17"
+    },
+    {
+     "index": 10,
+     "local_id": "LOCALID_KANTO_CAVE_MORGANA",
+     "gfx": "OBJ_EVENT_GFX_MAGMA_MEMBER_F",
+     "x": 33,
+     "y": 15,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Morgana",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_CAVE_SCENE",
+     "orig_flag": null
+    },
+    {
+     "index": 11,
+     "local_id": "LOCALID_KANTO_CAVE_ETTORE",
+     "gfx": "OBJ_EVENT_GFX_MAXIE",
+     "x": 35,
+     "y": 14,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Ettore",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_CAVE_SCENE",
+     "orig_flag": null
+    },
+    {
+     "index": 12,
+     "local_id": "LOCALID_KANTO_CAVE_ULISSE",
+     "gfx": "OBJ_EVENT_GFX_ARCHIE",
+     "x": 36,
+     "y": 15,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Ulisse",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_CAVE_SCENE",
+     "orig_flag": null
+    },
+    {
+     "index": 13,
+     "local_id": "LOCALID_KANTO_CAVE_ARIANNA",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
+     "x": 32,
+     "y": 14,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Ari",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_CAVE_SCENE",
+     "orig_flag": null
     }
    ],
    "item_balls": [
@@ -9670,7 +9748,38 @@
      "underfoot": false
     }
    ],
-   "coord_events": [],
+   "coord_events": [
+    {
+     "x": 32,
+     "y": 20,
+     "type": "trigger",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Climax",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 33,
+     "y": 20,
+     "type": "trigger",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Climax",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 34,
+     "y": 20,
+     "type": "trigger",
+     "script": "CeruleanCave_1F_Frlg_EventScript_Climax",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    }
+   ],
    "warps": [
     {
      "id": 0,
@@ -10431,7 +10540,7 @@
      "y": 8,
      "elevation": 3,
      "movement": "MOVEMENT_TYPE_FACE_DOWN",
-     "script": "0x0",
+     "script": "PokemonLeague_ChampionsRoom_Frlg_EventScript_Blu",
      "orig_script": "0x0",
      "flag": "0",
      "orig_flag": "0"
@@ -10444,7 +10553,7 @@
      "y": 15,
      "elevation": 0,
      "movement": "MOVEMENT_TYPE_FACE_UP",
-     "script": "0x0",
+     "script": "PokemonLeague_ChampionsRoom_Frlg_EventScript_Oak",
      "orig_script": "0x0",
      "flag": "FLAG_KANTO_HIDE_OAK_IN_CHAMP_ROOM",
      "orig_flag": "FLAG_HIDE_OAK_IN_CHAMP_ROOM",
@@ -10505,7 +10614,7 @@
      "y": 4,
      "elevation": 3,
      "movement": "MOVEMENT_TYPE_FACE_DOWN",
-     "script": "0x0",
+     "script": "PokemonLeague_HallOfFame_Frlg_EventScript_Oak",
      "orig_script": "0x0",
      "flag": "0",
      "orig_flag": "0"
@@ -14145,6 +14254,19 @@
      "orig_script": "CeruleanCity_EventScript_CeruleanCaveGuard",
      "flag": "FLAG_KANTO_HIDE_CERULEAN_CAVE_GUARD",
      "orig_flag": "FLAG_HIDE_CERULEAN_CAVE_GUARD"
+    },
+    {
+     "index": 13,
+     "local_id": "LOCALID_KANTO_CERULEAN_ARIANNA",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
+     "x": 23,
+     "y": 7,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_UP",
+     "script": "CeruleanCity_Frlg_EventScript_Arianna",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_CERULEAN_ARIANNA",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -14690,6 +14812,45 @@
      "flag": "FLAG_KANTO_HIDE_VERMILION_CITY_OAKS_AIDE",
      "orig_flag": "FLAG_HIDE_VERMILION_CITY_OAKS_AIDE",
      "hidden_at_start": true
+    },
+    {
+     "index": 9,
+     "local_id": "LOCALID_KANTO_VERMILION_ARIANNA",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
+     "x": 24,
+     "y": 30,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "VermilionCity_Frlg_EventScript_Arianna",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_VERMILION_ARIANNA",
+     "orig_flag": null
+    },
+    {
+     "index": 10,
+     "local_id": "LOCALID_KANTO_VERMILION_POLICE_N",
+     "gfx": "OBJ_EVENT_GFX_POLICEMAN",
+     "x": 24,
+     "y": 1,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "VermilionCity_Frlg_EventScript_Quarantine",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_VERMILION_QUARANTINE",
+     "orig_flag": null
+    },
+    {
+     "index": 11,
+     "local_id": "LOCALID_KANTO_VERMILION_POLICE_E",
+     "gfx": "OBJ_EVENT_GFX_POLICEMAN",
+     "x": 46,
+     "y": 19,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_LEFT",
+     "script": "VermilionCity_Frlg_EventScript_Quarantine",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_VERMILION_QUARANTINE",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -14781,6 +14942,216 @@
      "orig_var": "VAR_TEMP_1",
      "orig_var_value": "0",
      "enabled": false
+    },
+    {
+     "x": 22,
+     "y": 2,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineNorth",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 23,
+     "y": 2,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineNorth",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 24,
+     "y": 2,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineNorth",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 16,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 18,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 19,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 20,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 21,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 22,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 23,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 29,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 30,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 31,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 32,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 33,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 34,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 35,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 36,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 37,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 38,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
+    },
+    {
+     "x": 45,
+     "y": 39,
+     "type": "trigger",
+     "script": "VermilionCity_Frlg_EventScript_QuarantineEast",
+     "orig_script": null,
+     "orig_var": null,
+     "orig_var_value": null,
+     "enabled": true
     }
    ],
    "warps": [
@@ -15918,11 +16289,11 @@
      "index": 1,
      "local_id": "LOCALID_CREDITS_RIVAL",
      "gfx": "OBJ_EVENT_GFX_BLUE",
-     "x": 11,
-     "y": 6,
+     "x": 10,
+     "y": 8,
      "elevation": 0,
      "movement": "MOVEMENT_TYPE_FACE_DOWN",
-     "script": "0x0",
+     "script": "IndigoPlateau_Exterior_Frlg_EventScript_Blu",
      "orig_script": "0x0",
      "flag": "FLAG_KANTO_HIDE_CREDITS_RIVAL",
      "orig_flag": "FLAG_HIDE_CREDITS_RIVAL",
@@ -15932,15 +16303,28 @@
      "index": 2,
      "local_id": "LOCALID_CREDITS_PROF_OAK",
      "gfx": "OBJ_EVENT_GFX_PROF_OAK",
-     "x": 11,
-     "y": 6,
+     "x": 12,
+     "y": 8,
      "elevation": 0,
      "movement": "MOVEMENT_TYPE_FACE_DOWN",
-     "script": "0x0",
+     "script": "IndigoPlateau_Exterior_Frlg_EventScript_Oak",
      "orig_script": "0x0",
      "flag": "FLAG_KANTO_HIDE_CREDITS_OAK",
      "orig_flag": "FLAG_HIDE_CREDITS_OAK",
      "hidden_at_start": true
+    },
+    {
+     "index": 3,
+     "local_id": "LOCALID_KANTO_CREDITS_ARIANNA",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
+     "x": 11,
+     "y": 8,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "IndigoPlateau_Exterior_Frlg_EventScript_Arianna",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_CREDITS_ARIANNA",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -22945,6 +23329,19 @@
      "orig_script": "PalletTown_ProfessorOaksLab_EventScript_Pokedex",
      "flag": "FLAG_KANTO_HIDE_POKEDEX",
      "orig_flag": "FLAG_HIDE_POKEDEX"
+    },
+    {
+     "index": 11,
+     "local_id": "LOCALID_KANTO_OAKLAB_ARIANNA",
+     "gfx": "OBJ_EVENT_GFX_MAY_NORMAL",
+     "x": 5,
+     "y": 5,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_UP",
+     "script": "PalletTown_ProfessorOaksLab_Frlg_EventScript_Arianna",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_OAKLAB_ARIANNA",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -23675,6 +24072,19 @@
      "orig_script": "ViridianCity_PokemonCenter_1F_EventScript_Youngster",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 5,
+     "local_id": "LOCALID_KANTO_TAXI_VIRIDIANCITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -24121,6 +24531,19 @@
      "orig_script": "PewterCity_Museum_2F_EventScript_BaldingMan",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 6,
+     "local_id": "LOCALID_KANTO_MUSEUM_ROCCO",
+     "gfx": "OBJ_EVENT_GFX_STEVEN",
+     "x": 12,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "PewterCity_Museum_2F_Frlg_EventScript_Rocco",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -24593,6 +25016,19 @@
      "orig_script": "PewterCity_PokemonCenter_1F_EventScript_GBAKid2",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 8,
+     "local_id": "LOCALID_KANTO_TAXI_PEWTERCITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -25141,6 +25577,19 @@
      "orig_script": "CeruleanCity_PokemonCenter_1F_EventScript_Lass",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 6,
+     "local_id": "LOCALID_KANTO_TAXI_CERULEANCITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -25862,6 +26311,19 @@
      "flag": "FLAG_KANTO_HIDE_POSTGAME_GOSSIPERS",
      "orig_flag": "FLAG_HIDE_POSTGAME_GOSSIPERS",
      "hidden_at_start": true
+    },
+    {
+     "index": 6,
+     "local_id": "LOCALID_KANTO_TAXI_LAVENDERTOWN",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -26103,6 +26565,32 @@
      "orig_script": "LavenderTown_VolunteerPokemonHouse_EventScript_LittleGirl",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 7,
+     "local_id": "LOCALID_KANTO_FUJI_HOUSE_ETTORE",
+     "gfx": "OBJ_EVENT_GFX_MAXIE",
+     "x": 9,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "LavenderTown_VolunteerPokemonHouse_Frlg_EventScript_Ettore",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_FUJI_HOUSE_EXILES",
+     "orig_flag": null
+    },
+    {
+     "index": 8,
+     "local_id": "LOCALID_KANTO_FUJI_HOUSE_ULISSE",
+     "gfx": "OBJ_EVENT_GFX_ARCHIE",
+     "x": 10,
+     "y": 4,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_LEFT",
+     "script": "LavenderTown_VolunteerPokemonHouse_Frlg_EventScript_Ulisse",
+     "orig_script": null,
+     "flag": "FLAG_KANTO_HIDE_FUJI_HOUSE_EXILES",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -26556,6 +27044,19 @@
      "orig_script": "VermilionCity_PokemonCenter_1F_EventScript_VSSeekerWoman",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 6,
+     "local_id": "LOCALID_KANTO_TAXI_VERMILIONCITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -28802,6 +29303,19 @@
      "orig_script": "CeladonCity_PokemonCenter_1F_EventScript_Youngster",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 5,
+     "local_id": "LOCALID_KANTO_TAXI_CELADONCITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -30752,6 +31266,19 @@
      "orig_script": "FuchsiaCity_PokemonCenter_1F_EventScript_Youngster",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 5,
+     "local_id": "LOCALID_KANTO_TAXI_FUCHSIACITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 12,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -31868,6 +32395,19 @@
      "flag": "FLAG_KANTO_HIDE_CINNABAR_POKECENTER_BILL",
      "orig_flag": "FLAG_HIDE_CINNABAR_POKECENTER_BILL",
      "hidden_at_start": true
+    },
+    {
+     "index": 6,
+     "local_id": "LOCALID_KANTO_TAXI_CINNABARISLAND",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -32215,6 +32755,19 @@
      "flag": "FLAG_KANTO_HIDE_POSTGAME_GOSSIPERS",
      "orig_flag": "FLAG_HIDE_POSTGAME_GOSSIPERS",
      "hidden_at_start": true
+    },
+    {
+     "index": 7,
+     "local_id": "LOCALID_KANTO_TAXI_INDIGOPLATEAU",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 2,
+     "y": 4,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -33503,6 +34056,19 @@
      "orig_script": "SaffronCity_PokemonCenter_1F_EventScript_Youngster",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 5,
+     "local_id": "LOCALID_KANTO_TAXI_SAFFRONCITY",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -34337,6 +34903,19 @@
      "orig_script": "Route4_PokemonCenter_1F_EventScript_Newspaper",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 7,
+     "local_id": "LOCALID_KANTO_TAXI_ROUTE4",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
@@ -35042,6 +35621,19 @@
      "orig_script": "Route10_PokemonCenter_1F_EventScript_Aide",
      "flag": "0",
      "orig_flag": "0"
+    },
+    {
+     "index": 6,
+     "local_id": "LOCALID_KANTO_TAXI_ROUTE10",
+     "gfx": "OBJ_EVENT_GFX_COOLTRAINER_M",
+     "x": 13,
+     "y": 3,
+     "elevation": 3,
+     "movement": "MOVEMENT_TYPE_FACE_DOWN",
+     "script": "KantoTaxi_EventScript_Taxi",
+     "orig_script": null,
+     "flag": "0",
+     "orig_flag": null
     }
    ],
    "item_balls": [],
