@@ -154,11 +154,11 @@ are not listed in `spritesheet_rules.mk`. Conversion flags come from the
 |--------|--------------|
 | ~0-40 | white fade-in, then the first shine |
 | ~40-300 | phase 1 (256 frames): the double and single shines with the backdrop flashes |
-| ~300-445 | phase 2 (144 frames): the banner slides down and fades in while the logo slides up |
+| ~300-430 | phase 2 (144 frames): the banner slides down and fades in while the logo slides up |
 | afterwards | phase 3: BG0/BG1 on, PRESS START (y 108) and © line (y 148) |
 
 The expansion's **QUICKSTART HUD** ("SEL New Game", `include/config/quickstart.h`)
-sits in the top-right corner, around screen x ≥ 178, y 0-10. The logo stays
+sits in the top-right corner, around screen x ≥ 178, y 0-16. The logo stays
 clear of it; disable it for release builds.
 
 ## Design decision: both lines on the BG logo
@@ -173,7 +173,7 @@ the hero word. The default **stacked** layout instead puts **POKÉMON (cap
 - The tilemap, tile count and code stay exactly as they are.
 
 The banner sprite becomes a **prismatic "rift" flare** with a 4-point star,
-centred on screen just under the word (banner x 54, y 20). It keeps the
+centred on screen just under the word (banner x 54, y 16, i.e. screen y 66). It keeps the
 original reveal: it slides down over the logo and fades in. `--layout banner`
 reproduces the original split (word in the sprite, centred on the screen
 when it fits in 108 px) and suits words of about 6 letters or fewer.

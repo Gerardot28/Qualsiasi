@@ -402,12 +402,26 @@ static void traceAdd(int swi) {
 	traceHead = (traceHead + 1) % TRACE_LEN;
 }
 
+/* screenshot + savestate of the first fatal event; deferred to the end of the
+ * frame so the picture is complete and the state is taken between frames */
+static const char* pendingArtifacts;
+static bool artifactsDone;
+
 static void crashArtifacts(const char* kind) {
-	if (!optTraceCrash) {
+	if (!optTraceCrash || artifactsDone || pendingArtifacts) {
+		return;
+	}
+	pendingArtifacts = kind;
+}
+
+static void flushCrashArtifacts(void) {
+	if (!pendingArtifacts) {
 		return;
 	}
 	char path[4096], name[128];
-	snprintf(name, sizeof(name), "%s_f%" PRIu64, kind, frame);
+	snprintf(name, sizeof(name), "%s_f%" PRIu64, pendingArtifacts, frame);
+	pendingArtifacts = NULL;
+	artifactsDone = true;
 	outPath(path, sizeof(path), name, ".png");
 	writeShot(path, 1);
 	out("SHOT frame=%" PRIu64 " file=%s", frame, path);
@@ -417,26 +431,34 @@ static void crashArtifacts(const char* kind) {
 	}
 }
 
+#define EVENT_PRINT_LIMIT 8
 static void event(const char* kind, uint32_t pc, const char* fmt, ...) {
 	char msg[512];
 	va_list ap;
 	va_start(ap, fmt);
 	vsnprintf(msg, sizeof(msg), fmt, ap);
 	va_end(ap);
-	out("EVENT %s frame=%" PRIu64 " pc=0x%08X msg=\"%s\"", kind, frame, pc, msg);
+	int* counter = NULL;
 	bool fatal = false;
 	if (!strcmp(kind, "crash")) {
-		++nCrash;
+		counter = &nCrash;
 		fatal = true;
 	} else if (!strcmp(kind, "stuck")) {
-		++nStuck;
+		counter = &nStuck;
 		fatal = true;
 	} else if (!strcmp(kind, "reset")) {
-		++nReset;
+		counter = &nReset;
 		fatal = !optAllowReset;
 	}
+	int n = counter ? ++*counter : 1;
+	if (n <= EVENT_PRINT_LIMIT) {
+		out("EVENT %s frame=%" PRIu64 " pc=0x%08X msg=\"%s\"%s", kind, frame, pc, msg,
+		    n == EVENT_PRINT_LIMIT ? " (further events of this kind are only counted)" : "");
+	}
 	if (fatal) {
-		dumpTrace();
+		if (nCrash + nStuck + (optAllowReset ? 0 : nReset) == 1) {
+			dumpTrace();   /* registers + recent PCs at the first fatal event */
+		}
 		if (optStopOnCrash) {
 			stopRequested = true;
 		}
@@ -524,8 +546,10 @@ static void noteSwi(int imm) {
 	}
 	if (imm == 0x00) {
 		event("reset", curPC(), "SoftReset SWI 0x00 (lr=0x%08X)", (uint32_t) cpu->gprs[ARM_LR]);
+		crashArtifacts("reset");
 	} else if (imm == 0x26) {
 		event("reset", curPC(), "HardReset SWI 0x26 (lr=0x%08X)", (uint32_t) cpu->gprs[ARM_LR]);
+		crashArtifacts("reset");
 	}
 }
 
@@ -632,10 +656,12 @@ static void runFrame(uint32_t keys) {
 		if (counterValid && v < lastCounter && !(lastCounter > 0xFFFFFF00u && v < 0x100)) {
 			event("reset", curPC(), "watched counter 0x%08X went %u -> %u (game re-initialised)", counterAddr,
 			      lastCounter, v);
+			crashArtifacts("reset");
 		}
 		lastCounter = v;
 		counterValid = true;
 	}
+	flushCrashArtifacts();
 }
 
 static uint64_t regionHash(unsigned x0, unsigned y0, unsigned w, unsigned h) {

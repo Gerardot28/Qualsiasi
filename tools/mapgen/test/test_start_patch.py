@@ -29,7 +29,7 @@ def apply(root, mapid, x, y):
                 '    WarpIntoMap();\n'
                 '#endif\n') % (MARK, mapid, mapid, x, y)
         s = s.replace('    ClearFollowerNPCData();\n}\n', '    ClearFollowerNPCData();' + code + '}\n', 1)
-        s = '#define %s 1\n#include "script_pokemon_util.h"\n#include "item.h"\n' % MARK + s
+        s = s.replace('#include "global.h"\n', '#include "global.h"\n#define %s 1\n#include "script_pokemon_util.h"\n#include "item.h"\n' % MARK, 1)
         open(ng, 'w').write(s)
     ow = os.path.join(root, 'src/overworld.c')
     s = open(ow).read()
@@ -43,7 +43,7 @@ def apply(root, mapid, x, y):
 def revert(root):
     ng = os.path.join(root, 'src/new_game.c')
     s = open(ng).read()
-    s = s.replace('#define %s 1\n#include "script_pokemon_util.h"\n#include "item.h"\n' % MARK, '')
+    s = s.replace('#define %s 1\n#include "script_pokemon_util.h"\n#include "item.h"\n' % MARK, '')  # noqa
     s = re.sub(r'\n#if %s.*?#endif\n' % MARK, '\n', s, flags=re.S)
     s = s.replace('    ClearFollowerNPCData();\n\n}', '    ClearFollowerNPCData();\n}')
     open(ng, 'w').write(s)
