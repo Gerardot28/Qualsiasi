@@ -13,7 +13,7 @@ Riferimento tecnico e guida passo passo. Le parti sul codice sono verificate sul
 | **B. Iniezione VC (AGB_FIRM)** con NSUI | hardware GBA nativo, icona nel menu HOME | **no** (AGB_FIRM non emula l'RTC) | salvataggio interno al titolo, scritto all'uscita | identiche al GBA | NSUI è solo Windows: serve Wine/CrossOver o una VM | chi vuole l'icona in HOME e non usa open_agb_firm |
 | **C. mGBA per 3DS** | emulatore (homebrew) | sì (orologio della console) | `.sav` su SD + savestate | **New 3DS: piena velocità; Old 3DS: spesso sotto il 100%** | sì, basta copiare file; forwarder `.cia` dalle build di sviluppo di mGBA per macOS | New 3DS, chi vuole savestate e velocizzazione |
 
-Il nostro build ha già **`OW_USE_FAKE_RTC` TRUE**. La stessa ROM funziona quindi in tutti e tre i metodi, compreso AGB_FIRM senza RTC, senza il messaggio «La batteria interna si è esaurita» e con bacche ed eventi a tempo funzionanti.
+Il nostro build ha già **`OW_USE_FAKE_RTC` TRUE**. La stessa ROM funziona quindi in tutti e tre i metodi, compreso AGB_FIRM senza RTC, senza il messaggio «La batteria interna è scarica» e con bacche ed eventi a tempo funzionanti.
 
 ---
 
@@ -28,7 +28,7 @@ Il nostro build ha già **`OW_USE_FAKE_RTC` TRUE**. La stessa ROM funziona quind
 
 Smeraldo legge l'orologio della cartuccia (chip Seiko S-3511 via GPIO, `src/siirtc.c`). **AGB_FIRM non lo emula**. Con un ROM vanilla si ottengono:
 
-- il messaggio «La batteria interna si è esaurita…» (`gText_BatteryRunDry`, `Task_MainMenuCheckBattery` in `src/main_menu.c`);
+- il messaggio «La batteria interna è scarica. È possibile giocare. Tuttavia, non si verificheranno gli eventi collegati all'orologio.» (testo ufficiale IT di Smeraldo) (`gText_BatteryRunDry`, `Task_MainMenuCheckBattery` in `src/main_menu.c`);
 - orologio fermo: bacche che non crescono, maree della Grotta Ondosa bloccate, Isola Miraggio e lotteria giornaliere ferme, nessun ciclo giorno/notte.
 
 **Come funziona il fake RTC dell'expansion** (`include/config/overworld.h`, `src/fake_rtc.c`, `src/rtc.c`, `src/play_time.c`):

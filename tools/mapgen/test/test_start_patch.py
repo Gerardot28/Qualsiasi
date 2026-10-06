@@ -23,7 +23,7 @@ def apply(root, mapid, x, y):
                 '    VarSet(VAR_LITTLEROOT_INTRO_STATE, 7);\n'
                 '    FlagSet(FLAG_SYS_POKEMON_GET);\n'
                 '    FlagSet(FLAG_SYS_B_DASH);\n'
-                '    ScriptGiveMon(SPECIES_MUDKIP, 12, ITEM_NONE);\n'
+                '    ScriptGiveMon(SPECIES_MUDKIP, 30, ITEM_NONE);\n'
                 '    AddBagItem(ITEM_POKE_BALL, 5);\n'
                 '    SetWarpDestination(MAP_GROUP(%s), MAP_NUM(%s), WARP_ID_NONE, %d, %d);\n'
                 '    WarpIntoMap();\n'

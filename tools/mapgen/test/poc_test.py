@@ -82,30 +82,23 @@ def main():
     # ---- NPC + sign in town
     e.walk_to(12, 4)
     e.face('UP')
-    e.talk('p04_town_sign', presses=3)
+    e.talk('p04_town_sign')
     e.walk_to(20, 4)
     e.face('UP')
-    e.talk('p05_npc_girl', presses=3)
+    e.talk('p05_npc_girl')
 
     # ---- Pokemon Center: heal
     hp, mx, lvl = party_hp(e)
-    check('party: Mudkip lv12 present', lvl == 12 and mx > 0, 'hp=%d/%d lvl=%d' % (hp, mx, lvl))
+    check('party: Mudkip lv30 present', lvl == 30 and mx > 0, 'hp=%d/%d lvl=%d' % (hp, mx, lvl))
     e.run(['write16 gParties+0x56 3'], 'hurt')
     hp2, _, _ = party_hp(e)
     check('hp lowered for the nurse test', hp2 == 3, 'hp=%d' % hp2)
     enter_door(e, 7, 8, 'MAP_TEST_TOWN_POKEMON_CENTER_1F', 'p06_pokecenter')
     e.walk_to(7, 4)
     e.face('UP')
-    e.run(['press A', 'wait 20', 'waitstable 8 200', 'shot p07_nurse'], 'nurse')
-    lines = []
-    for _ in range(12):
-        lines += ['press A', 'wait 60']
-    lines += ['shot p08_nurse_done']
-    e.run(lines, 'nurse2')
-    lines = []
-    for _ in range(4):
-        lines += ['press B', 'wait 40']
-    e.run(lines, 'nurse3')
+    done = e.talk('p07_nurse', key='A', max_presses=60)   # A = YES + advance
+    e.shot('p08_nurse_done')
+    check('nurse dialogue finishes and releases the player', done)
     hp3, mx3, _ = party_hp(e)
     check('nurse heals the party', hp3 == mx3, 'hp=%d/%d' % (hp3, mx3), os.path.join(a.out, 'p07_nurse.png'))
     # upstairs and back
@@ -114,7 +107,8 @@ def main():
     m, x, y = e.where()
     check('PC stairs -> 2F', m == 'MAP_TEST_TOWN_POKEMON_CENTER_2F', '%s (%d,%d)' % (m, x, y), e.shot('p09_pc_2f'))
     if m == 'MAP_TEST_TOWN_POKEMON_CENTER_2F':
-        e.run(['hold DOWN 16', 'wait 30', 'hold LEFT 16', 'wait 150'], 'down')
+        e.walk_to(2, 6)
+        e.run(['hold LEFT 16', 'wait 150'], 'down')
         m, x, y = e.where()
         check('2F stairs -> 1F', m == 'MAP_TEST_TOWN_POKEMON_CENTER_1F', '%s (%d,%d)' % (m, x, y))
     exit_mat(e, 7, 8, 'MAP_TEST_TOWN', (7, 9), 'p10_out_of_pc')
@@ -123,22 +117,28 @@ def main():
     enter_door(e, 23, 8, 'MAP_TEST_TOWN_MART', 'p11_mart')
     e.walk_to(3, 3)
     e.face('LEFT')
-    e.run(['press A', 'wait 30', 'waitstable 8 200', 'press A', 'wait 60', 'waitstable 8 200', 'shot p12_mart_menu'], 'clerk')
-    e.run(['press A', 'wait 60', 'shot p13_mart_buy'] + ['press B', 'wait 40'] * 6, 'clerk2')
+    e.run(['press A', 'wait 12', 'waitstable 8 200 0 112 240 48', 'wait 30', 'shot p12_mart_menu'], 'clerk')
+    e.run(['press A', 'wait 60', 'waitstable 8 200 0 112 240 48', 'shot p12b_mart_buy_sell_quit',
+           'press A', 'until32 gMain+4 !%d 400' % cb2_overworld, 'wait 120', 'shot p13_mart_buy',
+           'read32 gMain+4 shopcb'], 'clerk2')
+    check('clerk opens the shop', e.last['shopcb'] != cb2_overworld, 'cb2=0x%x' % e.last['shopcb'],
+          os.path.join(a.out, 'p13_mart_buy.png'))
+    e.run(['press B', 'until32 gMain+4 %d 400' % cb2_overworld, 'wait 60'], 'shopout')
+    e.dismiss('B')
     exit_mat(e, 3, 7, 'MAP_TEST_TOWN', (23, 9), 'p14_out_of_mart')
 
     # ---- houses + gym
     enter_door(e, 7, 16, 'MAP_TEST_TOWN_HOUSE1', 'p15_house1')
     e.walk_to(6, 5)
     e.face('UP')
-    e.talk('p16_house1_npc', presses=3)
+    e.talk('p16_house1_npc')
     exit_mat(e, 3, 8, 'MAP_TEST_TOWN', (7, 17), 'p17_out_house1')
     enter_door(e, 22, 15, 'MAP_TEST_TOWN_HOUSE2', 'p18_house2')
     exit_mat(e, 3, 7, 'MAP_TEST_TOWN', (22, 16), 'p19_out_house2')
     enter_door(e, 16, 19, 'MAP_TEST_TOWN_GYM', 'p20_gym')
     e.walk_to(5, 3)
     e.face('UP')
-    e.talk('p21_gym_leader', presses=4)
+    e.talk('p21_gym_leader')
     exit_mat(e, 5, 19, 'MAP_TEST_TOWN', (16, 20), 'p22_out_gym')
 
     # ---- connection north to the route
@@ -164,22 +164,23 @@ def main():
         e.run(['press A', 'wait 30', 'read32 gMain+4 cb2b'], 'tr')
         if e.last['cb2b'] not in (cb2_overworld,):
             break
-    e.run(['wait 200', 'shot p24_trainer_battle'], 'trshot')
+    e.run(['wait 200', 'shot p24_trainer_battle', 'read32 gMain+4 cb2b'], 'trshot')
     in_b = e.last['cb2b'] != cb2_overworld
     check('trainer spots player and battle starts', in_b, 'cb2=0x%x' % e.last['cb2b'],
           os.path.join(a.out, 'p24_trainer_battle.png'))
     # fight: mash A (FIGHT -> first move) until back in the overworld
-    for i in range(60):
-        e.run(['press A', 'wait 40', 'read32 gMain+4 cb2b'], 'fight')
-        if e.last['cb2b'] == cb2_overworld:
-            break
-    e.run(['wait 60'] + ['press A', 'wait 40'] * 4, 'after')
+    e.run(['loop 400', 'breakif32 gMain+4 %d' % cb2_overworld, 'press A', 'wait 24', 'endloop', 'wait 30'], 'fight')
+    e.dismiss('B')
     e.run(['read32 gMain+4 cb2b'], 'x')
-    check('trainer battle won, back on the route', e.last['cb2b'] == cb2_overworld, '', e.shot('p25_after_trainer'))
+    ok = e.last['cb2b'] == cb2_overworld
+    # the trainer's defeat flag must now be set: talking again gives the post-battle text
+    check('trainer battle won, back on the route', ok, '', e.shot('p25_after_trainer'))
 
     # ---- wild encounter in tall grass (west patch rows 12-14, x 3-10)
     m, x, y = e.where()
     e.walk_to(11, 12)
+    e.run(['read32 gMain+4 cb2b'], 'x')
+    assert e.last['cb2b'] == cb2_overworld, 'not in the overworld before the grass test'
     got = False
     for i in range(40):
         d = 'LEFT' if i % 2 == 0 else 'RIGHT'
@@ -190,12 +191,15 @@ def main():
     e.run(['wait 240', 'shot p26_wild_battle', 'read32 gMain+4 cb2b'], 'wild')
     check('wild battle in tall grass', got, 'after %d moves' % (i + 1), os.path.join(a.out, 'p26_wild_battle.png'))
     if got:
-        # RUN: bottom-right of the action menu
-        for _ in range(6):
-            e.run(['press A', 'wait 30'], 'w')
-            e.run(['press RIGHT', 'wait 8', 'press DOWN', 'wait 8', 'press A', 'wait 120', 'read32 gMain+4 cb2b'], 'run')
+        e.run(['read32 gBattleTypeFlags btf'], 'btf')
+        check('encounter is a wild battle (no trainer flag)', (e.last['btf'] & 0x8) == 0, 'gBattleTypeFlags=0x%x' % e.last['btf'])
+        # wait for the action menu, then RUN (bottom-right)
+        for _ in range(8):
+            e.run(['press B', 'wait 40', 'press RIGHT', 'wait 8', 'press DOWN', 'wait 8', 'press A', 'wait 150',
+                   'read32 gMain+4 cb2b'], 'run')
             if e.last['cb2b'] == cb2_overworld:
                 break
+        e.dismiss('B')
         e.run(['wait 60', 'read32 gMain+4 cb2b'], 'x')
         check('ran from the wild battle', e.last['cb2b'] == cb2_overworld, '', e.shot('p27_after_wild'))
 

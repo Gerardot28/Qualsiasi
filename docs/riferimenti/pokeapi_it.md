@@ -62,13 +62,13 @@ Il campo `issues` segnala problemi pratici per il ROM:
 | Statistiche `STAT_*` | 8 | 8 (100%) | 8 | – | – |
 | Gruppi uova `EGG_GROUP_*` | 15 | 15 (100%) | 15 | – | – |
 | Specie `SPECIES_*` (forme incluse) | 1572 | 1572 (100%) | 1572 | – | categoria: 1572 (100%; 120 categorie Gen 9 dal corpus) |
-| Voci del Pokédex (specie base) | 1025 | **1018 (99,3%)** | 720 | 298 recuperate dal corpus (ScVi/LA) | – |
+| Voci del Pokédex (specie base) | 1025 | **1018 (99,3%)** | 898 | 120 recuperate dal corpus (ScVi, più 1 da LA) | – |
 | Luoghi PokeAPI (10 regioni principali) | 995 | **964 (96,9%)** | 286 (solo Hoenn/Kalos/Alola) | PKHeX + corpus + regola | – |
 | `MAPSEC_*` di pokeemerald | 209 | 209 (100%) | – | 203 con nome ufficiale in-game di Smeraldo/RFVF | – |
 
 Luoghi per regione (con nome IT / totale in PokeAPI): Kanto 92/96, Johto 62/67, Hoenn 105/110, Sinnoh 126/128, Unima 116/122, Kalos 104/106, Alola 101/101, Galar 87/92, Hisui 87/89, Paldea 84/84. Mancano solo pseudo-luoghi di PokeAPI («Roaming Kanto», «Unknown; all Poliwag», «Max Dens in the Galar Wild Area», «Kanto Pokémart» senza nome…), che non sono luoghi reali.
 
-Versioni usate per le voci del Pokédex (la più recente con testo IT): Spada/Scudo 493, Leggende Arceus 179, Violetto/Scarlatto 119, Alpha Sapphire 129, Ultraluna 68, Let's Go Eevee 30. Le descrizioni Gen 9 mancano in italiano su PokeAPI. Sono state recuperate cercando la stessa voce inglese, identica, nel corpus allineato di ScVi/LA e prendendo la riga italiana corrispondente.
+Versioni usate per le voci del Pokédex (la più recente con testo IT): Spada/Scudo 609, Alpha Sapphire 176, Violetto/Scarlatto 119, Ultraluna 77, Let's Go Eevee 36, Leggende Arceus 1. Le voci Gen 9 mancano in italiano su PokeAPI. Sono state recuperate cercando la stessa voce inglese, identica, nel corpus allineato di ScVi e prendendo la riga italiana corrispondente. Le voci di **Leggende Arceus** sono scritte nello stile arcaico degli appunti di Laven (es. «Adopra l’elettricità che stiva nelle sacche delle gote»), quindi si usano solo quando non c'è nient'altro. Mancano 7 specie: Kleavor, Ursaluna, Basculegion, Sneasler, Overqwil, Enamorus, Furiatonante.
 
 ### Costanti senza nome italiano in PokeAPI (coperte con fallback)
 
@@ -94,6 +94,7 @@ Queste descrizioni vanno scritte a mano. Bisogna comunque riscriverle in forma b
 - **Categoria (1)**: Reshiram, «Bianco Verità» (13).
 - **Strumenti e abilità**: 0 sopra i limiti (strumenti 20 caratteri, abilità 16).
 - **Specie**: 0 sopra i 12 caratteri. Il più lungo è «Fungofurioso» (12).
+- **Luoghi delle altre regioni** (`locations.json`): **197 nomi** italiani superano i 16 caratteri di `MAP_NAME_LENGTH`. Per regione: Hoenn 1, Sinnoh 9, Unima 23, Kalos 29, Alola 29, Galar 28, Paldea 34, Hisui 44; Kanto e Johto 0. Esempi: «Santuario del legno marcito», «Orto delle Bacche di Alola». Quando creeremo le MAPSEC delle nuove regioni serviranno abbreviazioni, come faceva Platino con «Merc. Arenipoli» o «Bibl. Canalipoli», oppure un `MAP_NAME_LENGTH` più alto (attenzione a popup e mappa di regione). «Æther Paradise» usa «Æ», che non è nel charmap.
 - **MAPSEC**: 0 sopra 16 se si usa `it_ingame` (es. «SOTT'ACQUA», «ZONA SAFARI»). I nomi PKHeX con disambiguazioni tra parentesi, tipo «(RZS)», non vanno usati così come sono.
 
 ## Note di metodo

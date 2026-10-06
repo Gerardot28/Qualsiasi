@@ -69,13 +69,13 @@ Il Campione è il rivale **Blu**. In RFVF il suo nome predefinito si sceglie all
 ### Capipalestra (OAC/HGSS)
 | # | Capopalestra (IT) | EN | Tipo | Città | Medaglia (IT) | EN | Conf. nome / medaglia | Evidenze |
 |---|---|---|---|---|---|---|---|---|
-| 1 | **Valerio** | Falkner | Volante | Violapoli¹ | Medaglia Zefiro | Zephyr Badge | alta / media | giochi:Valerio (5/5); GCC:Valerio; PokeRogue:Valerio |
+| 1 | **Valerio** | Falkner | Volante | Violapoli¹ | Medaglia Zefiro | Zephyr Badge | alta / alta | giochi:Valerio (5/5); GCC:Valerio; PokeRogue:Valerio |
 | 2 | **Raffaello** | Bugsy | Coleottero | Azalina¹ | Medaglia Alveare | Hive Badge | alta / alta | giochi:Raffaello (4/4); PokeRogue:Raffaello |
 | 3 | **Chiara** | Whitney | Normale | Fiordoropoli¹ | Medaglia Piana | Plain Badge | alta / alta | giochi:Chiara (5/5); GCC:Chiara; PokeRogue:Chiara |
 | 4 | **Angelo** | Morty | Spettro | Amarantopoli¹ | Medaglia Nebbia | Fog Badge | alta / alta | giochi:Angelo (4/4); GCC:Angelo; PokeRogue:Angelo |
 | 5 | **Furio** | Chuck | Lotta | Fiorlisopoli¹ | Medaglia Tempesta | Storm Badge | alta / alta | giochi:Furio (4/4); PokeRogue:Furio |
-| 6 | **Jasmine** | Jasmine | Acciaio | Olivinopoli¹ | Medaglia Minerale | Mineral Badge | alta / media | giochi:Jasmine (6/6); GCC:Jasmine; PokeRogue:Jasmine |
-| 7 | **Alfredo** | Pryce | Ghiaccio | Mogania¹ | Medaglia Gelo | Glacier Badge | alta / media | giochi:Alfredo (4/4); PokeRogue:Alfredo |
+| 6 | **Jasmine** | Jasmine | Acciaio | Olivinopoli¹ | Medaglia Minerale | Mineral Badge | alta / alta | giochi:Jasmine (6/6); GCC:Jasmine; PokeRogue:Jasmine |
+| 7 | **Alfredo** | Pryce | Ghiaccio | Mogania¹ | Medaglia Gelo | Glacier Badge | alta / alta | giochi:Alfredo (4/4); PokeRogue:Alfredo |
 | 8 | **Sandra** | Clair | Drago | Ebanopoli¹ | Medaglia Levante | Rising Badge | alta / alta | giochi:Sandra (4/4); PokeRogue:Sandra |
 
 ### Superquattro e Campione
@@ -139,7 +139,7 @@ In Smeraldo il Campione è **Adriano** (Wallace), in RZ e ROZA è **Rocco** (Ste
 
 **Percorsi**: Percorso 201–230 (220, 223, 226 e 230 sono marini).
 
-**Luoghi chiave**: Lago Verità¹ (Lake Verity), Lago Valore¹ (Lake Valor), Lago Arguzia¹ (Lake Acuity), Cava di Mineropoli¹ (Oreburgh Mine), Impianto Turbine¹ (Valley Windworks), Bosco di Evopoli¹ (Eterna Forest), Antico Château¹ (Old Chateau), Monte Corona² (Mt. Coronet), Vetta Lancia¹ (Spear Pillar), Gran Palude¹ (Great Marsh), Rovine di Flemminia¹ (Solaceon Ruins), Isola Ferrosa¹ (Iron Island), Torre Memoria² (Lost Tower), Covo Team Galassia (Covo del Team Galassia)¹ (Galactic HQ), Tempio di Nevepoli¹ (Snowpoint Temple), Grotta Ritorno¹ (Turnback Cave), Distortion World² (Distortion World), Monte Ostile¹ (Stark Mountain), Via Vittoria¹ (Victory Road), Torre Lotta¹ (Battle Tower), Parco Lotta² (Battle Frontier).
+**Luoghi chiave**: Lago Verità¹ (Lake Verity), Lago Valore¹ (Lake Valor), Lago Arguzia¹ (Lake Acuity), Cava di Mineropoli¹ (Oreburgh Mine), Impianto Turbine¹ (Valley Windworks), Bosco di Evopoli¹ (Eterna Forest), Antico Château¹ (Old Chateau), Monte Corona² (Mt. Coronet), Vetta Lancia¹ (Spear Pillar), Gran Palude¹ (Great Marsh), Rovine di Flemminia¹ (Solaceon Ruins), Isola Ferrosa¹ (Iron Island), Torre Memoria² (Lost Tower), Covo Team Galassia¹ (Galactic HQ), Tempio di Nevepoli¹ (Snowpoint Temple), Grotta Ritorno¹ (Turnback Cave), Distortion World² (Distortion World), Monte Ostile¹ (Stark Mountain), Via Vittoria¹ (Victory Road), Torre Lotta¹ (Battle Tower), Parco Lotta² (Battle Frontier).
 
 Il «Distortion World» resta in inglese nel testo italiano di Platino: 5 righe contro 1 «Mondo Distorto».
 

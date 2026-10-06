@@ -114,7 +114,8 @@ class Emu:
         return self.where()
 
     def shot(self, name, extra_wait=0):
-        lines = ['wait %d' % extra_wait] if extra_wait else []
+        # a freshly loaded savestate has no rendered frame yet: always run a few frames
+        lines = ['wait %d' % max(4, extra_wait)]
         self.run(lines + ['shot %s' % name], 'shot_' + name)
         p = os.path.join(self.out, name + '.png')
         self.say('  screenshot', p)
@@ -248,11 +249,15 @@ class Emu:
             lines += ['press %s' % key, 'wait %d' % gap]
         self.run(lines, 'press_%s' % key)
 
-    def talk(self, shotname, presses=6):
-        """Press A, screenshot the first text box, then mash through the dialogue."""
-        self.run(['press A', 'wait 12', 'waitstable 8 200', 'shot %s' % shotname], 'talk')
+    def dismiss(self, key='B', max_presses=40, gap=30):
+        """Press KEY until no script holds the field controls any more."""
+        self.run(['wait 5', 'loop %d' % max_presses, 'breakif8 sLockFieldControls 0', 'press %s' % key,
+                  'wait %d' % gap, 'endloop', 'wait 20', 'read8 sLockFieldControls lock'], 'dismiss')
+        return self.last.get('lock', 1) == 0
+
+    def talk(self, shotname, key='B', max_presses=40):
+        """Press A (talk / read), screenshot the first text box once printed, then
+        press KEY until the script has ended (B closes text without re-talking)."""
+        self.run(['press A', 'wait 12', 'waitstable 8 200 0 112 240 48', 'shot %s' % shotname], 'talk')
         self.say('  screenshot', os.path.join(self.out, shotname + '.png'))
-        lines = []
-        for _ in range(presses):
-            lines += ['press B', 'wait 40']   # B advances/closes text without re-talking
-        self.run(lines, 'talk_end')
+        return self.dismiss(key, max_presses)
