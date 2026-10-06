@@ -41,5 +41,21 @@
  "src/data/script_menu.h:gStdStrings": 60,
  "_why src/data/script_menu.h:gStdStrings": "gStdStrings are copied into STR_VAR_x (bufferstdstring / tv.c); ctextcheck measures every {STR_VAR_n} as 10 chars = 60 px in the containing messages, so 60 px keeps those checks valid.",
  "src/data/script_menu.h:gStdStrings/STDSTRING_MULTI_LINK": 80,
- "_why src/data/script_menu.h:gStdStrings/STDSTRING_MULTI_LINK": "only used by BattleFrontier_Lounge2_EventScript_BufferMultiLink -> BattleFrontier_Lounge2_Text_BattleTowerIsHottest, line 'la modalità {STR_VAR_1}!' = 55 px + 80 px, far below the 216-px field message box."
+ "_why src/data/script_menu.h:gStdStrings/STDSTRING_MULTI_LINK": "only used by BattleFrontier_Lounge2_EventScript_BufferMultiLink -> BattleFrontier_Lounge2_Text_BattleTowerIsHottest, line 'la modalità {STR_VAR_1}!' = 55 px + 80 px, far below the 216-px field message box.",
+ "src/pokemon_storage_system.c:gText_JustOnePkmn": 208,
+ "src/pokemon_storage_system.c:gText_PartyFull": 208,
+ "_why src/pokemon_storage_system.c:gText_JustOnePkmn,src/pokemon_storage_system.c:gText_PartyFull": "printed with AddTextPrinterParameterized2(0, FONT_NORMAL, ...) on window 0 = field message box (sStandardTextBox_WindowTemplates, 27 tiles = 216 px, x=0) while the PC main menu is open.",
+ "src/pokemon_storage_system.c:sMainMenuTexts": 207,
+ "_why src/pokemon_storage_system.c:sMainMenuTexts": "names: CreateMainMenu sets template.width = GetMaxWidthInMenuTable() = ConvertPixelWidthToTileWidth(widest) (<= 28 tiles, left 1), PrintMenuTable at x=8 -> up to 207 px; descriptions: AddTextPrinterParameterized2(0, FONT_NORMAL, desc) on the 27-tile (216 px) field message box, 2 lines.",
+ "src/pokemon_storage_system.c:gText_Box": 48,
+ "_why src/pokemon_storage_system.c:gText_Box": "default box name prefix ('Box ' + number) copied into the box name buffer (BOX_NAME_LENGTH 8 chars), same 8 x 6 px rule as user-entered box names.",
+ "src/pokemon_storage_system.c:sMessages": 144,
+ "_why src/pokemon_storage_system.c:sMessages": "PrintMessage: AddTextPrinterParameterized(WIN_MESSAGE, FONT_NORMAL, text, x=0, ...); sWindowTemplates[WIN_MESSAGE] width 18 tiles = 144 px, one line.",
+ "src/pokemon_storage_system.c:sMessages/MSG_WAS_DEPOSITED": 84,
+ "src/pokemon_storage_system.c:sMessages/MSG_WAS_RELEASED": 84,
+ "src/pokemon_storage_system.c:sMessages/MSG_BYE_BYE": 84,
+ "src/pokemon_storage_system.c:sMessages/MSG_CAME_BACK": 84,
+ "_why src/pokemon_storage_system.c:sMessages/MSG_WAS_DEPOSITED,src/pokemon_storage_system.c:sMessages/MSG_WAS_RELEASED,src/pokemon_storage_system.c:sMessages/MSG_BYE_BYE,src/pokemon_storage_system.c:sMessages/MSG_CAME_BACK": "WIN_MESSAGE 144 px, one line, minus 60 px for the {DYNAMIC 0} Pokemon nickname (10 chars x 6 px, as the validator assumes for name placeholders).",
+ "src/pokemon_storage_system.c:sMenuTexts": 120,
+ "_why src/pokemon_storage_system.c:sMenuTexts": "AddMenu: menuWindow.width = longest StringLength() + 2 tiles, PrintMenuTable at x=8, so every item fits by construction (8 px per character >= glyph widths); tilemapLeft = 29 - width stays >= 0 for items up to 27 chars. 120 px = 15+ characters."
 }

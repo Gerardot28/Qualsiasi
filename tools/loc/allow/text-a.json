@@ -1,0 +1,5 @@
+{
+ "_comment": "Batch text-a (match call, union room, contests, berries, decorations, trades, credits, ribbons, follower messages). Width allowances in FONT_NORMAL px, verified against the window templates cited in each _why entry.",
+ "src/data/text/match_call_messages.h": 147,
+ "_why src/data/text/match_call_messages.h": "pokenav_list.c PrintMatchCallFlavorText: FONT_NARROW at x=2 in the PokeNav list window (pokenav_match_call_gfx.c template.windowWidth = 16 tiles = 128px) -> 126px of FONT_NARROW. Normal-font cap = widest original line (147px normal = 126px narrow); narrow widths of every translated line separately verified <= 126px."
+}
