@@ -1,0 +1,15 @@
+{
+ "_why": "Batch battle-0 (src/battle_message.c part 0). Every key below is a battle message WITHOUT manual \\n/\\l breaks, so its displayed lines are produced at runtime by the automatic line breaker: src/battle_message.c BattleStringExpandPlaceholders() ends with BreakStringAutomatic(dst, BATTLE_MSG_MAX_WIDTH, BATTLE_MSG_MAX_LINES, fontId, SHOW_SCROLL_PROMPT) with BATTLE_MSG_MAX_WIDTH = 208 and BATTLE_MSG_MAX_LINES = 2 (include/battle_message.h); \\p paragraphs are wrapped separately (src/line_break.c BreakStringAutomatic splits on CHAR_PROMPT_CLEAR). The window is B_WIN_MSG (src/battle_bg.c: width 26 tiles = 208 px, height 4 tiles = 2 lines; sTextOnWindowsInfo_Normal[B_WIN_MSG]: FONT_NORMAL, x = 0). So no displayed line can exceed 208 px; the validator measures the whole literal as one line. Cap 330 px = 2 lines x 208 px - 78 px worst-case word-wrap slack (widest unbreakable token = a 13-char {B_*_NAME_WITH_PREFIX} placeholder) - 8 px SCROLL_PROMPT_WIDTH: a message up to 330 px still fits in ONE 2-line box with no extra scroll. Only strings whose concise Italian wording could not fit the original width are listed; every one measures <= 330 px.",
+ "src/battle_message.c:gText_DefendersStatRose": 330,
+ "src/battle_message.c:sText_Trainer1SentOutPkmn": 330,
+ "src/battle_message.c:sText_Trainer1SentOutPkmn2": 330,
+ "src/battle_message.c:sText_LinkPartnerSentOutPkmn1GoPkmn": 330,
+ "src/battle_message.c:sText_LinkPartnerSentOutPkmn2GoPkmn": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_PKMNGAINEDEXP": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_PKMNINLOVE": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_PKMNPERISHCOUNTFELL": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_PKMNCOPIEDFOE": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_STATROSE": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_STATFELL": 330,
+ "src/battle_message.c:gBattleStringsTable/STRINGID_PKMNSITEMHEALEDBURN": 330
+}
