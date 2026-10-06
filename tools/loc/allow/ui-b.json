@@ -1,0 +1,23 @@
+{
+ "_comment": "Width allowances (px, FONT_NORMAL) for batch ui-b. Each value verified against the window template / print call cited in the matching _why entry.",
+ "src/party_menu.c": 216,
+ "_why src/party_menu.c": "all 8 strings are printed by DisplayPartyMenuMessage -> PrintMessage (party_menu.c) = AddTextPrinterParameterized2(WIN_MSG, FONT_NORMAL, x=0); WIN_MSG in every sPartyMenu window template set (src/data/party_menu.h) is 28 tiles = 224 px; 216 leaves room for the {PAUSE_UNTIL_PRESS} down arrow (8 px). Yes/No menu (sPartyMenuYesNoWindowTemplate, rows 9-12) does not overlap WIN_MSG (rows 15-18).",
+ "src/use_pokeblock.c:sText_GetsAPokeBlockQuestion": 140,
+ "_why src/use_pokeblock.c:sText_GetsAPokeBlockQuestion": "AskUsePokeblock: nickname (<= POKEMON_NAME_LENGTH 12 chars, ~72-84 px) + this suffix printed on WIN_TEXT (sWindowTemplates[WIN_TEXT] 28 tiles = 224 px, x=0, FONT_NORMAL, single line); Yes/No window at tiles (24,11)-(28,14) does not overlap rows 17-18. 224 - 84 = 140.",
+ "src/slot_machine.c:sText_QuitTheGame": 216,
+ "_why src/slot_machine.c:sText_QuitTheGame": "printed on WIN_MSG = sWindowTemplates[0] in slot_machine.c, 27 tiles = 216 px, x=0, FONT_NORMAL (AddTextPrinterParameterized(WIN_MSG, ..., 0, 1, ...)); Yes/No menu at tile (21,7) is above the message window (rows 15-18).",
+ "src/pokedex_area_screen.c:GetTimeOfDayTextWithButton": 64,
+ "_why src/pokedex_area_screen.c:GetTimeOfDayTextWithButton": "time-of-day labels: sTimeOfDayWindowLabelTemplates[DEX_AREA_LABEL_TIME_OF_DAY] width 8 tiles = 64 px; ShowEncounterInfoLabel centers the text in 64 px with GetStringCenterAlignXOffset(FONT_NORMAL, text, 64).",
+ "src/fishing.c": 207,
+ "_why src/fishing.c": "all fishing messages are printed on window 0 = field message box (LoadMessageBoxAndFrameGfx(0) in Fishing_InitDots; sStandardTextBox_WindowTemplates in menu.c = 27 tiles = 216 px); x = 0 or 1, FONT_NORMAL; 216 - 1 - 8 (down arrow of {PAUSE_UNTIL_PRESS}) = 207.",
+ "src/pokenav_list.c:gText_PokenavMatchCall_Strategy": 126,
+ "_why src/pokenav_list.c:gText_PokenavMatchCall_Strategy": "PrintMatchCallFieldNames prints it with FONT_NARROW at x=2 in the PokeNav list window, whose width is template.windowWidth = 16 tiles = 128 px (pokenav_match_call_gfx.c) -> 126 px; 'Strategia' is 44 px in FONT_NARROW.",
+ "src/pokeblock_feed.c": 216,
+ "_why src/pokeblock_feed.c": "the 3 'ate the Pokeblock' messages are printed with AddTextPrinterParameterized2(0, FONT_NORMAL, x=0) on window 0 = sWindowTemplates[0] in pokeblock_feed.c, 28 tiles = 224 px; 216 leaves room for the {PAUSE_UNTIL_PRESS} down arrow.",
+ "src/data/speaker_names.h": 64,
+ "_why src/data/speaker_names.h": "speaker names are drawn in the name box (src/field_name_box.c): FONT_SMALL, width = string width capped at OW_NAME_BOX_DEFAULT_WIDTH 8 tiles = 64 px (include/config/name_box.h), centered; FONT_NORMAL width >= FONT_SMALL width so 64 is conservative.",
+ "src/quickstart.c": 42,
+ "_why src/quickstart.c": "default player/rival names copied with StringCopy_PlayerName into playerName / rivalName (PLAYER_NAME_LENGTH 7 bytes); same name-field rule as README: 7 x 6 px = 42 px.",
+ "src/field_region_map.c:PrintTitleWindowText": 56,
+ "_why src/field_region_map.c:PrintTitleWindowText": "fly prompt printed on WIN_TITLE (sFieldRegionMapWindowTemplates, width 7 tiles = 56 px), centered with GetStringCenterAlignXOffset(FONT_NORMAL, FlyPromptText, 0x38 = 56)."
+}

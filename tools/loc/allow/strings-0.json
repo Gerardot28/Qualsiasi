@@ -209,5 +209,12 @@
  "src/strings.c:gText_12PoofForgotMove": 176,
  "_why src/strings.c:gText_PkmnLearnedMove4,gText_12PoofForgotMove": "chooseboxmon.c LearnMove ui->printMessage: field_specials.c UIPrintMessage -> ShowFieldMessage (27 tiles = 216px) and move_relearner.c UIPrintMessage -> menu_specialized.c MoveRelearnerPrintMessage, RELEARNERWIN_MSG width 22 tiles = 176px, x=0 (gText_12PoofForgotMove also party WIN_MSG 224px).",
  "src/strings.c:gText_TossHowManyVar1s": 104,
- "_why src/strings.c:gText_TossHowManyVar1s": "Tightest window: player_pc.c ITEMPC_WIN_MESSAGE 13 tiles = 104px, x=0 (bag WIN_DESCRIPTION / pyramid WIN_INFO: 14 tiles, x=3 -> 109px). STR_VAR_1 is font-fitted (WrapFontIdToFit) to 96-98px and sits alone on line 1 with \":\"."
+ "_why src/strings.c:gText_TossHowManyVar1s": "Tightest window: player_pc.c ITEMPC_WIN_MESSAGE 13 tiles = 104px, x=0 (bag WIN_DESCRIPTION / pyramid WIN_INFO: 14 tiles, x=3 -> 109px). STR_VAR_1 is font-fitted (WrapFontIdToFit) to 96-98px and sits alone on line 1 with \":\".",
+ "src/strings.c:gText_ConfirmStarterChoice": 192,
+ "src/strings.c:gText_BirchInTrouble": 192,
+ "_why src/strings.c:gText_ConfirmStarterChoice,gText_BirchInTrouble": "starter_choose.c Task_StarterChoose / Task_AskConfirmStarter: sWindowTemplates[0] width 24 tiles = 192px, AddTextPrinterParameterized x=0 (the Yes/No box is at tilemapTop 9, above the message).",
+ "src/strings.c:gText_DoWhatWithPokemon": 128,
+ "_why src/strings.c:gText_DoWhatWithPokemon": "party_menu.c DisplayPartyMenuStdMessage(PARTY_MSG_DO_WHAT_WITH_MON): data/party_menu.h sDoWhatWithMonMsgWindowTemplate width 16 tiles = 128px, x=0.",
+ "src/strings.c:gText_NextFusionMon": 168,
+ "_why src/strings.c:gText_NextFusionMon": "party_menu.c DisplayPartyMenuStdMessage(PARTY_MSG_CHOOSE_SECOND_FUSION) default: sDefaultPartyMsgWindowTemplate width 21 tiles = 168px, x=0."
 }

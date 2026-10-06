@@ -32,6 +32,8 @@ R104 = 'data/maps/Route104/scripts.inc'
 TRN = 'data/text/trainers.inc'
 MAUV = 'data/maps/MauvilleCity/scripts.inc'
 JUAN = 'data/maps/SootopolisCity_Gym_1F/scripts.inc'
+SPACE = 'data/maps/MossdeepCity_SpaceCenter_2F/scripts.inc'
+LOUNGE7 = 'data/maps/BattleFrontier_Lounge7/scripts.inc'
 
 # (file, exact original line, replacement lines, expected (severity, check, label, message substring))
 MUTATIONS = [
@@ -104,6 +106,17 @@ MUTATIONS = [
      ('error', 'LENGTH', 'SootopolisCity_Gym_1F_Text_JuanDefeat', 'gDisplayedStringBattle')),
     (MAUV, '\t.string "If I combine forces with RALTS,\\n"', [],
      ('error', 'TERMINATION', 'MauvilleCity_Text_WallyWeCanBeatAnyone', None)),
+    # lose text of a multi battle (multi_2_vs_2 -> setmultitrainerbattle): battle box, 213px > 208px
+    (SPACE, '\t.string "I\'m with our leader…$"',
+     ['\t.string "Sto con il capo… e non mi pento di niente!$"'],
+     ('error', 'WIDTH', 'MossdeepCity_SpaceCenter_Text_TabithaDefeat', 'too wide for the battle box')),
+    # Battle Frontier move tutor description: fixed 12x6-tile window (96px, 3 rows)
+    (LOUNGE7, '\t.string "half the user\'s\\n"',
+     ['\t.string "metà dei PS massimi\\n"'],
+     ('error', 'WIDTH', 'BattleFrontier_Lounge7_Text_SoftboiledDesc', 'tutor_desc window')),
+    (R104, '\t.string "feared the sea, however stormy.$"',
+     ['\t.string "temeva il mare in tempesta.\\p$"'],
+     ('warning', 'STYLE', 'Route104_Text_BrineyLivesInSeasideCottage', '\\p$')),
 ]
 
 

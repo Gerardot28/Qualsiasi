@@ -45,7 +45,7 @@ usage problem.
 | BOXLINES | error | In a 2-line box (field, battle, PokéNav), the first break of a paragraph must be `\n` and the following breaks `\l`. A second `\n` draws a 3rd row outside the window. For unclassified texts this is only a warning, raised when the text uses more rows than the original did. |
 | LENGTH | error | Placeholders are expanded with no bounds check. A text over 1000 bytes overflows `gStringVar4[1000]`, and a battle lose/win text over 423 bytes overflows `gDisplayedStringBattle[425]`. Both corrupt memory. `{PLAYER}` counts as 7 bytes and `{STR_VAR_n}` as 20. |
 | TOKENS | warning | `{STR_VAR_n}` added although the original never uses it (the script will not fill it), or a placeholder dropped. Fewer `{PLAY_BGM}`, `{PLAY_SE}`, `{COLOR}`, `{PAUSE}`, `{FONT_*}` and similar control codes than the original. |
-| STYLE | warning | `‘` (opening quote) used as an apostrophe between letters. |
+| STYLE | warning | `‘` (opening quote) used as an apostrophe between letters. A new `\p$` or `\l$` at the end of a text (the player must press a button again and sees an empty or scrolled box). A text block that became empty. |
 
 ## Apostrophes and quotes (from `charmap.txt`)
 
@@ -77,6 +77,10 @@ Window geometry, all with `FONT_NORMAL` and x = 0 unless stated:
 * **PokéNav / match call** (`pokenavcall`, `src/match_call.c`,
   `src/pokenav_match_call_data.c`): the window is 28 tiles with the printer at
   x = 32, so the limit is **192 px** (184 px before `\p` or `\l`).
+* **tutor_desc** (Battle Frontier move tutor descriptions,
+  `BattleFrontier_Lounge7_Text_*Desc`): fixed window
+  `sBattleFrontierTutor_WindowTemplate` in `src/field_specials.c`, 12×6 tiles,
+  so **96 px** and at most **3 rows** (both errors).
 * **unclassified** (only referenced from C tables, menus, `bufferstring`, or
   unreferenced): the limit is max(widest vanilla line of that label, 216 px),
   with no hard box rule.
@@ -85,11 +89,18 @@ The usage class of every label comes from scanning all `data/**/*.inc` and
 `data/*.s` command lines. The macros in `asm/macros/*.inc` are expanded
 symbolically, so `giveitem_msg`, `trainerbattle_*` argument positions,
 `ingame_trade`, `move_tutor` and the like are understood. `src/**/*.c` is
-scanned too (`ShowFieldMessage(...)` plus a few verified files: `tv.c`,
-`battle_pyramid.c`, `birch_pc.c`, apprentice and exchange corner texts as
-field; match call files as pokenav). On vanilla this gives 8,928 field, 1,080
-battle and 322 PokéNav labels, 355 unclassified and 874 unreferenced (mostly
-FRLG texts and token-pasted apprentice texts).
+scanned too: `ShowFieldMessage(...)`/`ShowSaveMessage(...)` mean field,
+`BattlePutTextOnWindow(...)` battle, plus verified files (`tv.c`,
+`battle_pyramid.c`, `birch_pc.c`, `main_menu.c`, `pokemon.c`,
+`data/script_menu.h`, apprentice and exchange corner texts as field;
+`battle_message.c` and `secret_base.c` lose texts as battle; match call files
+as pokenav). `setmultitrainerbattle` (`multi_2_vs_2`) lose texts are battle.
+A short list of label patterns verified by hand covers texts the scan cannot
+follow (`LABEL_CLASS_OVERRIDES`: frontier maniac/gambler and storyteller texts,
+token-pasted Battle Tower partner texts as field, tutor descriptions). On
+vanilla this gives 9,382 field, 1,099 battle, 322 PokéNav and 20 tutor_desc
+labels, 203 unclassified and 533 unreferenced (mostly unused FRLG Fame Checker
+texts).
 
 Placeholders: `{PLAYER}` is 42 px (7 characters × 6 px, the widest naming-screen
 glyph). `{RIVAL}` is the widest of the names in `src/strings.c` (BRENDAN is
@@ -142,7 +153,7 @@ python3 -I tools/textcheck/selftest.py --report
 ```
 
 This copies four vanilla files to `/home/user/work/textcheck-test/` and plants
-21 mistakes (23 expected findings): an overlong field line, a battle line, a PokéNav line, a missing
+24 mistakes (26 expected findings): an overlong field line, a battle line, a PokéNav line, a missing
 `$`, a `$` mid-block, text after `$`, `—«»`, a raw `"`, `{PLAYR}`,
 `{PLAYER }`, a decomposed è, a changed command, an injected `.string`, a
 deleted block, 3 rows in a box, `\l` as the first break, the arrow rule, an
