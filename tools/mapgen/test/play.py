@@ -137,9 +137,20 @@ class Emu:
         self.say('booted:', self.where())
 
     # ------------------------------------------------------------------ navigation
+    def map_json_by_id(self, mapname):
+        if not hasattr(self, '_mapcache'):
+            self._mapcache = {}
+            for n in self.P.map_names():
+                try:
+                    jj = self.P.map_json(n)
+                except Exception:
+                    continue
+                self._mapcache[jj.get('id')] = (n, jj)
+        return self._mapcache[mapname]
+
     def grid_for(self, mapname):
         """walkable grid of the current map from the tree (collision + objects)."""
-        folder, j = self.P.map_by_id(mapname)
+        folder, j = self.map_json_by_id(mapname)
         L = self.P.layout(j['layout'])
         b = L.blocks
         h, w = b.shape
@@ -205,7 +216,7 @@ class Emu:
                 k = 1
                 while i + k < len(path) and path[i + k] == d:
                     k += 1
-                lines.append('hold %s %d' % (d, frames_per_tile * k + 2))
+                lines.append('hold %s %d' % (d, frames_per_tile * k))
                 i += k
             lines.append('wait %d' % final_wait)
             self.run(lines, 'walk_%d_%d' % (gx, gy))
@@ -220,7 +231,7 @@ class Emu:
         return False
 
     def step(self, direction, n=1, wait=20, frames_per_tile=16):
-        self.run(['hold %s %d' % (direction, frames_per_tile * n + 2), 'wait %d' % wait], 'step_%s' % direction)
+        self.run(['hold %s %d' % (direction, frames_per_tile * n), 'wait %d' % wait], 'step_%s' % direction)
         return self.where()
 
     def face(self, direction):

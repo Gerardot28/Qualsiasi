@@ -218,6 +218,9 @@ class Gen:
             if s is None:
                 continue
             types = set(db.sp[s]['types'])
+            if uncovered and field == 'land_mons' and kind != 'icecave' and \
+                    any('TYPE_ICE' in db.sp[b]['types'] for b in db.basic_members(root)):
+                continue  # Ice families (Alolan/Galarian ice forms too) debut in Shoal Cave
             match = bool(types & pref_types)
             if habitat_letter and pref_types and not match:
                 continue

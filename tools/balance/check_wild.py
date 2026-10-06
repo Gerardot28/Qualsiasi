@@ -214,7 +214,7 @@ def main():
           '33→37, 42→44, 46→49, 49→52, 55→57, 58→62, 70→72, 100→100), anche per la pesca.',
           '- Evoluzioni: forme base sempre; evoluzioni per livello solo da livello evolutivo + 2; '
           'pietra/scambio/amicizia/altro solo da Lv 30 e in slot ≤ 5%.',
-          '- Potenza: slot ≤ Lv 15 solo specie con PS totali ≤ 330 e famiglie con BST finale ≤ 535 '
+          '- Potenza: slot ≤ Lv 15 solo specie con statistiche base totali (BST) ≤ 330 e famiglie con BST finale ≤ 535 '
           '(max 1 famiglia forte in uno slot 1%); pseudo-leggendari da Lv 30 in slot 1-5%; '
           'famiglie degli starter da Lv 20 in slot 1-5% (max 1 per tabella); leggendari/misteriosi/UC/paradosso '
           'solo in aree post-game, slot 1%, Lv 60-70, max 1 per tabella.',

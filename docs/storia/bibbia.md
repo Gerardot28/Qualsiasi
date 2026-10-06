@@ -35,7 +35,7 @@ Otto Medaglie, una Lega, un multiverso intero dietro l'orizzonte. **Atto 1: Hoen
 - **Meteorite**: un frammento del Grande Varco, caduto tremila anni fa nelle Cascate Meteora. "Vibra" quando un Varco è vicino e amplifica qualsiasi energia legata alla Soglia.
 - **Gemma Rossa / Gemma Blu**: le chiavi delle Ancore, custodite sul Monte Pira. Ognuna, da sola, risveglia e aizza un'Ancora (la Rossa scuote il mare, la Blu scuote la terra: per questo Ulisse usa la Rossa e Ettore la Blu); unite, le calmano. ("Non devono mai essere separate.")
 - **Merce Devon**: componenti di uno *stabilizzatore di Varchi* progettato dalla Devon per il sottomarino di Capitan Stern, che vuole studiare un Varco sottomarino.
-- **Stemma Argine**: la spilla di riconoscimento del Team Argine; apre il loro covo sotto il Monte Camino.
+- **Stemma Alpha**: la spilla di riconoscimento del Team Alpha; apre il loro covo sotto il Monte Camino.
 
 ### 2.5 Il messaggio dell'Atto 1
 Né muri né porte spalancate: i Varchi vanno **custoditi**, non sbarrati né forzati. È la lezione che il protagonista impara (e che Rayquaza incarna) e che prepara l'Atto 2, quando il Grande Varco si aprirà davvero e qualcuno dovrà attraversarlo per primo.
@@ -47,19 +47,22 @@ Né muri né porte spalancate: i Varchi vanno **custoditi**, non sbarrati né fo
 ### 3.1 La Società Soglia (passato)
 Gruppo di ricerca fondato dodici anni fa da un geologo, **Ettore**, e da un oceanografo, **Ulisse**, amici inseparabili, con fondi della Devon S.p.A. e la consulenza (giovanile) del Prof. Birch e di Capitan Stern. Studiava i Varchi. Si sciolse dopo **l'Incidente di Ciclanova**: un esperimento per aprire un Varco artificiale sotto Ciclamipoli mandò in tilt la centrale e costrinse ad abbandonare Ciclanova (il generatore impazzito della missione opzionale di Walter è un residuo di quell'esperimento). Da quella notte Ettore e Ulisse si accusano a vicenda.
 
-### 3.2 Team Argine (sprite rosso, ex "Team Magma")
+
+> **Nota sui nomi (decisa dal giocatore):** i due Team si chiamano **Team Alpha** (ex Magma, rossi: "il principio" — vogliono riportare Hoenn com'era all'origine, sigillata) e **Team Omega** (ex Idro, blu: "l'ultimo confine" — vogliono andare oltre ogni limite e aprire il multiverso). Il motto del Team Omega resta "Oltre ogni mare!".
+
+### 3.2 Team Alpha (sprite rosso, ex "Team Magma")
 - **Ideale**: i Varchi sono un'invasione. Pokémon e "cose" di altri mondi stanno cambiando Hoenn per sempre. Bisogna chiudere la Soglia e **sigillare Hoenn per sempre**.
 - **Piano**: risvegliare Groudon e "affondare l'Ancora": Hoenn verrebbe inchiodata al suo mondo, ogni Varco si richiuderebbe di colpo (schiacciando o rispedendo indietro chi ci si trova), e il sole di Groudon prosciugherebbe i mari.
-- **Stile**: disciplina, gerarchia, mantelli rossi, linguaggio militare. Motto: **"Hoenn resta Hoenn!"** Saluto dei membri: "Per l'Argine!"
-- Covo: sotto il Monte Camino (MAGMA_HIDEOUT → "Covo Argine").
-- Classi: Recluta = "Team Argine"; Admin = "Admin Argine"; Capo = "Capo Argine".
+- **Stile**: disciplina, gerarchia, mantelli rossi, linguaggio militare. Motto: **"Hoenn resta Hoenn!"** Saluto dei membri: "Per l'Alpha!"
+- Covo: sotto il Monte Camino (MAGMA_HIDEOUT → "Covo Alpha").
+- Classi: Recluta = "Team Alpha"; Admin = "Admin Alpha"; Capo = "Capo Alpha".
 
-### 3.3 Team Oltre (sprite blu, ex "Team Idro")
+### 3.3 Team Omega (sprite blu, ex "Team Idro")
 - **Ideale**: i confini sono prigioni. La Convergenza è un dono: bisogna **spalancare la Soglia** e fondere tutti i mondi in un unico grande mare.
 - **Piano**: risvegliare Kyogre e "levare l'Ancora": Hoenn salperebbe nel multiverso, i Varchi resterebbero aperti per sempre… ma la pioggia senza fine sommergerebbe la regione e la Soglia si lacererebbe del tutto.
 - **Stile**: ciurma di pirati idealisti, bandane blu, gergo marinaresco, entusiasmo. Motto: **"Oltre ogni mare!"** Saluto: "Vele al vento!"
-- Covo: Porto Alghepoli (AQUA_HIDEOUT → "Covo Oltre").
-- Classi: Recluta = "Team Oltre"; Admin = "Admin Oltre"; Capo = "Capo Oltre".
+- Covo: Porto Alghepoli (AQUA_HIDEOUT → "Covo Omega").
+- Classi: Recluta = "Team Omega"; Admin = "Admin Omega"; Capo = "Capo Omega".
 
 ### 3.4 Perché si odiano
 Ettore pensa che Ulisse sia un incosciente che ha quasi distrutto Ciclamipoli; Ulisse pensa che Ettore sia un codardo che ha paura di tutto ciò che è diverso. Ciascuno scambia il protagonista per un agente dell'altro (vedi Museo Oceanografico e Cascate Meteora). Alla fine, a Ceneride, entrambi capiscono di aver avuto torto **insieme**.
@@ -75,7 +78,7 @@ Legenda: *ruolo vanilla → nome nostro*. "Tic" = intercalari e abitudini verbal
 | Ruolo vanilla | Nome | Sprite | Personalità | Stile e tic | Motivazione | Arco |
 |---|---|---|---|---|---|---|
 | Player (Brendan) | Scelto dal giocatore; suggerito **Dante** (max 7 caratteri) | Nuovo: capelli rossi a punta, vestiti neri moderni | Ragazzo di città, curioso, testardo, poche parole ma fatti. Muto nei dialoghi (stile Pokémon): parlano gli altri | — | Uscire dall'ombra del padre, capire cosa sono i Varchi | Da "il figlio di Norman" a Campione di Hoenn e custode designato del Grande Varco |
-| Rivale (May) | **Arianna** | Sprite di May | Figlia del Prof. Birch. Solare, impaziente, competitiva, sempre col suo *Taccuino dei Varchi* | Tic: "Allora, allora!" quando è eccitata; "Segno tutto!" (scrive ogni scoperta); conta sulle dita ("Primo… secondo…") | Attraversare un Varco per prima. Vuole fare qualcosa di suo, non solo "la figlia del professore" | Tentata dall'utopia del Team Oltre (Percorso 119, Porto Alghepoli), capisce che le porte non si aprono a calci; rinuncia alla Lega per studiare i Varchi con il padre; nel finale annuncia che verrà con te oltre il Grande Varco |
+| Rivale (May) | **Arianna** | Sprite di May | Figlia del Prof. Birch. Solare, impaziente, competitiva, sempre col suo *Taccuino dei Varchi* | Tic: "Allora, allora!" quando è eccitata; "Segno tutto!" (scrive ogni scoperta); conta sulle dita ("Primo… secondo…") | Attraversare un Varco per prima. Vuole fare qualcosa di suo, non solo "la figlia del professore" | Tentata dall'utopia del Team Omega (Percorso 119, Porto Alghepoli), capisce che le porte non si aprono a calci; rinuncia alla Lega per studiare i Varchi con il padre; nel finale annuncia che verrà con te oltre il Grande Varco |
 | Wally | **Lino** (nome ufficiale italiano di Wally) | WALLY | Fragile, gentile, timido, più coraggioso di quanto creda | Parla piano, con puntini di sospensione; "Io… ce la posso fare."; ringrazia sempre | Diventare forte insieme a Ralts. È anche sensibile ai Varchi: gli girano la testa quando uno si apre vicino (foreshadowing per l'Atto 2, non spiegarlo) | Dal ragazzino che non riesce a lanciare una Poké Ball al rivale che ti aspetta alla Via Vittoria |
 
 > Nota: il protagonista è sempre maschio. I rami di script "giocatrice femmina" (case di Brendan come rivale) sono irraggiungibili: scrivere lo stesso testo con lo stesso nome rivale **Arianna**, per sicurezza.
@@ -113,13 +116,13 @@ Legenda: *ruolo vanilla → nome nostro*. "Tic" = intercalari e abitudini verbal
 
 | Ruolo vanilla | Nome | Sprite | Personalità | Stile e tic | Motivazione | Arco |
 |---|---|---|---|---|---|---|
-| Archie (Capo Aqua) | **Ulisse**, Capo del Team Oltre | ARCHIE | Carismatico, rumoroso, sognatore, generoso coi suoi, pericolosamente sicuro di sé | Gergo da marinaio: "Ciurma!", "Per mille Varchi!", ride forte "Ahrrr-ha-ha!"; chiama il protagonista "mozzo" | Fondere i mondi: "Nessuno dovrebbe nascere chiuso in una gabbia chiamata regione." | Risveglia Kyogre nell'Antro Abissale; davanti al diluvio capisce di aver aperto una porta che non sa chiudere. A Ceneride si scusa, insieme a Ettore |
-| Maxie (Capo Magma) | **Ettore**, Capo del Team Argine | MAXIE | Freddo, razionale, colto, ossessionato dall'ordine | Frasi lunghe e precise, cita numeri e dati; "Fufufu…" (risatina); chiama il protagonista "ragazzino" | Proteggere Hoenn dall'ignoto: "Ogni muro che costruisco è una casa che salvo." | Risveglia Groudon nel Covo Argine; vede il sole che brucia la sua stessa terra. Finale a Ceneride: ammette che anche un muro può uccidere |
-| Tabitha (Admin Magma) | **Ruggero**, Admin Argine | MAGMA_MEMBER_M (battaglia: Admin Magma) | Fanatico, pomposo, devoto a Ettore | "Per l'Argine!"; risatina "Hehehe…" | Fare carriera; crede ciecamente nel muro | Monte Camino, Covo Argine, Centro Spaziale |
-| Courtney (Admin Magma, inutilizzata in Emerald) | **Morgana**, Admin Argine | — | Gelida, parla a frammenti | "…Analisi completata." | — | Solo nome, per coerenza |
-| Matt (Admin Aqua) | **Baldo**, Admin Oltre | AQUA_MEMBER_M | Omone allegro e muscoloso, ama le lotte | "Ahoy!", ride sempre | Seguire Ulisse fino in capo al multiverso | Covo Oltre (Porto Alghepoli) |
-| Shelly (Admin Aqua) | **Ondina**, Admin Oltre | AQUA_MEMBER_F | Sarcastica, sveglia, la "mente" della ciurma | "Ahahah, che carino."; chiama tutti "tesoro" con veleno | Vedere un mondo dove il mare non ha fine | Istituto Meteo, Antro Abissale; ha un dubbio sincero quando arriva il diluvio |
-| Grunts | **Recluta** (nome) / classe "Team Argine" o "Team Oltre" | sprite vanilla | Argine: soldatini zelanti; Oltre: pirati chiassosi | Argine: "Per l'Argine!", "Ordini dall'alto!"; Oltre: "Vele al vento!", "Arrr!" | Credere in qualcosa | Comici ma veri: alcuni dubitano |
+| Archie (Capo Aqua) | **Ulisse**, Capo del Team Omega | ARCHIE | Carismatico, rumoroso, sognatore, generoso coi suoi, pericolosamente sicuro di sé | Gergo da marinaio: "Ciurma!", "Per mille Varchi!", ride forte "Ahrrr-ha-ha!"; chiama il protagonista "mozzo" | Fondere i mondi: "Nessuno dovrebbe nascere chiuso in una gabbia chiamata regione." | Risveglia Kyogre nell'Antro Abissale; davanti al diluvio capisce di aver aperto una porta che non sa chiudere. A Ceneride si scusa, insieme a Ettore |
+| Maxie (Capo Magma) | **Ettore**, Capo del Team Alpha | MAXIE | Freddo, razionale, colto, ossessionato dall'ordine | Frasi lunghe e precise, cita numeri e dati; "Fufufu…" (risatina); chiama il protagonista "ragazzino" | Proteggere Hoenn dall'ignoto: "Ogni muro che costruisco è una casa che salvo." | Risveglia Groudon nel Covo Alpha; vede il sole che brucia la sua stessa terra. Finale a Ceneride: ammette che anche un muro può uccidere |
+| Tabitha (Admin Magma) | **Ruggero**, Admin Alpha | MAGMA_MEMBER_M (battaglia: Admin Magma) | Fanatico, pomposo, devoto a Ettore | "Per l'Alpha!"; risatina "Hehehe…" | Fare carriera; crede ciecamente nel muro | Monte Camino, Covo Alpha, Centro Spaziale |
+| Courtney (Admin Magma, inutilizzata in Emerald) | **Morgana**, Admin Alpha | — | Gelida, parla a frammenti | "…Analisi completata." | — | Solo nome, per coerenza |
+| Matt (Admin Aqua) | **Baldo**, Admin Omega | AQUA_MEMBER_M | Omone allegro e muscoloso, ama le lotte | "Ahoy!", ride sempre | Seguire Ulisse fino in capo al multiverso | Covo Omega (Porto Alghepoli) |
+| Shelly (Admin Aqua) | **Ondina**, Admin Omega | AQUA_MEMBER_F | Sarcastica, sveglia, la "mente" della ciurma | "Ahahah, che carino."; chiama tutti "tesoro" con veleno | Vedere un mondo dove il mare non ha fine | Istituto Meteo, Antro Abissale; ha un dubbio sincero quando arriva il diluvio |
+| Grunts | **Recluta** (nome) / classe "Team Alpha" o "Team Omega" | sprite vanilla | Alpha: soldatini zelanti; Omega: pirati chiassosi | Alpha: "Per l'Alpha!", "Ordini dall'alto!"; Omega: "Vele al vento!", "Arrr!" | Credere in qualcosa | Comici ma veri: alcuni dubitano |
 
 ### 4.5 Altri personaggi con nome
 
@@ -129,8 +132,8 @@ Legenda: *ruolo vanilla → nome nostro*. "Tic" = intercalari e abitudini verbal
 | Devon researcher (MAN_2) | **Ricercatore Devon** | Sfortunatissimo: lo derubano due volte. "Perché sempre a me?!" |
 | Mr. Briney | **Capitan Scoglio** (originale) | Vecchio lupo di mare in pensione, nostalgico, sentimentale con il suo Wingull |
 | Peeko | **Peeko** | Il Wingull di Capitan Scoglio |
-| Capt. Stern | **Capitan Stern** | Oceanografo del Museo di Porto Selcepoli, ex Società Soglia. Vuole studiare un Varco sottomarino col suo sottomarino; il Team Oltre glielo ruberà |
-| Prof. Cozmo | **Prof. Cozmo** | Studioso di meteoriti a Brunifoglia; ingannato dal Team Argine |
+| Capt. Stern | **Capitan Stern** | Oceanografo del Museo di Porto Selcepoli, ex Società Soglia. Vuole studiare un Varco sottomarino col suo sottomarino; il Team Omega glielo ruberà |
+| Prof. Cozmo | **Prof. Cozmo** | Studioso di meteoriti a Brunifoglia; ingannato dal Team Alpha |
 | Lanette | **Lanette** | Creatrice del sistema Box del PC; il suo PC "a volte riceve messaggi da altri mondi" (battuta) |
 | Scott | **Scott** | Talent scout misterioso. Sta costruendo il **Parco Lotta**, "il primo posto dove Allenatori di mondi diversi potranno sfidarsi". Foreshadowing Atto 2 |
 | Trick Master | **Maestro Trucco** | Mago dei travestimenti, comico |
@@ -153,7 +156,7 @@ Legenda: *ruolo vanilla → nome nostro*. "Tic" = intercalari e abitudini verbal
 | ITEM_DEVON_PARTS | Merce Devon | Componenti Devon di uno stabilizzatore di Varchi per Capitan Stern. |
 | ITEM_LETTER | Lettera | Lettera del Sig. Petri per suo figlio Rocco. |
 | ITEM_METEORITE | Meteorite | Frammento dell'antico Grande Varco. Vibra quando un Varco è vicino. |
-| ITEM_MAGMA_EMBLEM | Stemma Argine | Spilla del Team Argine: apre il loro covo. |
+| ITEM_MAGMA_EMBLEM | Stemma Alpha | Spilla del Team Alpha: apre il loro covo. |
 | ITEM_RED_ORB | Gemma Rossa | Gemma ardente del Monte Pira. Separata dalla Blu, sveglia e aizza le Ancore; unita, le calma. (Ulisse la usa su Kyogre.) |
 | ITEM_BLUE_ORB | Gemma Blu | Gemma marina del Monte Pira. Separata dalla Rossa, sveglia e aizza le Ancore; unita, le calma. (Ettore la usa su Groudon.) |
 | ITEM_DEVON_SCOPE | Devonscopio | Visore Devon che rivela Pokémon invisibili e increspature dei Varchi. |
@@ -203,15 +206,15 @@ Formato: **ID — mappe** · cosa succede · chi dice cosa (battuta chiave) · f
 
 **A22 — Route104, Route104_MrBrineysHouse** · Casa vuota di Capitan Scoglio.
 
-**A23 — PetalburgWoods** · Recluta Oltre (bandana blu) aggredisce il Ricercatore Devon per rubargli dei documenti. *"Vele al vento! Quei documenti servono al Capo per aprire una rotta che nessuno ha mai solcato!"* Sconfitta: "Arrr! Il colpo vero lo facciamo a Ferrugipoli!" Ricercatore: "Perché sempre a me?!" (ti regala una Mega Ball).
+**A23 — PetalburgWoods** · Recluta Omega (bandana blu) aggredisce il Ricercatore Devon per rubargli dei documenti. *"Vele al vento! Quei documenti servono al Capo per aprire una rotta che nessuno ha mai solcato!"* Sconfitta: "Arrr! Il colpo vero lo facciamo a Ferrugipoli!" Ricercatore: "Perché sempre a me?!" (ti regala una Mega Ball).
 
 **A24–A25 — RustboroCity, RustboroCity_Gym** · Petra: *"Lezione numero uno: le rocce ricordano tutto. Vediamo cosa ricorderanno di te!"* Medaglia Pietra.
 
-**A27–A28 — RustboroCity** · Una Recluta Oltre scappa con le Merce Devon: "Largo, terricoli!" Il Ricercatore ti implora di aiutarlo.
+**A27–A28 — RustboroCity** · Una Recluta Omega scappa con le Merce Devon: "Largo, terricoli!" Il Ricercatore ti implora di aiutarlo.
 
 **A29–A30 — Route116, RusturfTunnel** · Capitan Scoglio disperato: "Il mio Peeko! Quei pirati da strapazzo l'hanno preso!" La Recluta è bloccata nel tunnel cieco. *"Il Capo Ulisse dice che con questa merce potremo tenere aperto un Varco per sempre!"* Sconfitta: restituisce la Merce Devon, libera Peeko, scappa. Scoglio: "Sono Capitan Scoglio. Se ti serve un passaggio per mare, la mia barca è tua!"
 
-**A31–A32 — RustboroCity_DevonCorp_3F** · Sig. Petri: *"Due gruppi si contendono i Varchi: il Team Oltre e il Team Argine. Un tempo erano una cosa sola… li ho finanziati io, che sciocco."* Ti dà la **Lettera** per suo figlio Rocco (Bluruvia) e il **PokéNav**, e ti chiede di portare la Merce Devon a Capitan Stern a Porto Selcepoli.
+**A31–A32 — RustboroCity_DevonCorp_3F** · Sig. Petri: *"Due gruppi si contendono i Varchi: il Team Omega e il Team Alpha. Un tempo erano una cosa sola… li ho finanziati io, che sciocco."* Ti dà la **Lettera** per suo figlio Rocco (Bluruvia) e il **PokéNav**, e ti chiede di portare la Merce Devon a Capitan Stern a Porto Selcepoli.
 
 **A33–A34 — RustboroCity (o Route104)** · Scienziato Devon: aggiornamento Match Call. Arianna ti registra: *"Allora, allora! Ora possiamo sentirci ovunque. Anche… se uno di noi finisse dall'altra parte di un Varco."* Lotta opzionale.
 
@@ -227,9 +230,9 @@ Formato: **ID — mappe** · cosa succede · chi dice cosa (battuta chiave) · f
 
 **B01 — Route109** · Scoglio attracca: "Ti aspetto qui, ragazzo."
 
-**B02–B04 — SlateportCity, SlateportCity_SternsShipyard_1F, SlateportCity_OceanicMuseum_1F** · Reclute Oltre in fila davanti al Museo ("Biglietto da 50, poi rubiamo tutto, arrr!"). Al Cantiere: Stern è al Museo. Dentro, una Recluta che conosci da Ferrugipoli: "Tu?! Di nuovo?!"
+**B02–B04 — SlateportCity, SlateportCity_SternsShipyard_1F, SlateportCity_OceanicMuseum_1F** · Reclute Omega in fila davanti al Museo ("Biglietto da 50, poi rubiamo tutto, arrr!"). Al Cantiere: Stern è al Museo. Dentro, una Recluta che conosci da Ferrugipoli: "Tu?! Di nuovo?!"
 
-**B05 — SlateportCity_OceanicMuseum_2F** · Stern riconosce la Merce. Due Reclute: "Alt! Quella merce serve al Capo!" Arriva **Ulisse**. *"Ahrrr-ha-ha! Allora sei tu il mozzo che ci rema contro. Sono Ulisse, Capo del Team Oltre. Tutta la vita viene dal mare… e il mare non conosce confini! Perché Hoenn dovrebbe? … Non hai la divisa rossa… non sei uno dell'Argine? Strano. Comunque, non intralciarci più."* Se ne va. Stern ti ringrazia, cura la squadra: "Partirò per una spedizione sottomarina: laggiù c'è un Varco che nessuno ha mai visto."
+**B05 — SlateportCity_OceanicMuseum_2F** · Stern riconosce la Merce. Due Reclute: "Alt! Quella merce serve al Capo!" Arriva **Ulisse**. *"Ahrrr-ha-ha! Allora sei tu il mozzo che ci rema contro. Sono Ulisse, Capo del Team Omega. Tutta la vita viene dal mare… e il mare non conosce confini! Perché Hoenn dovrebbe? … Non hai la divisa rossa… non sei uno dell'Alpha? Strano. Comunque, non intralciarci più."* Se ne va. Stern ti ringrazia, cura la squadra: "Partirò per una spedizione sottomarina: laggiù c'è un Varco che nessuno ha mai visto."
 
 **B06 — SlateportCity** · Scott si presenta: "Sto costruendo qualcosa di grande… un posto per Allenatori di *ogni* mondo."
 
@@ -247,17 +250,17 @@ Formato: **ID — mappe** · cosa succede · chi dice cosa (battuta chiave) · f
 
 **B15–B17 — Route118, Route111** · Famiglia Vincenti (comici: "Vincere è di famiglia!"). Gabby e Ty: "Siamo in diretta! Che effetto fa vivere in tempi di Varchi?"
 
-**B18 — Route112** · Reclute Argine (prima apparizione, mantelli rossi) bloccano la funivia: *"Per l'Argine! Il Capo sta per risvegliare ciò che dorme sotto il Monte Camino. Una squadra è andata a Brunifoglia a prendere la chiave."*
+**B18 — Route112** · Reclute Alpha (prima apparizione, mantelli rossi) bloccano la funivia: *"Per l'Alpha! Il Capo sta per risvegliare ciò che dorme sotto il Monte Camino. Una squadra è andata a Brunifoglia a prendere la chiave."*
 
 **B19–B21 — FieryPath, Route113, FallarborTown** · Cenere ovunque. A Brunifoglia il Prof. Cozmo è sparito: "È partito con degli uomini in rosso verso le Cascate Meteora."
 
-**B22 — MeteorFalls_1F_1R** · Reclute Argine col Meteorite: *"Con questo frammento, il Monte Camino farà il resto. Hoenn resta Hoenn!"* Arriva Ulisse con due Reclute Oltre: "Fermi, talpe rosse!" Gli Argine ti spingono via e fuggono. Ulisse: *"Ancora tu? Credevo fossi dell'Argine. Quelli sono fanatici: vogliono murare Hoenn e lasciar fuori il resto dell'universo! Noi siamo il loro opposto."* Cozmo: "Mi hanno ingannato… quel Meteorite è un pezzo del Grande Varco…"
+**B22 — MeteorFalls_1F_1R** · Reclute Alpha col Meteorite: *"Con questo frammento, il Monte Camino farà il resto. Hoenn resta Hoenn!"* Arriva Ulisse con due Reclute Omega: "Fermi, talpe rosse!" Gli Alpha ti spingono via e fuggono. Ulisse: *"Ancora tu? Credevo fossi dell'Alpha. Quelli sono fanatici: vogliono murare Hoenn e lasciar fuori il resto dell'universo! Noi siamo il loro opposto."* Cozmo: "Mi hanno ingannato… quel Meteorite è un pezzo del Grande Varco…"
 
-**B23–B24 — Route112_CableCarStation, MtChimney** · In cima, rissa Argine contro Oltre (Poochyena contro Poochyena). Battute: "Se chiudono i Varchi, i Pokémon di altri mondi resteranno schiacciati!" / "Fuori gli stranieri!". Ulisse alle prese con tre avversari: "Vai, mozzo! Vogliono pompare il Meteorite nel vulcano!" Ruggero: *"Troppo tardi! Il Meteorite è già nelle mani del Capo!"* **Ettore** alla macchina: *"Il Meteorite amplifica l'energia della Soglia. Iniettato nel magma, sveglierà ciò che dorme sotto Hoenn… e ogni Varco si chiuderà. Per sempre. Fufufu. Ulisse si lamentava di un ragazzino ficcanaso. Sei tu. Un tempo anche la terra era aperta e indifesa. Io le darò un Argine."* Sconfitto: "Mi ritiro. Ma anche senza il Meteorite… se avrò la Gemma… Fufufu." Ulisse: "Grazie! Ma… da che parte stai, tu?" Puoi prendere il Meteorite dalla macchina.
+**B23–B24 — Route112_CableCarStation, MtChimney** · In cima, rissa Alpha contro Omega (Poochyena contro Poochyena). Battute: "Se chiudono i Varchi, i Pokémon di altri mondi resteranno schiacciati!" / "Fuori gli stranieri!". Ulisse alle prese con tre avversari: "Vai, mozzo! Vogliono pompare il Meteorite nel vulcano!" Ruggero: *"Troppo tardi! Il Meteorite è già nelle mani del Capo!"* **Ettore** alla macchina: *"Il Meteorite amplifica l'energia della Soglia. Iniettato nel magma, sveglierà ciò che dorme sotto Hoenn… e ogni Varco si chiuderà. Per sempre. Fufufu. Ulisse si lamentava di un ragazzino ficcanaso. Sei tu. Un tempo anche la terra era aperta e indifesa. Io le darò un muro."* Sconfitto: "Mi ritiro. Ma anche senza il Meteorite… se avrò la Gemma… Fufufu." Ulisse: "Grazie! Ma… da che parte stai, tu?" Puoi prendere il Meteorite dalla macchina.
 
 **B25 — FallarborTown_CozmosHouse** · Cozmo riprende il Meteorite (scambio MT): "Brillerà di nuovo, qui, al sicuro."
 
-**B26 — JaggedPass** · Una Recluta Argine fa la guardia a una parete sospetta: "Qui non c'è niente! Circolare!" (il Covo).
+**B26 — JaggedPass** · Una Recluta Alpha fa la guardia a una parete sospetta: "Qui non c'è niente! Circolare!" (il Covo).
 
 **B27–B28 — LavaridgeTown, LavaridgeTown_Gym_1F** · Fiammetta: *"Sono nuova, ma il mio fuoco no! E… ehm… speriamo che il vulcano stia buono."* Medaglia Fiamma.
 
@@ -275,29 +278,29 @@ Formato: **ID — mappe** · cosa succede · chi dice cosa (battuta chiave) · f
 
 **C01 — Route118** · Rocco salta giù da una sporgenza: "Ti ho visto lottare. Interessante… I Varchi si stanno spostando verso est. Stai attento."
 
-**C02–C04 — Route119, Route119_WeatherInstitute_1F/2F** · Sul Percorso 119 piove sempre ("Varchi meteorologici", dicono gli abitanti). Due vedette Oltre bloccano il ponte. Il Team Oltre occupa l'Istituto Meteo. **Ondina** (Admin Oltre): *"Ahahah, che carino. Ci servono i dati sulle piogge anomale, tesoro: ci diranno dove dorme l'Ancora del Mare."* Dopo la sconfitta entra una Recluta di corsa: *"Admin! L'Argine sta salendo al Monte Pira!"* Ondina: "Vele al vento, ciurma! Si cambia rotta!" Gli scienziati regalano Castform: "Cambia forma col tempo… e impazzisce quando un Varco si apre."
+**C02–C04 — Route119, Route119_WeatherInstitute_1F/2F** · Sul Percorso 119 piove sempre ("Varchi meteorologici", dicono gli abitanti). Due vedette Omega bloccano il ponte. Il Team Omega occupa l'Istituto Meteo. **Ondina** (Admin Omega): *"Ahahah, che carino. Ci servono i dati sulle piogge anomale, tesoro: ci diranno dove dorme l'Ancora del Mare."* Dopo la sconfitta entra una Recluta di corsa: *"Admin! L'Alpha sta salendo al Monte Pira!"* Ondina: "Vele al vento, ciurma! Si cambia rotta!" Gli scienziati regalano Castform: "Cambia forma col tempo… e impazzisce quando un Varco si apre."
 
-**C05 — Route119 (nord)** · Arianna, turbata: *"Allora… ho parlato con una del Team Oltre. Un mondo senza confini… non suona così male, no? … Lottiamo. Mi schiarisce le idee."* Ti dà la MN Volo: "Vola alto. Io intanto segno tutto." Subito dopo, Scott: "Volare… sì, ti serve proprio."
+**C05 — Route119 (nord)** · Arianna, turbata: *"Allora… ho parlato con una del Team Omega. Un mondo senza confini… non suona così male, no? … Lottiamo. Mi schiarisce le idee."* Ti dà la MN Volo: "Vola alto. Io intanto segno tutto." Subito dopo, Scott: "Volare… sì, ti serve proprio."
 
 **C06–C08 — FortreeCity, Route120** · Qualcosa di invisibile blocca la Palestra e il ponte. Rocco: *"Questo Devonscopio rivela ciò che non si vede. Anche le increspature di un Varco, dicono."* Rivela il Kecleon, ci lotta davanti a te, ti regala il Devonscopio e vola via.
 
 **C09 — FortreeCity_Gym** · Alice: *"Dall'alto si vede una linea di luce sopra il mare. La chiamano Cicatrice. Volando, la si sente respirare."* Medaglia Piuma.
 
-**C10–C11 — Route121** · Chiamata di Scott. Squadre Oltre in marcia verso il Monte Pira: "Il Capo ha detto: la Gemma o niente!"
+**C10–C11 — Route121** · Chiamata di Scott. Squadre Omega in marcia verso il Monte Pira: "Il Capo ha detto: la Gemma o niente!"
 
-**C12–C13 — LilycoveCity, AquaHideout (ingresso)** · Porto Alghepoli, città natale del protagonista (qualche NPC può ricordarsi di lui: battute opzionali). Wailmer del Team Oltre bloccano il porto; furti attribuiti ai "pirati blu". Diversi NPC parlano di **una torre altissima vicino al Percorso 131** e di **una creatura verde vista in cielo** (Rayquaza). Davanti al Centro Commerciale, **ultima lotta con Arianna**: *"Ho deciso. Non andrò alla Lega. Loro aprono porte senza chiedersi cosa c'è dall'altra parte. Io voglio essere quella che lo scopre davvero, con calma. Il mio filo porta altrove. Ma tu… tu devi diventare Campione!"* Poi torna a casa. Il Covo Oltre (grotta nella baia) è sorvegliato.
+**C12–C13 — LilycoveCity, AquaHideout (ingresso)** · Porto Alghepoli, città natale del protagonista (qualche NPC può ricordarsi di lui: battute opzionali). Wailmer del Team Omega bloccano il porto; furti attribuiti ai "pirati blu". Diversi NPC parlano di **una torre altissima vicino al Percorso 131** e di **una creatura verde vista in cielo** (Rayquaza). Davanti al Centro Commerciale, **ultima lotta con Arianna**: *"Ho deciso. Non andrò alla Lega. Loro aprono porte senza chiedersi cosa c'è dall'altra parte. Io voglio essere quella che lo scopre davvero, con calma. Il mio filo porta altrove. Ma tu… tu devi diventare Campione!"* Poi torna a casa. Il Covo Omega (grotta nella baia) è sorvegliato.
 
-**C16–C17 — MtPyre_1F, MtPyre_Exterior, MtPyre_Summit** · Nebbia e Reclute di entrambi i Team. In cima: il Team Argine ha già preso la **Gemma Blu** (fuori scena) e ha perso il suo **Stemma Argine**. Ulisse prende la **Gemma Rossa** davanti a te, senza lottare: *"Ahrrr! Con questa sveglierò l'Ancora del Mare. Leveremo l'ancora, mozzo! Hoenn salperà!"* I Custodi: *"Le Gemme non devono mai essere separate. Tremila anni fa, l'Ancora della Terra e l'Ancora del Mare lottarono quando il cielo si aprì. Solo le Gemme, unite, le calmarono."* Ti danno lo Stemma Argine.
+**C16–C17 — MtPyre_1F, MtPyre_Exterior, MtPyre_Summit** · Nebbia e Reclute di entrambi i Team. In cima: il Team Alpha ha già preso la **Gemma Blu** (fuori scena) e ha perso il suo **Stemma Alpha**. Ulisse prende la **Gemma Rossa** davanti a te, senza lottare: *"Ahrrr! Con questa sveglierò l'Ancora del Mare. Leveremo l'ancora, mozzo! Hoenn salperà!"* I Custodi: *"Le Gemme non devono mai essere separate. Tremila anni fa, l'Ancora della Terra e l'Ancora del Mare lottarono quando il cielo si aprì. Solo le Gemme, unite, le calmarono."* Ti danno lo Stemma Alpha.
 
 **C19–C21 — JaggedPass, MagmaHideout_1F…4F** · Lo Stemma apre la parete segreta. Dentro, Ruggero, poi Ettore davanti a Groudon addormentato: *"Guarda, ragazzino. L'Ancora della Terra. Con la Gemma Blu la sveglio, e lei affonderà nella Soglia finché nessun Varco potrà più aprirsi."* Groudon si risveglia, **non obbedisce** e fugge. Ettore, scosso: "Doveva… obbedire." Lotta. Dopo: "Devo ritrovarla prima che sia tardi. Fufufu… no, non c'è niente da ridere." Se ne va.
 
-**C22–C23 — SlateportCity (TV, porto)** · Capitan Stern in TV annuncia una **grotta sottomarina sul Percorso 128**, sede di un Varco. Al porto il Team Oltre ruba il sottomarino col megafono. Ulisse: *"Grazie per la mappa, Stern! Mozzo, se vuoi fermarci, ti aspetto nel mio covo… se arrivi in tempo! Ahrrr-ha-ha!"*
+**C22–C23 — SlateportCity (TV, porto)** · Capitan Stern in TV annuncia una **grotta sottomarina sul Percorso 128**, sede di un Varco. Al porto il Team Omega ruba il sottomarino col megafono. Ulisse: *"Grazie per la mappa, Stern! Mozzo, se vuoi fermarci, ti aspetto nel mio covo… se arrivi in tempo! Ahrrr-ha-ha!"*
 
-**C24–C25 — AquaHideout_1F/B1F/B2F** · Pannelli di teletrasporto e trappole. **Baldo** (Admin Oltre): *"Ahoy! Troppo tardi, il Capo è salpato verso una grotta sotto il mare! Ahahah! Lottiamo, tanto ormai è fatta!"* La rotta per Verdeazzupoli si apre. Stern consiglia: "Rocco vive a Verdeazzupoli. Lui sa come scendere sott'acqua."
+**C24–C25 — AquaHideout_1F/B1F/B2F** · Pannelli di teletrasporto e trappole. **Baldo** (Admin Omega): *"Ahoy! Troppo tardi, il Capo è salpato verso una grotta sotto il mare! Ahahah! Lottiamo, tanto ormai è fatta!"* La rotta per Verdeazzupoli si apre. Stern consiglia: "Rocco vive a Verdeazzupoli. Lui sa come scendere sott'acqua."
 
 **C26–C27 — Route124, MossdeepCity, MossdeepCity_Gym** · Tell e Pat: *"Sentiamo un'eco…" / "…che viene dall'alto." / "La Cicatrice si sta…" / "…aprendo."* Medaglia Mente.
 
-**C28–C30 — MossdeepCity, MossdeepCity_SpaceCenter_1F/2F** · Il Team Argine annuncia l'incursione con una **lettera educatissima** ("Gentile Centro Spaziale, verremo a prendere il carburante. Distinti saluti, Team Argine."). Vuole il carburante per un **razzo sigillo** da sparare nella Cicatrice. Tre Reclute di fila (rifiutabili), poi **lotta doppia con Rocco contro Ettore e Ruggero**. Ettore: *"Se l'Ancora non obbedisce, chiuderò il cielo con le mie mani!"* Dopo la sconfitta: *"…Un muro, un razzo, un'Ancora. Ogni cosa che tocco brucia. E se Ulisse avesse torto quanto me?"* Rinuncia e se ne va. Rocco: "Vieni a casa mia. Ti serve una cosa."
+**C28–C30 — MossdeepCity, MossdeepCity_SpaceCenter_1F/2F** · Il Team Alpha annuncia l'incursione con una **lettera educatissima** ("Gentile Centro Spaziale, verremo a prendere il carburante. Distinti saluti, Team Alpha."). Vuole il carburante per un **razzo sigillo** da sparare nella Cicatrice. Tre Reclute di fila (rifiutabili), poi **lotta doppia con Rocco contro Ettore e Ruggero**. Ettore: *"Se l'Ancora non obbedisce, chiuderò il cielo con le mie mani!"* Dopo la sconfitta: *"…Un muro, un razzo, un'Ancora. Ogni cosa che tocco brucia. E se Ulisse avesse torto quanto me?"* Rinuncia e se ne va. Rocco: "Vieni a casa mia. Ti serve una cosa."
 
 **C31–C32 — MossdeepCity_StevensHouse** · Chiamata di Arianna: "Ho visto un Pokémon verde enorme volare sopra il mare! Segnato!" A casa, tra pietre di altri mondi ("questa viene da un posto chiamato Kalos… credo"), Rocco ti dà la **MN Sub**.
 
@@ -347,7 +350,7 @@ Formato: **ID — mappe** · cosa succede · chi dice cosa (battuta chiave) · f
 ## 7. Guida di stile
 
 ### 7.1 Regole formali
-- **Title Case per i nomi propri**: Pokémon, Prof. Birch, Percorso 101, Poké Ball, Pokédex, Centro Pokémon, Pokémon Market, Capopalestra, Lega Pokémon, Superquattro, Campione, Team Argine, Team Oltre, Varco/Varchi (sempre maiuscolo), Grande Varco, Cicatrice, Soglia.
+- **Title Case per i nomi propri**: Pokémon, Prof. Birch, Percorso 101, Poké Ball, Pokédex, Centro Pokémon, Pokémon Market, Capopalestra, Lega Pokémon, Superquattro, Campione, Team Alpha, Team Omega, Varco/Varchi (sempre maiuscolo), Grande Varco, Cicatrice, Soglia.
 - **Niente MAIUSCOLO** tranne per urla brevi ("FERMO!") o onomatopee.
 - **Prefisso "Nome: "** solo dove il testo originale lo aveva (es. `ULISSE: ...`→ `Ulisse: ...`). Non aggiungerne di nuovi.
 - **Segnaposto intoccabili**: `{PLAYER}`, `{RIVAL}`, `{STR_VAR_1}`, `{STR_VAR_2}`, `{STR_VAR_3}`, `{KUN}`, `{PKMN}`, `{COLOR …}`, `{PAUSE …}` ecc. Mai tradurli o spostarli dentro parole.
@@ -362,7 +365,7 @@ Allenatore/Allenatrice, Capopalestra, Medaglia, Palestra, Superquattro, Campione
 - Avventuroso, emotivo, adatto a tutte le età. Mai cinico, mai volgare.
 - Il mistero dei Varchi è **meraviglia** prima che paura.
 - Umorismo nei personaggi secondari (Ricercatore Devon, Reclute, Famiglia Vincenti, Maestro Trucco, Mamma).
-- I cattivi hanno ragioni comprensibili: Argine = paura dell'altro; Oltre = utopia irresponsabile. Mai macchiette totali i capi; le Reclute possono essere comiche.
+- I cattivi hanno ragioni comprensibili: Alpha = paura dell'altro; Omega = utopia irresponsabile. Mai macchiette totali i capi; le Reclute possono essere comiche.
 - Riferimenti agli altri mondi: vaghi e suggestivi ("un posto chiamato Kalos… credo"), mai descrizioni dettagliate.
 
 ### 7.4 Testi generici
@@ -375,7 +378,7 @@ Allenatore/Allenatrice, Capopalestra, Medaglia, Palestra, Superquattro, Campione
   - Montanaro: fatica, vette ("Salire è dura, perdere di più!").
   - Nuotatore/Nuotatrice: acqua, fiato.
   - Ornitologo: volo, piume. Pigliamosche: insetti, retini. Pokémaniaco: collezione, entusiasmo nerd.
-  - Recluta Argine: ordini, disciplina, "Per l'Argine!". Recluta Oltre: pirati, "Arrr!", "Vele al vento!".
+  - Recluta Alpha: ordini, disciplina, "Per l'Alpha!". Recluta Omega: pirati, "Arrr!", "Vele al vento!".
   - Ogni tanto (non sempre) un allenatore cita un Pokémon "arrivato da un Varco".
 - **Messaggi di sistema**: invariati nella forma, tradotti con la terminologia ufficiale.
 - **Match Call**: tono colloquiale, 2–4 riquadri, nessuna informazione di trama nuova.
@@ -385,8 +388,8 @@ Allenatore/Allenatrice, Capopalestra, Medaglia, Palestra, Superquattro, Campione
 ## 8. Promemoria rapido dei nomi (dettagli e limiti in `nomi.json`)
 
 - **Protagonista**: `{PLAYER}` (suggerito Dante). **Rivale**: Arianna (`{RIVAL}`), figlia del Prof. Birch. **Wally → Lino** (nome ufficiale italiano; se la produzione decide di tenere "Wally", basta sostituire il nome ovunque).
-- **Team Argine** (rosso): Capo **Ettore**, Admin **Ruggero** (e Morgana, inutilizzata), Reclute. **Team Oltre** (blu): Capo **Ulisse**, Admin **Baldo** e **Ondina**, Reclute. Ex organizzazione comune: **Società Soglia**.
-- **Classi in lotta** (max 12 caratteri): Team Argine / Admin Argine / Capo Argine; Team Oltre / Admin Oltre / Capo Oltre; la classe condivisa da Arianna, Lino e Rocco è **Sfidante**; Capopalestra, Superquattro, Campione.
-- **Oggetti**: Merce Devon, Lettera, Meteorite, Stemma Argine, Gemma Rossa, Gemma Blu, Devonscopio, Scanner, Occhialoni, Biglietto Nave (M/N Acqua).
-- **Luoghi nuovi o rinominati**: Covo Argine (sotto il Monte Camino), Covo Oltre (Porto Alghepoli), Parco Lotta. Tutti gli altri luoghi usano il nome ufficiale (Grotta Pietrosa, Bosco Petalo, Tunnel Menferro, Cascate Meteora, Monte Camino, Passo Selvaggio, Monte Pira, Antro Abissale, Grotta dei Tempi, Torre dei Cieli, Via Vittoria, Ciclanova, Vecchia Nave, Torre Miraggio…).
+- **Team Alpha** (rosso): Capo **Ettore**, Admin **Ruggero** (e Morgana, inutilizzata), Reclute. **Team Omega** (blu): Capo **Ulisse**, Admin **Baldo** e **Ondina**, Reclute. Ex organizzazione comune: **Società Soglia**.
+- **Classi in lotta** (max 12 caratteri): Team Alpha / Admin Alpha / Capo Alpha; Team Omega / Admin Omega / Capo Omega; la classe condivisa da Arianna, Lino e Rocco è **Sfidante**; Capopalestra, Superquattro, Campione.
+- **Oggetti**: Merce Devon, Lettera, Meteorite, Stemma Alpha, Gemma Rossa, Gemma Blu, Devonscopio, Scanner, Occhialoni, Biglietto Nave (M/N Acqua).
+- **Luoghi nuovi o rinominati**: Covo Alpha (sotto il Monte Camino), Covo Omega (Porto Alghepoli), Parco Lotta. Tutti gli altri luoghi usano il nome ufficiale (Grotta Pietrosa, Bosco Petalo, Tunnel Menferro, Cascate Meteora, Monte Camino, Passo Selvaggio, Monte Pira, Antro Abissale, Grotta dei Tempi, Torre dei Cieli, Via Vittoria, Ciclanova, Vecchia Nave, Torre Miraggio…).
 - **Lessico dei Varchi**: Varco/Varchi, Varchi minori, Grande Varco, Cicatrice, Soglia, Convergenza, Ancora della Terra (Groudon), Ancora del Mare (Kyogre), Custode della Volta (Rayquaza), Incidente di Ciclanova.

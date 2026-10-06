@@ -72,7 +72,7 @@
   "MAPSEC_METEOR_FALLS": "Cascate Meteora",
   "MAPSEC_METEOR_FALLS2": "Cascate Meteora",
   "MAPSEC_MT_PYRE": "Monte Pira",
-  "MAPSEC_AQUA_HIDEOUT_OLD": "Covo Oltre",
+  "MAPSEC_AQUA_HIDEOUT_OLD": "Covo Omega",
   "MAPSEC_SHOAL_CAVE": "Grotta Ondosa",
   "MAPSEC_SEAFLOOR_CAVERN": "Antro Abissale",
   "MAPSEC_UNDERWATER_SEAFLOOR_CAVERN": "Sott'acqua",
@@ -199,8 +199,8 @@
   "MAPSEC_VIAPOIS_CHAMBER": "Sala G-ardenia",
   "MAPSEC_EMBER_SPA": "Terme Laviche",
   "MAPSEC_SPECIAL_AREA": "Area Speciale",
-  "MAPSEC_AQUA_HIDEOUT": "Covo Oltre",
-  "MAPSEC_MAGMA_HIDEOUT": "Covo Argine",
+  "MAPSEC_AQUA_HIDEOUT": "Covo Omega",
+  "MAPSEC_MAGMA_HIDEOUT": "Covo Alpha",
   "MAPSEC_MIRAGE_TOWER": "Torre Miraggio",
   "MAPSEC_BIRTH_ISLAND": "Isola Materna",
   "MAPSEC_FARAWAY_ISLAND": "Isola Suprema",
@@ -231,7 +231,7 @@
   },
   "TEAM_AQUA": {
    "en": "TEAM AQUA",
-   "it": "Team Oltre"
+   "it": "Team Omega"
   },
   "PKMN_BREEDER": {
    "en": "{PKMN} BREEDER",
@@ -255,7 +255,7 @@
   },
   "TEAM_MAGMA": {
    "en": "TEAM MAGMA",
-   "it": "Team Argine"
+   "it": "Team Alpha"
   },
   "EXPERT": {
    "en": "EXPERT",
@@ -263,7 +263,7 @@
   },
   "AQUA_ADMIN": {
    "en": "AQUA ADMIN",
-   "it": "Admin Oltre"
+   "it": "Admin Omega"
   },
   "BLACK_BELT": {
    "en": "BLACK BELT",
@@ -271,7 +271,7 @@
   },
   "AQUA_LEADER": {
    "en": "AQUA LEADER",
-   "it": "Capo Oltre"
+   "it": "Capo Omega"
   },
   "HEX_MANIAC": {
    "en": "HEX MANIAC",
@@ -415,7 +415,7 @@
   },
   "MAGMA_ADMIN": {
    "en": "MAGMA ADMIN",
-   "it": "Admin Argine"
+   "it": "Admin Alpha"
   },
   "RIVAL": {
    "en": "{PKMN} TRAINER",
@@ -431,7 +431,7 @@
   },
   "MAGMA_LEADER": {
    "en": "MAGMA LEADER",
-   "it": "Capo Argine"
+   "it": "Capo Alpha"
   },
   "LASS": {
    "en": "LASS",
@@ -528,10 +528,10 @@
   "MATT": "Baldo",
   "SHELLY": "Ondina",
   "GRUNT": "Recluta",
-  "AQUA_GRUNT": "Recluta Oltre",
-  "MAGMA_GRUNT": "Recluta Argine",
-  "TEAM_AQUA": "Team Oltre",
-  "TEAM_MAGMA": "Team Argine",
+  "AQUA_GRUNT": "Recluta Omega",
+  "MAGMA_GRUNT": "Recluta Alpha",
+  "TEAM_AQUA": "Team Omega",
+  "TEAM_MAGMA": "Team Alpha",
   "NURSE": "Infermiera",
   "CLERK": "Commesso",
   "GYM_GUIDE": "Guida Palestra",
@@ -603,7 +603,7 @@
    "note": "Gruppo di ricerca sui Varchi, sciolto dopo l'Incidente di Ciclanova."
   },
   "TEAM_MAGMA": {
-   "name": "Team Argine",
+   "name": "Team Alpha",
    "sprite": "rosso (Magma)",
    "leader": "Ettore",
    "admins": [
@@ -611,15 +611,15 @@
     "Morgana"
    ],
    "grunt": "Recluta",
-   "class_grunt": "Team Argine",
-   "class_admin": "Admin Argine",
-   "class_leader": "Capo Argine",
+   "class_grunt": "Team Alpha",
+   "class_admin": "Admin Alpha",
+   "class_leader": "Capo Alpha",
    "goal": "Risvegliare Groudon (Ancora della Terra) per sigillare Hoenn e chiudere ogni Varco per sempre.",
    "motto": "Hoenn resta Hoenn!",
-   "hideout": "Covo Argine"
+   "hideout": "Covo Alpha"
   },
   "TEAM_AQUA": {
-   "name": "Team Oltre",
+   "name": "Team Omega",
    "sprite": "blu (Aqua)",
    "leader": "Ulisse",
    "admins": [
@@ -627,12 +627,12 @@
     "Ondina"
    ],
    "grunt": "Recluta",
-   "class_grunt": "Team Oltre",
-   "class_admin": "Admin Oltre",
-   "class_leader": "Capo Oltre",
+   "class_grunt": "Team Omega",
+   "class_admin": "Admin Omega",
+   "class_leader": "Capo Omega",
    "goal": "Risvegliare Kyogre (Ancora del Mare) per far salpare Hoenn nel multiverso e tenere aperti tutti i Varchi.",
    "motto": "Oltre ogni mare!",
-   "hideout": "Covo Oltre"
+   "hideout": "Covo Omega"
   }
  },
  "key_items": {
@@ -649,8 +649,8 @@
    "desc": "Frammento di un\nantico Varco. Vibra\nse c'è un Varco."
   },
   "ITEM_MAGMA_EMBLEM": {
-   "name": "Stemma Argine",
-   "desc": "Lo stemma del\nTeam Argine. Apre\nil loro covo."
+   "name": "Stemma Alpha",
+   "desc": "Lo stemma del\nTeam Alpha. Apre\nil loro covo."
   },
   "ITEM_RED_ORB": {
    "name": "Gemma Rossa",
@@ -740,11 +740,11 @@
   "Space Center": "Centro Spaziale",
   "Oceanic Museum": "Museo Oceanografico",
   "Cable Car": "Funivia",
-  "Team Magma": "Team Argine",
-  "Team Aqua": "Team Oltre",
+  "Team Magma": "Team Alpha",
+  "Team Aqua": "Team Omega",
   "Red Orb": "Gemma Rossa",
   "Blue Orb": "Gemma Blu",
-  "Magma Emblem": "Stemma Argine",
+  "Magma Emblem": "Stemma Alpha",
   "Devon Goods": "Merce Devon",
   "New Mauville": "Ciclanova"
  }

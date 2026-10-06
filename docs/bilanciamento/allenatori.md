@@ -28,9 +28,9 @@ Generato da `tools/balance/trainer_gen.py` + `tools/balance/bosses.party` (pokee
 
 | Pokémon | Liv. | Strumento | Abilità | Natura | Mosse |
 |---|---|---|---|---|---|
-| Roggenrola | 13 | — | — | Adamant | Sand Attack, Harden, Earthquake, Rock Slide |
-| Nacli | 14 | — | — | Impish | Rock Throw, Mud Shot, Harden, Rock Slide |
-| Tyrunt | 15 | Sitrus Berry | Strong Jaw | Adamant | Rock Tomb, Roar, Dragon Claw, Rock Slide |
+| Roggenrola | 13 | — | — | Adamant | Sand Attack, Harden, Toxic, Tackle |
+| Nacli | 14 | — | — | Impish | Rock Throw, Mud Shot, Harden, Curse |
+| Tyrunt | 15 | Sitrus Berry | Strong Jaw | Adamant | Rock Tomb, Roar, Dragon Dance, Tackle |
 
 ### Brawly — Lotta
 
@@ -38,10 +38,10 @@ Generato da `tools/balance/trainer_gen.py` + `tools/balance/bosses.party` (pokee
 
 | Pokémon | Liv. | Strumento | Abilità | Natura | Mosse |
 |---|---|---|---|---|---|
-| Riolu | 17 | — | — | Jolly | Quick Attack, Bulk Up, Feint, High Jump Kick |
-| Mienfoo | 17 | — | — | Jolly | Fake Out, Detect, Pound, Brick Break |
-| Croagunk | 18 | — | Dry Skin | Adamant | Taunt, Sludge Bomb, Brick Break, Earthquake |
-| Pawmo | 19 | Sitrus Berry | — | Jolly | Arm Thrust, Nuzzle, Bite, Thunder Punch |
+| Riolu | 17 | — | — | Jolly | Quick Attack, Bulk Up, Feint, Swords Dance |
+| Mienfoo | 17 | — | — | Jolly | Fake Out, Detect, Pound, Swords Dance |
+| Croagunk | 18 | — | Dry Skin | Adamant | Taunt, Toxic, Low Kick, Astonish |
+| Pawmo | 19 | Sitrus Berry | — | Jolly | Arm Thrust, Nuzzle, Bite, Thunder Wave |
 
 ### Wattson — Elettro
 
@@ -50,9 +50,9 @@ Generato da `tools/balance/trainer_gen.py` + `tools/balance/bosses.party` (pokee
 | Pokémon | Liv. | Strumento | Abilità | Natura | Mosse |
 |---|---|---|---|---|---|
 | Charjabug | 22 | — | — | Modest | Bug Bite, Spark, Mud-Slap, String Shot |
-| Helioptile | 22 | — | Dry Skin | Timid | Mud-Slap, Thunder Wave, Quick Attack, Thunderbolt |
+| Helioptile | 22 | — | Dry Skin | Timid | Mud-Slap, Thunder Wave, Quick Attack, Hidden Power |
 | Luxio | 23 | — | Intimidate | Adamant | Spark, Bite, Quick Attack, Charge |
-| Rotom | 24 | Sitrus Berry | — | Modest | Shock Wave, Thunder Wave, Confuse Ray, Thunderbolt |
+| Rotom | 24 | Sitrus Berry | — | Modest | Shock Wave, Thunder Wave, Confuse Ray, Swift |
 
 ### Flannery — Fuoco
 
@@ -60,11 +60,11 @@ Generato da `tools/balance/trainer_gen.py` + `tools/balance/bosses.party` (pokee
 
 | Pokémon | Liv. | Strumento | Abilità | Natura | Mosse |
 |---|---|---|---|---|---|
-| Salandit | 26 | — | — | Timid | Poison Fang, Sweet Scent, Fire Blast, Sludge Bomb |
-| Fletchinder | 27 | — | Flame Body | Jolly | Flame Charge, Aerial Ace, Peck, Fly |
-| Houndoom | 28 | — | Flash Fire | Timid | Flamethrower, Roar, Smog, Fire Blast |
+| Salandit | 26 | — | — | Timid | Poison Fang, Sweet Scent, Swift, Nasty Plot |
+| Fletchinder | 27 | — | Flame Body | Jolly | Flame Charge, Aerial Ace, Peck, Swords Dance |
+| Houndoom | 28 | — | Flash Fire | Timid | Flamethrower, Roar, Smog, Sucker Punch |
 | Turtonator | 28 | — | — | Modest | Flamethrower, Dragon Pulse, Protect, Iron Defense |
-| Torkoal | 29 | Charcoal | Drought | Modest | Flamethrower, Body Slam, Rock Tomb, Eruption |
+| Torkoal | 29 | Charcoal | Drought | Modest | Flamethrower, Body Slam, Rock Tomb, Toxic |
 
 ### Norman — Normale
 
@@ -219,7 +219,7 @@ Il suffisso della variante vanilla indica lo starter del **giocatore** (VAR_STAR
 
 | Pokémon | Liv. | Strumento | Abilità | Natura | Mosse |
 |---|---|---|---|---|---|
-| Budew | 16 | — | — | Modest | Stun Spore, Sludge Bomb, Leaf Storm, Extrasensory |
+| Budew | 16 | — | — | Modest | Stun Spore, Toxic, Absorb, Growth |
 | Ralts | 17 | Oran Berry | Synchronize | Modest | Confusion, Disarming Voice, Double Team, Teleport |
 
 ### Via Vittoria
@@ -243,9 +243,9 @@ Il suffisso della variante vanilla indica lo starter del **giocatore** (VAR_STAR
 
 | Pokémon | Liv. | Strumento | Abilità | Natura | Mosse |
 |---|---|---|---|---|---|
-| Numel | 21 | — | — | Quiet | Ember, Focus Energy, Fire Blast, Earthquake |
-| Sandile | 21 | — | — | Adamant | Bite, Sand Tomb, Torment, Earthquake |
-| Salandit | 22 | — | — | Timid | Poison Fang, Sweet Scent, Sludge Bomb, Fire Blast |
+| Numel | 21 | — | — | Quiet | Ember, Focus Energy, Toxic, Incinerate |
+| Sandile | 21 | — | — | Adamant | Bite, Sand Tomb, Torment, Toxic |
+| Salandit | 22 | — | — | Timid | Poison Fang, Sweet Scent, Hidden Power, Toxic |
 | Houndour | 23 | Oran Berry | — | Timid | Fire Fang, Bite, Roar, Smog |
 
 ### Max — Monte Camino
@@ -256,8 +256,8 @@ Il suffisso della variante vanilla indica lo starter del **giocatore** (VAR_STAR
 |---|---|---|---|---|---|
 | Thievul | 25 | — | — | Jolly | Snarl, Quick Attack, Thief, Nasty Plot |
 | Mudbray | 25 | — | Stamina | Adamant | Bulldoze, Double Kick, Rock Smash, Iron Defense |
-| Numel | 26 | — | Simple | Quiet | Bulldoze, Amnesia, Lava Plume, Fire Blast |
-| Houndoom | 27 | Sitrus Berry | Flash Fire | Timid | Flamethrower, Roar, Nasty Plot, Sludge Bomb |
+| Numel | 26 | — | Simple | Quiet | Bulldoze, Amnesia, Lava Plume, Toxic |
+| Houndoom | 27 | Sitrus Berry | Flash Fire | Timid | Flamethrower, Roar, Nasty Plot, Bite |
 
 ### Tabitha — Covo Magma
 
@@ -373,4 +373,4 @@ Rivincite _2/_3/_4/_5 di capipalestra e Wally (Via Vittoria): 6 Pokémon, asso a
 
 - Livello = livello vanilla mappato sulla curva (2→2, 5→6, 12→13, 15→15, 19→19, 24→24, 29→29, 31→33, 33→37, 42→44, 46→49, 49→52, 55→57, 58→62, 70→72, 100→100), interpolata linearmente; le rivincite usano la stessa curva.
 - Specie a tema per classe, da tutte le generazioni; stadio evolutivo coerente col livello (evoluzioni per livello al livello di evoluzione; pietra/scambio/amicizia: 1° stadio ≥ 30, 2° stadio ≥ 38); pseudo-leggendari solo da Lv 35 e solo per Fantallenatori/Esperti/Domadraghi.
-- Mosse: `mdb.best_moveset` (normal_trainer=True; MT per classi forti e da Lv 30). IV da 8 a 20 secondo il livello, fino a 25 nelle rivincite post-game. IA: Basic Trainer.
+- Mosse: `mdb.best_moveset` (normal_trainer=True; MT per classi forti e da Lv 30; sotto Lv 30 le mosse MT/uovo più potenti di 60/75 vengono sostituite). IV da 8 a 20 secondo il livello, fino a 25 nelle rivincite post-game. IA: Basic Trainer.
