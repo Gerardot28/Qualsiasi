@@ -146,14 +146,14 @@ Il «Distortion World» resta in inglese nel testo italiano di Platino: 5 righe 
 ### Capipalestra (ordine di Platino; in DP Fannie è la quinta e Marzia la terza)
 | # | Capopalestra (IT) | EN | Tipo | Città | Medaglia (IT) | EN | Conf. nome / medaglia | Evidenze |
 |---|---|---|---|---|---|---|---|---|
-| 1 | **Pedro** | Roark | Roccia | Mineropoli¹ | Medaglia Carbone | Coal Badge | alta / media | giochi:Pedro (4/4); GCC:Pedro; PokeRogue:Pedro |
-| 2 | **Gardenia** | Gardenia | Erba | Evopoli¹ | Medaglia Bosco | Forest Badge | alta / media | giochi:Gardenia (4/4); GCC:Gardenia; PokeRogue:Gardenia |
-| 3 | **Fannie** | Fantina | Spettro | Cuoripoli¹ | Medaglia Vestigia | Relic Badge | alta / media | giochi:Fannie (7/7); GCC:Fannie; PokeRogue:Fannie |
-| 4 | **Marzia** | Maylene | Lotta | Rupepoli¹ | Medaglia Ciottolo | Cobble Badge | alta / media | giochi:Marzia (4/4); PokeRogue:Marzia |
-| 5 | **Omar** | Crasher Wake | Acqua | Pratopoli¹ | Medaglia Acquitrino | Fen Badge | alta / media | giochi: «Omar il Distruttore» (titolo completo); GCC «Omar il Distruttore»; PokeRogue «Omar» |
-| 6 | **Ferruccio** | Byron | Acciaio | Canalipoli¹ | Medaglia Cava | Mine Badge | alta / media | giochi:Ferruccio (4/4); PokeRogue:Ferruccio |
-| 7 | **Bianca** | Candice | Ghiaccio | Nevepoli¹ | Medaglia Ghiacciolo | Icicle Badge | alta / media | giochi:Bianca (4/4); GCC:Bianca; PokeRogue:Bianca |
-| 8 | **Corrado** | Volkner | Elettro | Arenipoli¹ | Medaglia Faro | Beacon Badge | alta / media | giochi:Corrado (4/4); GCC:Corrado; PokeRogue:Corrado |
+| 1 | **Pedro** | Roark | Roccia | Mineropoli¹ | Medaglia Carbone | Coal Badge | alta / alta | giochi:Pedro (4/4); GCC:Pedro; PokeRogue:Pedro |
+| 2 | **Gardenia** | Gardenia | Erba | Evopoli¹ | Medaglia Bosco | Forest Badge | alta / alta | giochi:Gardenia (4/4); GCC:Gardenia; PokeRogue:Gardenia |
+| 3 | **Fannie** | Fantina | Spettro | Cuoripoli¹ | Medaglia Vestigia | Relic Badge | alta / alta | giochi:Fannie (7/7); GCC:Fannie; PokeRogue:Fannie |
+| 4 | **Marzia** | Maylene | Lotta | Rupepoli¹ | Medaglia Ciottolo | Cobble Badge | alta / alta | giochi:Marzia (4/4); PokeRogue:Marzia |
+| 5 | **Omar** | Crasher Wake | Acqua | Pratopoli¹ | Medaglia Acquitrino | Fen Badge | alta / alta | giochi: «Omar il Distruttore» (titolo completo); GCC «Omar il Distruttore»; PokeRogue «Omar» |
+| 6 | **Ferruccio** | Byron | Acciaio | Canalipoli¹ | Medaglia Cava | Mine Badge | alta / alta | giochi:Ferruccio (4/4); PokeRogue:Ferruccio |
+| 7 | **Bianca** | Candice | Ghiaccio | Nevepoli¹ | Medaglia Ghiacciolo | Icicle Badge | alta / alta | giochi:Bianca (4/4); GCC:Bianca; PokeRogue:Bianca |
+| 8 | **Corrado** | Volkner | Elettro | Arenipoli¹ | Medaglia Faro | Beacon Badge | alta / alta | giochi:Corrado (4/4); GCC:Corrado; PokeRogue:Corrado |
 
 ### Superquattro e Campione
 | Nome (IT) | EN | Tipo | Conf. | Evidenze |
@@ -414,7 +414,7 @@ Ricordi errati che di solito circolano, smentiti dai testi ufficiali:
 
 ## Note per Pokémon Multiverse
 
-- Limiti di lunghezza di pokeemerald-expansion: nomi degli allenatori `TRAINER_NAME_LENGTH` = 10 (controllo automatico), nomi delle mappe `MAP_NAME_LENGTH` = 16. Nomi più lunghi di 10 caratteri: «Omar il Distruttore» (19). Per Crasher Wake usare «Omar». I titoli «Professor/Professoressa» vanno nella classe allenatore, non nel nome.
+- Limiti di lunghezza di pokeemerald-expansion: nomi degli allenatori `TRAINER_NAME_LENGTH` = 10 (controllo automatico), nomi delle mappe `MAP_NAME_LENGTH` = 16. Nomi più lunghi di 10 caratteri: nessuno. Per Crasher Wake usare «Omar». I titoli «Professor/Professoressa» vanno nella classe allenatore, non nel nome.
 - L'apostrofo tipografico «’» (es. «Hau’oli», «Isola dell’Armatura») è nel charmap (`B4`, uguale a `'`).
 - Per i nomi delle mappe di Hoenn e Kanto già presenti nel ROM usare `mapsec_hoenn_kanto.json`, campo `it_ingame`: sono le stringhe maiuscole ufficiali di Smeraldo e RFVF italiani.
 

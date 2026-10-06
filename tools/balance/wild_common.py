@@ -50,10 +50,10 @@ UNREACHABLE_LABELS = {
 }
 # Tables in which one legendary/mythical/UB/paradox may appear (1% slot, Lv 60-70)
 POSTGAME_LABELS = {
-    'gArtisanCave_B1F', 'gArtisanCave_1F', 'gDesertUnderpass', 'gSkyPillar_5F',
+    # Only areas reachable exclusively after the Hall of Fame. Sky Pillar and
+    # Altering Cave are reachable mid-game in Emerald, so they are excluded.
+    'gArtisanCave_B1F', 'gArtisanCave_1F', 'gDesertUnderpass',
     'gSafariZone_Northeast', 'gSafariZone_Southeast',
-    'gAlteringCave1', 'gAlteringCave2', 'gAlteringCave3', 'gAlteringCave4', 'gAlteringCave5',
-    'gAlteringCave6', 'gAlteringCave7', 'gAlteringCave8', 'gAlteringCave9',
 }
 
 

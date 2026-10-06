@@ -13,15 +13,15 @@ Generato da `tools/balance/wild_gen.py` e verificato da `tools/balance/check_wil
 
 | Gen | Famiglie coperte | Slot occupati |
 |---|---|---|
-| 1 | 87/87 | 401 |
-| 2 | 49/49 | 215 |
+| 1 | 87/87 | 406 |
+| 2 | 49/49 | 216 |
 | 3 | 64/64 | 310 |
-| 4 | 31/31 | 134 |
-| 5 | 73/73 | 278 |
-| 6 | 31/31 | 130 |
-| 7 | 34/34 | 162 |
-| 8 | 37/37 | 140 |
-| 9 | 40/40 | 205 |
+| 4 | 31/31 | 138 |
+| 5 | 73/73 | 268 |
+| 6 | 31/31 | 131 |
+| 7 | 34/34 | 160 |
+| 8 | 37/37 | 148 |
+| 9 | 40/40 | 198 |
 
 ## Regole applicate
 
@@ -40,10 +40,10 @@ Percentuale = somma dei tassi degli slot della specie. *(non raggiungibile)* = t
 | Route102 | Erba/terreno | 3-5 | Bounsweet 30%, Capsakid 30%, Starly 10%, Minccino 10%, Poltchageist 5%, Jigglypuff 5%, Sunkern 4%, Zubat 4%, Venipede 2% |
 | Route102 | Surf | 6-39 | Skrelp 60%, Krabby 30%, Basculin 5%, Ducklett 4%, Luvdisc 1% |
 | Route102 | Pesca | 6-48 | Goldeen 70%, Finizen 30%, Corphish 60%, Clauncher 20%, Shellder 20%, Tirtouga 40%, Alomomola 40%, Finneon 15%, Tatsugiri 4%, Relicanth 1% |
-| Route103 | Erba/terreno | 2-5 | Pidove 30%, Seedot 30%, Whismur 10%, Skwovet 10%, Rattata 5%, Sentret 5%, Zigzagoon 4%, Wattrel 4%, Zorua (Hisui) 2% |
+| Route103 | Erba/terreno | 2-5 | Pidove 30%, Seedot 30%, Whismur 10%, Skwovet 10%, Rattata 5%, Sentret 5%, Marill 4%, Wattrel 4%, Zorua (Hisui) 2% |
 | Route103 | Surf | 6-39 | Dewpider 60%, Tympole 30%, Psyduck 5%, Omanyte 4%, Pyukumuku 1% |
 | Route103 | Pesca | 6-48 | Wishiwashi 70%, Carvanha 30%, Arrokuda 60%, Barboach 20%, Chinchou 20%, Qwilfish 40%, Veluza 40%, Wailmer 15%, Dondozo 4%, Corsola 1% |
-| Route104 | Erba/terreno | 3-6 | Bramblin 30%, Tarountula 30%, Lillipup 10%, Skitty 10%, Smeargle 5%, Bidoof 5%, Hoothoot 4%, Rookidee 4%, Phantump 2% |
+| Route104 | Erba/terreno | 3-6 | Bramblin 30%, Zigzagoon 30%, Lillipup 10%, Skitty 10%, Smeargle 5%, Bidoof 5%, Hoothoot 4%, Rookidee 4%, Phantump 2% |
 | Route104 | Surf | 11-31 | Seel 60%, Mareanie 30%, Horsea 5%, Staryu 4%, Clamperl 1% |
 | Route104 | Pesca | 6-48 | Finizen 70%, Wimpod 30%, Finneon 60%, Corphish 20%, Binacle 20%, Kabuto 40%, Bruxish 40%, Tentacool 15%, Magikarp 4%, Cloyster 1% |
 | Route105 | Surf | 6-39 | Poliwag 60%, Wingull 30%, Buizel 5%, Popplio 4%, Frillish 1% |
@@ -214,8 +214,8 @@ Percentuale = somma dei tassi degli slot della specie. *(non raggiungibile)* = t
 | SootopolisCity | Surf | 6-39 | Chewtle 60%, Skrelp 30%, Panpour 5%, Quaxwell 4%, Pyukumuku 1% |
 | SootopolisCity | Pesca | 6-48 | Finizen 70%, Binacle 30%, Goldeen 60%, Remoraid 20%, Barboach 20%, Corsola 40%, Basculin 40%, Relicanth 15%, Bruxish 4%, Finneon 1% |
 | SkyPillar_3F | Erba/terreno | 37-41 | Noctowl 30%, Oranguru 30%, Oricorio 10%, Hawlucha 10%, Duraludon 5%, Serperior 5%, Emolga 4%, Fearow 4%, Appletun 2% |
-| SkyPillar_5F | Erba/terreno | 37-65 | Jumpluff 30%, Butterfree 30%, Vivillon 10%, Druddigon 10%, Espathra 10%, Cinderace 4%, Hakamo-o 4%, Spidops 1%, Cresselia 1% |
-| SafariZone_Southeast | Erba/terreno | 37-65 | Machoke 30%, Dubwool 30%, Dusclops 10%, Komala 10%, Manectric 10%, Vigoroth 4%, Emboar 4%, Centiskorch 1%, Ting-Lu 1% |
+| SkyPillar_5F | Erba/terreno | 37-42 | Jumpluff 30%, Butterfree 30%, Vivillon 10%, Druddigon 10%, Cinderace 5%, Hakamo-o 5%, Fraxure 4%, Ledian 4%, Spidops 2% |
+| SafariZone_Southeast | Erba/terreno | 37-65 | Machoke 30%, Dubwool 30%, Dusclops 10%, Komala 10%, Manectric 10%, Vigoroth 4%, Emboar 4%, Centiskorch 1%, Chien-Pao 1% |
 | SafariZone_Southeast | Surf | 25-42 | Bibarel 60%, Quagsire 30%, Drizzile 5%, Arctovish 4%, Lapras 1% |
 | SafariZone_Southeast | Pesca | 25-42 | Magikarp 70%, Corphish 30%, Omanyte 60%, Kabuto 20%, Wugtrio 20%, Tentacool 40%, Luvdisc 40%, Bruxish 15%, Relicanth 4%, Lumineon 1% |
 | SafariZone_Northeast | Erba/terreno | 37-65 | Electrode 30%, Sawk 30%, Cofagrigus 10%, Comfey 10%, Tauros 10%, Shelgon 4%, Serperior 4%, Arboliva 1%, Uxie 1% |
@@ -226,24 +226,24 @@ Percentuale = somma dei tassi degli slot della specie. *(non raggiungibile)* = t
 | MagmaHideout_3F_1R | Erba/terreno | 27-37 | Anorith 30%, Nosepass 30%, Boldore 10%, Qwilfish (Hisui) 10%, Charmander 5%, Marowak 5%, Lycanroc 4%, Lunatone 4%, Kricketune 2% |
 | MagmaHideout_3F_2R | Erba/terreno | 27-37 | Naclstack 30%, Nidorino 30%, Gloom 10%, Stunfisk (Galar) 10%, Fennekin 5%, Aerodactyl 5%, Dugtrio 4%, Jangmo-o 4%, Wormadam 2% |
 | MagmaHideout_4F | Erba/terreno | 27-37 | Ponyta 30%, Mudbray 30%, Weepinbell 10%, Stunfisk 10%, Tepig 5%, Gengar 5%, Mawile 4%, Carkol 4%, Clodsire 2% |
-| MagmaHideout_3F_3R | Erba/terreno | 27-37 | Nidorina 30%, Sneasel (Hisui) 30%, Solrock 10%, Oricorio 10%, Ivysaur 5%, Roserade 5%, Seviper 4%, Golem (Alola) 4%, Slakoth 2% |
+| MagmaHideout_3F_3R | Erba/terreno | 27-37 | Nidorina 30%, Sneasel (Hisui) 30%, Solrock 10%, Oricorio 10%, Ivysaur 5%, Roserade 5%, Seviper 4%, Golem (Alola) 4%, Magmar 2% |
 | MagmaHideout_2F_3R | Erba/terreno | 27-37 | Tinkatuff 30%, Lileep 30%, Gligar 10%, Orthworm 10%, Grafaiai 5%, Skarmory 5%, Shuckle 4%, Klawf 4%, Combusken 2% |
 | MirageTower_1F | Erba/terreno | 20-24 | Darumaka 30%, Silicobra 30%, Sizzlipede 10%, Salandit 10%, Sprigatito 5%, Litleo 5%, Tyrunt 4%, Houndour 4%, Glimmet 2% |
 | MirageTower_2F | Erba/terreno | 20-24 | Drilbur 30%, Dwebble 30%, Toedscool 10%, Phanpy 10%, Rowlet 5%, Shieldon 5%, Onix 4%, Cranidos 4%, Growlithe 2% |
 | MirageTower_3F | Erba/terreno | 20-24 | Golett 30%, Pansear 30%, Numel 10%, Litwick 10%, Spritzee 5%, Rhyhorn 5%, Torracat 4%, Carnivine 4%, Sandslash 2% |
 | MirageTower_4F | Erba/terreno | 20-24 | Vulpix 30%, Sandygast 30%, Sandile 10%, Minun 10%, Crocalor 5%, Growlithe (Hisui) 5%, Torkoal 4%, Hitmonlee 4%, Diggersby 2% |
-| DesertUnderpass | Erba/terreno | 39-65 | Galvantula 30%, Illumise 30%, Volbeat 10%, Spidops 10%, Pinsir 10%, Ribombee 4%, Arctibax 4%, Fraxure 1%, Iron Thorns 1% |
-| ArtisanCave_B1F | Erba/terreno | 42-65 | Amoonguss 30%, Ferrothorn 30%, Parasect 10%, Grimmsnarl 10%, Lucario 10%, Leavanny 4%, Accelgor 4%, Zweilous 1%, Heatran 1% |
-| ArtisanCave_1F | Erba/terreno | 42-65 | Ledian 30%, Absol 30%, Durant 10%, Muk 10%, Toxicroak 10%, Sliggoo (Hisui) 4%, Aegislash 4%, Drapion 1%, Cobalion 1% |
-| AlteringCave1 | Erba/terreno | 7-65 | Combee 30%, Kricketot 30%, Wurmple 10%, Nymble 10%, Scatterbug 10%, Burmy 4%, Caterpie 4%, Blipbug 1%, Iron Treads 1% |
-| AlteringCave2 *(non raggiungibile)* | Erba/terreno | 3-65 | Grimer (Alola) 30%, Venonat 30%, Meowth (Galar) 10%, Magnemite 10%, Purrloin 10%, Karrablast 4%, Diglett (Alola) 4%, Varoom 1%, Sandy Shocks 1% |
-| AlteringCave3 *(non raggiungibile)* | Erba/terreno | 19-65 | Trubbish 30%, Nuzleaf 30%, Vullaby 10%, Murkrow 10%, Cufant 10%, Thievul 4%, Volbeat 4%, Mightyena 1%, Buzzwole 1% |
-| AlteringCave4 *(non raggiungibile)* | Erba/terreno | 13-65 | Paras 30%, Sewaddle 30%, Cutiefly 10%, Stunky 10%, Grubbin 10%, Foongus 4%, Sudowoodo 4%, Zorua 1%, Okidogi 1% |
-| AlteringCave5 *(non raggiungibile)* | Erba/terreno | 7-65 | Inkay 30%, Trapinch 30%, Nincada 10%, Klink 10%, Ferroseed 10%, Joltik 4%, Meowth (Alola) 4%, Yamask (Galar) 1%, Fezandipiti 1% |
-| AlteringCave6 *(non raggiungibile)* | Erba/terreno | 18-65 | Scraggy 30%, Yanma 30%, Sableye 10%, Morpeko 10%, Herdier 10%, Illumise 4%, Ledian 4%, Pawniard 1%, Brute Bonnet 1% |
-| AlteringCave7 *(non raggiungibile)* | Erba/terreno | 18-65 | Maschiff 30%, Pachirisu 30%, Koffing 10%, Togedemaru 10%, Pansage 10%, Unown 4%, Ariados 4%, Shelmet 1%, Iron Jugulis 1% |
-| AlteringCave8 *(non raggiungibile)* | Erba/terreno | 18-65 | Linoone (Galar) 30%, Spidops 30%, Bronzor 10%, Raticate (Alola) 10%, Buneary 10%, Quilladin 4%, Klefki 4%, Spinda 1%, Chien-Pao 1% |
-| AlteringCave9 *(non raggiungibile)* | Erba/terreno | 18-65 | Baltoy 30%, Toedscool 30%, Beedrill 10%, Naclstack 10%, Mienfoo 10%, Furret 4%, Heracross 4%, Elgyem 1%, Terrakion 1% |
+| DesertUnderpass | Erba/terreno | 39-65 | Galvantula 30%, Illumise 30%, Volbeat 10%, Spidops 10%, Pinsir 10%, Ribombee 4%, Arctibax 4%, Parasect 1%, Regidrago 1% |
+| ArtisanCave_B1F | Erba/terreno | 42-65 | Amoonguss 30%, Ferrothorn 30%, Grimmsnarl 10%, Spiritomb 10%, Lucario 10%, Accelgor 4%, Leavanny 4%, Zweilous 1%, Heatran 1% |
+| ArtisanCave_1F | Erba/terreno | 42-65 | Mightyena 30%, Perrserker 30%, Mabosstiff 10%, Vespiquen 10%, Toxicroak 10%, Corviknight 4%, Slakoth 4%, Escavalier 1%, Fezandipiti 1% |
+| AlteringCave1 | Erba/terreno | 7-16 | Kricketot 30%, Nymble 30%, Wurmple 10%, Caterpie 10%, Burmy 5%, Blipbug 5%, Scatterbug 4%, Combee 4%, Tarountula 2% |
+| AlteringCave2 *(non raggiungibile)* | Erba/terreno | 3-14 | Grimer (Alola) 30%, Venonat 30%, Purrloin 10%, Magnemite 10%, Cufant 5%, Yamask (Galar) 5%, Meowth (Alola) 4%, Fidough 4%, Spinarak 2% |
+| AlteringCave3 *(non raggiungibile)* | Erba/terreno | 19-29 | Trubbish 30%, Nuzleaf 30%, Vullaby 10%, Murkrow 10%, Klefki 5%, Sudowoodo 5%, Zorua 4%, Volbeat 4%, Morpeko 2% |
+| AlteringCave4 *(non raggiungibile)* | Erba/terreno | 13-22 | Varoom 30%, Honedge 30%, Cutiefly 10%, Koffing 10%, Sableye 5%, Trapinch 5%, Klink 4%, Togedemaru 4%, Grimer 2% |
+| AlteringCave5 *(non raggiungibile)* | Erba/terreno | 7-16 | Inkay 30%, Joltik 30%, Stunky 10%, Grubbin 10%, Pawniard 5%, Shelmet 5%, Nincada 4%, Sewaddle 4%, Diglett (Alola) 2% |
+| AlteringCave6 *(non raggiungibile)* | Erba/terreno | 18-28 | Scraggy 30%, Yanma 30%, Baltoy 10%, Ledian 10%, Bombirdier 5%, Ferroseed 5%, Bronzor 4%, Pinsir 4%, Thwackey 2% |
+| AlteringCave7 *(non raggiungibile)* | Erba/terreno | 18-28 | Illumise 30%, Linoone (Galar) 30%, Pineco 10%, Parasect 10%, Oinkologne 5%, Kecleon 5%, Foongus 4%, Stonjourner 4%, Glameow 2% |
+| AlteringCave8 *(non raggiungibile)* | Erba/terreno | 18-28 | Raticate (Alola) 30%, Tyrunt 30%, Karrablast 10%, Thievul 10%, Grovyle 5%, Pincurchin 5%, Sneasel (Hisui) 4%, Furfrou 4%, Glimmet 2% |
+| AlteringCave9 *(non raggiungibile)* | Erba/terreno | 18-28 | Skorupi 30%, Shieldon 30%, Beedrill 10%, Arbok 10%, Pachirisu 5%, Anorith 5%, Archen 4%, Bayleef 4%, Buneary 2% |
 | MeteorFalls_StevensCave | Erba/terreno | 37-42 | Drampa 30%, Sigilyph 30%, Mr. Mime 10%, Girafarig 10%, Rabsca 5%, Hakamo-o 5%, Raichu (Alola) 4%, Alakazam 4%, Swoobat 2% |
 
 ## Esito della verifica
