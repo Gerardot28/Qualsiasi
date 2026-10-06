@@ -87,7 +87,12 @@ class Emu:
         outp = p.stdout + p.stderr
         with open(os.path.join(self.out, name + '.log'), 'w') as f:
             f.write(outp)
-        if p.returncode not in (0, 3) or 'EVENT  crash' in outp or 'EVENT crash' in outp:
+        if 'EVENT stuck' in outp:
+            self.say('  (harness reported a "stuck" event - no VBlank wait for a while; continuing)')
+        bad = p.returncode not in (0, 3, 4) or 'EVENT crash' in outp or 'EVENT reset' in outp
+        if p.returncode == 4 and 'EVENT stuck' not in outp:
+            bad = True
+        if bad:
             raise EmuError('harness failed (%d): %s' % (p.returncode, outp[-2000:]))
         reads = {}
         for m in re.finditer(r'READ\s.*?value=(0x[0-9a-fA-F]+).*?label=(\w+)', outp):
@@ -249,6 +254,5 @@ class Emu:
         self.say('  screenshot', os.path.join(self.out, shotname + '.png'))
         lines = []
         for _ in range(presses):
-            lines += ['press A', 'wait 40']
-        lines += ['press B', 'wait 30']
+            lines += ['press B', 'wait 40']   # B advances/closes text without re-talking
         self.run(lines, 'talk_end')

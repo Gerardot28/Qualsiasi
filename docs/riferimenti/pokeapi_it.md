@@ -33,7 +33,7 @@ Codici lingua in PokeAPI: `languages.csv` → **italiano = id 8** (`it`), ingles
 | `abilities.json` | `ABILITY_*` | come sopra; i 2 slot segnaposto `ABILITY_314`/`ABILITY_317` (nome «-------») sono esclusi |
 | `natures.json` | `NATURE_*` | `en`, `it`, `increased_stat`, `decreased_stat` |
 | `types.json` | `TYPE_*` | `TYPE_MYSTERY` → «???»; `TYPE_STELLAR` → «Astrale» |
-| `stats.json` | `STAT_*` | PS, Attacco, Difesa, Velocità, Attacco Speciale, Difesa Speciale, Precisione, Elusione |
+| `stats.json` | `STAT_*` | PS, Attacco, Difesa, Velocità, Attacco Speciale, Difesa Speciale, precisione, elusione (minuscolo come in PokeAPI) |
 | `egg_groups.json` | `EGG_GROUP_*` | nomi IT dei gruppi uova |
 | `species.json` | `SPECIES_*` (1572, forme incluse) | `national_dex`, `it`, `it_genus` («Pokémon Seme»), `it_category` («Seme», pronto per `.categoryName`), `is_form` |
 | `species_by_national_dex.json` | n° nazionale 1–1025 | nome, categoria, generazione, voce del Pokédex IT |
