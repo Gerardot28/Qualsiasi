@@ -9,6 +9,9 @@
  *   shot FILE.ppm       write the current frame (240x160) as PPM
  *   savestate FILE      write a save state
  *   loadstate FILE      load a save state
+ *   rtc MS              freeze the real-time clock at MS milliseconds since the Unix epoch
+ * Environment: GBASHOT_RTC=MS freezes the clock from power-on (default: 2026-01-01 12:00:01 UTC,
+ * so day/night tinting is deterministic); GBASHOT_RTC=host keeps the host clock.
  */
 #include <mgba/core/core.h>
 #include <mgba/core/serialize.h>
@@ -84,6 +87,11 @@ int main(int argc, char** argv) {
 		struct VFile* sv = VFileOpen(argv[3], O_CREAT | O_RDWR);
 		if (sv) core->loadSave(core, sv);
 	}
+	const char* rtcEnv = getenv("GBASHOT_RTC");
+	if (!rtcEnv || strcmp(rtcEnv, "host")) {
+		core->rtc.override = RTC_FIXED;
+		core->rtc.value = rtcEnv ? strtoll(rtcEnv, NULL, 10) : 1767268801000LL;
+	}
 	core->reset(core);
 	FILE* sc = !strcmp(argv[2], "-") ? stdin : fopen(argv[2], "r");
 	if (!sc) { perror(argv[2]); return 1; }
@@ -103,6 +111,7 @@ int main(int argc, char** argv) {
 			for (int i = 0; i < c; ++i) { run(n > 3 ? atoi(a3) : 4, k); run(n > 4 ? atoi(a4) : 12, 0); }
 		}
 		else if (!strcmp(cmd, "shot")) shot(a1);
+		else if (!strcmp(cmd, "rtc")) { core->rtc.override = RTC_FIXED; core->rtc.value = strtoll(a1, NULL, 10); }
 		else if (!strcmp(cmd, "savestate")) {
 			struct VFile* vf = VFileOpen(a1, O_CREAT | O_TRUNC | O_RDWR);
 			if (vf) { mCoreSaveStateNamed(core, vf, SAVESTATE_SAVEDATA | SAVESTATE_RTC); vf->close(vf); }

@@ -1,0 +1,32 @@
+# gbashot script: boots a fresh ROM (no save) and takes the screenshots used to check the
+# protagonist: Birch's intro (front pic), Littleroot (scripted walk), then (after the debug
+# "Cheat start") free roaming/running in Littleroot, trainer card, Acro Bike, Fly map head icon
+# and the battle intro (back pic throw). The intro bike ride is captured by intro.txt.
+# Deterministic with the harness' default frozen clock (2026-01-01 12:00:01 UTC).
+wait 300
+press START
+wait 200
+press START
+wait 120
+press A
+wait 120
+repeat 80 A 4 30
+repeat 15 A 4 20
+shot 03_birch_boy.ppm
+repeat 45 A 4 30
+repeat 36 A 4 30
+repeat 4 B 4 30
+hold RIGHT 60
+wait 300
+shot 04_littleroot_arrive.ppm
+repeat 38 A 4 16
+press A 4 6
+shot 05_littleroot_walk_a.ppm
+wait 4
+shot 06_littleroot_walk_b.ppm
+wait 4
+shot 07_littleroot_walk_c.ppm
+repeat 9 A 4 16
+repeat 32 A 4 20
+repeat 24 A 2 6
+savestate house.ss
