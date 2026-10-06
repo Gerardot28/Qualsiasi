@@ -151,6 +151,9 @@ def rom_map_table(rom_bytes, syms, by_addr, src_ids):
     g = 0
     while True:
         ptr = r32(base + 4 * g)
+        if ptr == 0 and g < 255:  # group not built in this ROM (e.g. FRLG link rooms in the Kanto port)
+            g += 1
+            continue
         if ptr is None or ptr not in group_tables:
             break
         nxt = [a for a in group_tables if a > ptr] + [base]
