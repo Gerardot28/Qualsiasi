@@ -1,0 +1,14 @@
+{
+  "name": "qualsiasi",
+  "description": "Mod per Claude Code di Gerardot28",
+  "owner": {
+    "name": "Gerardot28"
+  },
+  "plugins": [
+    {
+      "name": "token-meter",
+      "source": "./token-meter",
+      "description": "Barra laterale con i token spesi e la percentuale di utilizzo settimanale in tempo reale"
+    }
+  ]
+}

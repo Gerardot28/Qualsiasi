@@ -1,0 +1,9 @@
+{
+  "name": "token-meter",
+  "version": "0.1.0",
+  "description": "Barra laterale con i token spesi e la percentuale di utilizzo settimanale in tempo reale",
+  "author": {
+    "name": "Gerardot28"
+  },
+  "types": "./types/index.d.ts"
+}
